@@ -1,9 +1,7 @@
-<script setup lang="ts">
-import BackStage from "./views/BackStage.vue";
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <BackStage />
+  <router-view name="main"></router-view>
 </template>
 
 <style scoped></style>
