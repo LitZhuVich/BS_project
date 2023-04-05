@@ -21,37 +21,37 @@ import Tabs from "../components/BackStage/Tabs.vue"; // 标签页
 
 import ApiClient from "../request/request";
 const axios = new ApiClient();
-const registerdata = {
-  username: "test3",
-  password: "test3",
-  password_confirmation: "test3",
-};
-const logindata = {
-  username: "litzhu",
-  password: "litzhu",
-};
-interface tokenType {
-  token: string;
-}
+// const registerdata = {
+//   username: "test3",
+//   password: "test3",
+//   password_confirmation: "test3",
+// };
+// const logindata = {
+//   username: "litzhu",
+//   password: "litzhu",
+// };
+// interface tokenType {
+//   token: string;
+// }
 
-await axios
-  .post("/login", logindata)
-  .then((response: any) => {
-    console.log(response.token);
-    localStorage.setItem("token", response.token);
-  })
-  .catch((error) => {
-    console.log(error.message);
-  });
+// await axios
+//   .post("/login", logindata)
+//   .then((response: any) => {
+//     console.log(response.token);
+//     localStorage.setItem("token", response.token);
+//   })
+//   .catch((error) => {
+//     console.log(error.message);
+//   });
 
-await axios
-  .get("/user")
-  .then((response: any) => {
-    console.log(response);
-  })
-  .catch((error) => {
-    console.log(error.message);
-  });
+// await axios
+//   .get("/user")
+//   .then((response: any) => {
+//     console.log(response);
+//   })
+//   .catch((error) => {
+//     console.log(error.message);
+//   });
 const item = {
   date: "2016-05-02",
   name: "Tom",
