@@ -7,10 +7,10 @@
     </div>
     <el-tabs v-model="tabValue" type="card" class="demo-tabs">
         <el-tab-pane key="1" label="工单" name="1">
-            <test />
+            <Order />
         </el-tab-pane>
         <el-tab-pane key="2" label="新建工单" name="2">
-            <test />
+
         </el-tab-pane>
         <el-tab-pane v-for="item in tabList" :name="item.name" :key="item.name" closeable>
             <component :is="item.componentName" v-bind="item.data"></component>
@@ -22,7 +22,7 @@
 import { ref } from 'vue'
 // 引入组件
 // TODO: 工单和新建工单页写完后，替换下面的TEST.vue
-import test from '../BackStage/TEST.vue';
+import Order from '../BackStage/Order.vue';
 
 interface TabType {
     title: string,  // 标签页显示名称
