@@ -4,6 +4,7 @@
       <Aside />
     </el-aside>
 
+<<<<<<< HEAD
     <el-container>
       <el-header style="text-align: right; font-size: 12px">
         <div class="toolbar">
@@ -32,6 +33,13 @@
           </el-table>
         </el-scrollbar>
       </el-main>
+=======
+        <el-container style="height: 100vh;">
+            <el-main>
+                <Tabs />
+            </el-main>
+        </el-container>
+>>>>>>> a55c8fbf37ceb2f04899c621be738208c1f3af34
     </el-container>
   </el-container>
 </template>
@@ -40,7 +48,8 @@
 import { ref } from "vue";
 import { Menu as IconMenu, Message, Setting } from "@element-plus/icons-vue";
 // 引入组件
-import Aside from "../components/BackStage/Aside.vue";
+import Aside from "../components/BackStage/Aside.vue";// 侧边栏
+import Tabs from "../components/BackStage/Tabs.vue";// 标签页
 
 const item = {
   date: "2016-05-02",
@@ -55,9 +64,14 @@ const tableData = ref(Array.from({ length: 20 }).fill(item));
 @import "../GlobalStyle.scss";
 
 .layout-container-demo .el-header {
+<<<<<<< HEAD
   position: relative;
   background-color: var(--el-color-primary-light-7);
   color: var(--el-text-color-primary);
+=======
+    position: relative;
+    color: var(--el-text-color-primary);
+>>>>>>> a55c8fbf37ceb2f04899c621be738208c1f3af34
 }
 
 .layout-container-demo .el-aside {
@@ -68,6 +82,7 @@ const tableData = ref(Array.from({ length: 20 }).fill(item));
   /* 背景颜色 */
   background-color: $AsideBg;
 }
+<<<<<<< HEAD
 
 .layout-container-demo .el-menu {
   border-right: none;
@@ -84,4 +99,6 @@ const tableData = ref(Array.from({ length: 20 }).fill(item));
   height: 100%;
   right: 20px;
 }
+=======
+>>>>>>> a55c8fbf37ceb2f04899c621be738208c1f3af34
 </style>

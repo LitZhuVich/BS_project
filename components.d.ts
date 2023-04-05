@@ -11,8 +11,13 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     Aside: typeof import('./src/components/BackStage/Aside.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
+<<<<<<< HEAD
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCheckbox: typeof import('element-plus/es')['ElCheckbox']
+=======
+    ElAvatar: typeof import('element-plus/es')['ElAvatar']
+    ElButton: typeof import('element-plus/es')['ElButton']
+>>>>>>> a55c8fbf37ceb2f04899c621be738208c1f3af34
     ElContainer: typeof import('element-plus/es')['ElContainer']
     ElDropdown: typeof import('element-plus/es')['ElDropdown']
     ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
@@ -33,8 +38,16 @@ declare module '@vue/runtime-core' {
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
+<<<<<<< HEAD
     ElText: typeof import('element-plus/es')['ElText']
+=======
+    ElTabPane: typeof import('element-plus/es')['ElTabPane']
+    ElTabs: typeof import('element-plus/es')['ElTabs']
+    LoginView: typeof import('./src/components/LoginView.vue')['default']
+>>>>>>> a55c8fbf37ceb2f04899c621be738208c1f3af34
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Tabs: typeof import('./src/components/BackStage/Tabs.vue')['default']
+    TEST: typeof import('./src/components/BackStage/TEST.vue')['default']
   }
 }

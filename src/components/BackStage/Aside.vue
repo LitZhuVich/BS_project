@@ -7,35 +7,37 @@
                 <el-menu-item-group>
                     <el-menu-item index="1-1">
                         <el-icon>
-                            <HomeFilled />
+                            <HomeFilled :color="iconColor" />
                         </el-icon>
                     </el-menu-item>
                     <el-menu-item index="1-2">
                         <el-icon>
-                            <Message />
+                            <Message :color="iconColor" />
                         </el-icon>
                     </el-menu-item>
                     <el-menu-item index="1-3">
                         <el-icon>
-                            <Phone />
+                            <Phone :color="iconColor" />
                         </el-icon>
                     </el-menu-item>
                     <el-menu-item index="1-4">
                         <el-icon>
-                            <ChatDotRound />
+                            <ChatDotRound :color="iconColor" />
                         </el-icon>
                     </el-menu-item>
-                    <el-menu-item index="1-5">5</el-menu-item>
-                    <el-menu-item index="1-6">6</el-menu-item>
-                    <el-menu-item index="1-7">7</el-menu-item>
-                    <el-menu-item index="1-8">
+                    <el-menu-item index="1-5">
                         <el-icon>
-                            <Operation />
+                            <Reading :color="iconColor" />
                         </el-icon>
                     </el-menu-item>
-                    <el-menu-item index="1-9">
+                    <el-menu-item index="1-6">
                         <el-icon>
-                            <Plus />
+                            <Avatar :color="iconColor" />
+                        </el-icon>
+                    </el-menu-item>
+                    <el-menu-item index="1-7">
+                        <el-icon>
+                            <Operation :color="iconColor" />
                         </el-icon>
                     </el-menu-item>
                 </el-menu-item-group>
@@ -45,14 +47,18 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue'
 import {
     HomeFilled,
     Message,
     Phone,
     ChatDotRound,
+    Reading,
+    Avatar,
     Operation,
-    Plus,
 } from '@element-plus/icons-vue'
+
+const iconColor = ref('#ffffff')
 </script>
 
 <style scoped lang="scss">
@@ -61,4 +67,5 @@ import {
 
 .el-menu {
     background-color: $AsideBg;
-}</style>
+}
+</style>
