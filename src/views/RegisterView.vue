@@ -10,15 +10,19 @@
       class="demo-ruleForm"
     >
       <h2 class="title">注册</h2>
-      <el-form-item label="账号" prop="name">
-        <el-input v-model="ruleForm.name" type="text" autocomplete="off" />
+      <el-form-item label="账号" prop="username">
+        <el-input v-model="ruleForm.username" type="text" autocomplete="off" />
       </el-form-item>
-      <el-form-item label="密码" prop="pass">
-        <el-input v-model="ruleForm.pass" type="password" autocomplete="off" />
-      </el-form-item>
-      <el-form-item label="确认密码" prop="checkPass">
+      <el-form-item label="密码" prop="password">
         <el-input
-          v-model="ruleForm.checkPass"
+          v-model="ruleForm.password"
+          type="password"
+          autocomplete="off"
+        />
+      </el-form-item>
+      <el-form-item label="确认密码" prop="password_confirmation">
+        <el-input
+          v-model="ruleForm.password_confirmation"
           type="password"
           autocomplete="off"
         />
@@ -49,6 +53,9 @@
 import { reactive, ref } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
 
+import ApiClient from "../request/request";
+const apiClient = new ApiClient();
+
 const ruleFormRef = ref<FormInstance>();
 
 // 检测用户名
@@ -56,9 +63,10 @@ const validateName = (rule: any, value: any, callback: any): void => {
   if (value === "") {
     callback(new Error("请输入用户名"));
   } else {
-    if (ruleForm.name !== "") {
+    if (ruleForm.username !== "") {
       if (!ruleFormRef.value) return;
-      ruleFormRef.value.validateField("name", () => null);
+      // TODO:有待修改
+      ruleFormRef.value.validateField("user", () => null);
     }
     callback();
   }
@@ -68,9 +76,10 @@ const validatePass = (rule: any, value: any, callback: any): void => {
   if (value === "") {
     callback(new Error("请输入密码"));
   } else {
-    if (ruleForm.name !== "") {
+    if (ruleForm.username !== "") {
       if (!ruleFormRef.value) return;
-      ruleFormRef.value.validateField("checkPass", () => null);
+      // TODO:有待修改
+      ruleFormRef.value.validateField("pass", () => null);
     }
     callback();
   }
@@ -79,7 +88,7 @@ const validatePass = (rule: any, value: any, callback: any): void => {
 const validatePass2 = (rule: any, value: any, callback: any): void => {
   if (value === "") {
     callback(new Error("请输入确认密码"));
-  } else if (value !== ruleForm.pass) {
+  } else if (value !== ruleForm.password) {
     callback(new Error("与输入的密码不一致"));
   } else {
     callback();
@@ -87,26 +96,38 @@ const validatePass2 = (rule: any, value: any, callback: any): void => {
 };
 // 验证表单对象
 const ruleForm = reactive({
-  name: "",
-  pass: "",
-  checkPass: "",
+  username: "",
+  password: "",
+  password_confirmation: "",
 });
 // 认证规则
 const rules = reactive<FormRules>({
-  name: [{ validator: validateName, trigger: "change" }],
-  pass: [{ validator: validatePass, trigger: "change" }],
-  checkPass: [{ validator: validatePass2, trigger: "change" }],
+  username: [{ validator: validateName, trigger: "change" }],
+  password: [{ validator: validatePass, trigger: "change" }],
+  password_confirmation: [{ validator: validatePass2, trigger: "change" }],
 });
+// 返回注册类型接口
+interface registerType {
+  user: {
+    username: string;
+    id: number;
+  };
+  token: string;
+}
+
 // 提交表单
 const submitForm = (formEl: FormInstance | undefined): void => {
   if (!formEl) return;
-  formEl.validate((valid) => {
+  formEl.validate(async (valid) => {
     if (valid) {
       // 提交成功
-      console.log("submit!");
+      const response: registerType = await apiClient.post(
+        "/register",
+        ruleForm
+      );
+      console.log("注册成功");
     } else {
-      // 提交失败
-      console.log("error submit!");
+      // 账号密码输入为空
       return false;
     }
   });
@@ -122,7 +143,7 @@ const resetForm = (formEl: FormInstance | undefined): void => {
 #loginBody {
   width: 100vw;
   height: 100vh;
-  background: url(../../public/image/authBackImage.jpg) no-repeat center center;
+  background: url("/image/authBackImage.jpg") no-repeat center center;
   display: flex;
   justify-content: center;
   align-items: center;

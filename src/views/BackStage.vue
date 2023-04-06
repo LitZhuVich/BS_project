@@ -18,9 +18,6 @@ import { Menu as IconMenu, Message, Setting } from "@element-plus/icons-vue";
 // 引入组件
 import Aside from "../components/BackStage/Aside.vue"; // 侧边栏
 import Tabs from "../components/BackStage/Tabs.vue"; // 标签页
-
-import ApiClient from "../request/request";
-const axios = new ApiClient();
 // const registerdata = {
 //   username: "test3",
 //   password: "test3",

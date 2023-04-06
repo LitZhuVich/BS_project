@@ -7,35 +7,45 @@ export default class ApiClient {
     this.axiosInstance = axios.create({
       // 测试的后端接口
       baseURL: "http://www.bstestserver.com/api/v1",
-      timeout: 15000,
-      headers: {
-        "Content-Type": "application/json",
+    });
+    // 发送拦截
+    this.axiosInstance.interceptors.request.use(
+      (config) => {
+        const token = localStorage.getItem("token");
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
       },
-    });
-    this.axiosInstance.interceptors.request.use((config) => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+      (error) => {
+        return Promise.reject(error);
       }
-      return config;
-    });
+    );
     // 接收拦截
     this.axiosInstance.interceptors.response.use(
       (response: AxiosResponse): AxiosResponse => {
         return response;
       },
       (error: any): Promise<never> => {
-        return Promise.reject(error);
+        if (error.response && error.response.status === 401) {
+          // 处理未授权错误
+          console.log(error.response);
+          // console.error(error.message); // 输出其他错误信息
+        } else {
+          // console.error(error.message); // 输出其他错误信息
+        }
+        return Promise.reject(error.message);
       }
     );
   }
 
-  public async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
+  // get 方法
+  async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
     const response = await this.axiosInstance.get<T>(url, config);
     return response.data;
   }
-
-  public async post<T>(
+  // post 方法
+  async post<T>(
     url: string,
     data?: any,
     config?: AxiosRequestConfig
