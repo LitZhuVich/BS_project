@@ -3,6 +3,7 @@
     <el-aside width="70px">
       <Aside />
     </el-aside>
+<<<<<<< HEAD
 
     <el-container>
       <el-header style="text-align: right; font-size: 12px">
@@ -23,20 +24,20 @@
         </div>
       </el-header>
 
+=======
+    <el-container style="height: 100vh">
+>>>>>>> 4599645dc971e843bd4f76a8cc136be2c471ca06
       <el-main>
-        <el-scrollbar>
-          <el-table :data="tableData">
-            <el-table-column prop="date" label="Date" width="140" />
-            <el-table-column prop="name" label="Name" width="120" />
-            <el-table-column prop="address" label="Address" />
-          </el-table>
-        </el-scrollbar>
+        <Tabs />
       </el-main>
+<<<<<<< HEAD
       <el-container style="height: 100vh">
         <el-main>
           <Tabs />
         </el-main>
       </el-container>
+=======
+>>>>>>> 4599645dc971e843bd4f76a8cc136be2c471ca06
     </el-container>
   </el-container>
 </template>
@@ -48,12 +49,9 @@ import { Menu as IconMenu, Message, Setting } from "@element-plus/icons-vue";
 import Aside from "../components/BackStage/Aside.vue"; // 侧边栏
 import Tabs from "../components/BackStage/Tabs.vue"; // 标签页
 
-const item = {
-  date: "2016-05-02",
-  name: "Tom",
-  address: "No. 189, Grove St, Los Angeles",
-};
-const tableData = ref(Array.from({ length: 20 }).fill(item));
+import ApiClient from "../request/request";
+const apiClient = new ApiClient();
+apiClient.get("/user").then((response: any) => console.log(response.user));
 </script>
 
 <style scoped lang="scss">
@@ -65,24 +63,25 @@ const tableData = ref(Array.from({ length: 20 }).fill(item));
 }
 .layout-container-demo .el-header {
   position: relative;
-  background-color: var(--el-color-primary-light-7);
   color: var(--el-text-color-primary);
+<<<<<<< HEAD
   position: relative;
   color: var(--el-text-color-primary);
+=======
+>>>>>>> 4599645dc971e843bd4f76a8cc136be2c471ca06
 }
 
 .layout-container-demo .el-aside {
-  color: var(--el-text-color-primary);
-  background: var(--el-color-primary-light-8);
   /* 侧边栏高度撑满 */
   height: 100vh;
   /* 背景颜色 */
   background-color: $AsideBg;
 }
 
-.layout-container-demo .el-menu {
-  border-right: none;
+.el-container {
+  background-color: $GlobalBg;
 }
+<<<<<<< HEAD
 
 .layout-container-demo .el-main {
   padding: 0;
@@ -95,4 +94,6 @@ const tableData = ref(Array.from({ length: 20 }).fill(item));
   height: 100%;
   right: 20px;
 }
+=======
+>>>>>>> 4599645dc971e843bd4f76a8cc136be2c471ca06
 </style>

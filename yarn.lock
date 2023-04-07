@@ -184,6 +184,13 @@
     estree-walker "^2.0.2"
     picomatch "^2.3.1"
 
+"@types/axios@^0.14.0":
+  version "0.14.0"
+  resolved "https://registry.npmmirror.com/@types/axios/-/axios-0.14.0.tgz#ec2300fbe7d7dddd7eb9d3abf87999964cafce46"
+  integrity sha512-KqQnQbdYE54D7oa/UmYVMZKq7CO4l8DEENzOKc4aBRwxCXSlJXGz83flFx5L7AWrOQnmuN3kVsRdt+GZPPjiVQ==
+  dependencies:
+    axios "*"
+
 "@types/estree@^1.0.0":
   version "1.0.0"
   resolved "https://registry.npmmirror.com/@types/estree/-/estree-1.0.0.tgz#5fb2e536c1ae9bf35366eed879e827fa59ca41c2"
@@ -395,7 +402,7 @@ asynckit@^0.4.0:
   resolved "https://registry.npmmirror.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
   integrity sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==
 
-axios@^1.3.4:
+axios@*, axios@^1.3.4:
   version "1.3.4"
   resolved "https://registry.npmmirror.com/axios/-/axios-1.3.4.tgz#f5760cefd9cfb51fd2481acf88c05f67c4523024"
   integrity sha512-toYm+Bsyl6VC5wSkfkbbNB6ROv7KY93PEBBL6xyDczaIHasAiv4wPqQ/c4RjoQzipxRD2W5g21cOqQulZ7rHwQ==
@@ -505,6 +512,11 @@ element-plus@^2.3.2:
     lodash-unified "^1.0.2"
     memoize-one "^6.0.0"
     normalize-wheel-es "^1.2.0"
+
+es-module-lexer@^1.1.1:
+  version "1.2.1"
+  resolved "https://registry.npmmirror.com/es-module-lexer/-/es-module-lexer-1.2.1.tgz#ba303831f63e6a394983fde2f97ad77b22324527"
+  integrity sha512-9978wrXM50Y4rTMmW5kXIC09ZdXQZqkE4mxhwkd8VbzsGkXGPgV4zWuqQJgCEzYngdo2dYDa0l8xhX4fkSwJSg==
 
 esbuild@^0.17.5:
   version "0.17.15"
@@ -684,6 +696,13 @@ magic-string@^0.25.7:
   integrity sha512-RmF0AsMzgt25qzqqLc1+MbHmhdx0ojF2Fvs4XnOqz2ZOBXzzkEwc/dJQZCYHAn7v1jbVOjAZfK8msRn4BxO4VQ==
   dependencies:
     sourcemap-codec "^1.4.8"
+
+magic-string@^0.29.0:
+  version "0.29.0"
+  resolved "https://registry.npmmirror.com/magic-string/-/magic-string-0.29.0.tgz#f034f79f8c43dba4ae1730ffb5e8c4e084b16cf3"
+  integrity sha512-WcfidHrDjMY+eLjlU+8OvwREqHwpgCeKVBUpQ3OhYYuvfaYCUgcbuBzappNzZvg/v8onU3oQj+BYpkOJe9Iw4Q==
+  dependencies:
+    "@jridgewell/sourcemap-codec" "^1.4.13"
 
 magic-string@^0.30.0:
   version "0.30.0"
@@ -946,6 +965,16 @@ unplugin-auto-import@^0.15.2:
     minimatch "^7.4.3"
     unimport "^3.0.3"
     unplugin "^1.3.1"
+
+unplugin-element-plus@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.npmmirror.com/unplugin-element-plus/-/unplugin-element-plus-0.7.0.tgz#e834fa96331c81ce771a163ee7b69fdf476a6852"
+  integrity sha512-gbRIdZlXrWfIZkxLAiNZwUuLaLMYDTBBM51vLR6Um0F6fKhAmGak2uqVrUuvzk5FcqroJ1xKU/o8dEcpNDnLBA==
+  dependencies:
+    "@rollup/pluginutils" "^5.0.2"
+    es-module-lexer "^1.1.1"
+    magic-string "^0.29.0"
+    unplugin "^1.1.0"
 
 unplugin-vue-components@^0.24.1:
   version "0.24.1"

@@ -3,29 +3,41 @@
     <el-form
       ref="ruleFormRef"
       :model="ruleForm"
-      status-icon
       :rules="rules"
       label-width="90px"
       label-suffix="："
       class="demo-ruleForm"
     >
       <h2 class="title">登录</h2>
-      <el-form-item label="账号" prop="name">
-        <el-input v-model="ruleForm.name" type="text" autocomplete="off" />
+      <el-form-item label="账号" prop="username">
+        <el-input
+          v-model="ruleForm.username"
+          type="text"
+          autocomplete="off"
+          :prefix-icon="User"
+          maxlength="20"
+        />
       </el-form-item>
-      <el-form-item label="密码" prop="pass">
-        <el-input v-model="ruleForm.pass" type="password" autocomplete="off" />
+      <el-form-item label="密码" prop="password">
+        <el-input
+          v-model="ruleForm.password"
+          type="password"
+          autocomplete="off"
+          show-password
+          :prefix-icon="Lock"
+          maxlength="20"
+        />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm(ruleFormRef)">
           登录
         </el-button>
         <el-button @click="resetForm(ruleFormRef)"> 重置 </el-button>
-        <el-checkbox
+        <!-- <el-checkbox
           v-model="rememberMe"
           label="记住我"
           style="margin-left: 10px"
-        />
+        /> -->
       </el-form-item>
       <hr />
       <el-form-item>
@@ -46,18 +58,29 @@
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
-
+import { ElNotification } from "element-plus";
+import { User, Lock } from "@element-plus/icons-vue";
+import ApiClient from "../request/request";
+import { useRouter } from "vue-router";
+const apiClient = new ApiClient();
+const router = useRouter();
 const ruleFormRef = ref<FormInstance>();
 // 存储是否记住我
-const rememberMe = ref<boolean>(false);
+// const rememberMe = ref<boolean>(false);
+
+// 验证表单对象
+const ruleForm = reactive({
+  username: "",
+  password: "",
+});
+
 // 检测用户名
 const validateName = (rule: any, value: any, callback: any): void => {
   if (value === "") {
     callback(new Error("请输入用户名"));
   } else {
-    if (ruleForm.name !== "") {
+    if (ruleForm.username !== "") {
       if (!ruleFormRef.value) return;
-      ruleFormRef.value.validateField("name", () => null);
     }
     callback();
   }
@@ -67,38 +90,60 @@ const validatePass = (rule: any, value: any, callback: any): void => {
   if (value === "") {
     callback(new Error("请输入密码"));
   } else {
-    if (ruleForm.name !== "") {
+    if (ruleForm.username !== "") {
       if (!ruleFormRef.value) return;
-      ruleFormRef.value.validateField("checkPass", () => null);
     }
     callback();
   }
 };
 
-// 验证表单对象
-const ruleForm = reactive({
-  name: "",
-  pass: "",
-});
 // 认证规则
 const rules = reactive<FormRules>({
-  name: [{ validator: validateName, trigger: "change" }],
-  pass: [{ validator: validatePass, trigger: "change" }],
+  username: [{ validator: validateName, trigger: "change" }],
+  password: [{ validator: validatePass, trigger: "change" }],
 });
+// 返回登录类型接口
+interface loginType {
+  token: string;
+  error: string;
+  success: string;
+}
+
 // 提交表单
 const submitForm = (formEl: FormInstance | undefined): void => {
   if (!formEl) return;
-  formEl.validate((valid) => {
+  formEl.validate(async (valid) => {
     if (valid) {
+      const response: loginType = await apiClient.post("/login", ruleForm);
       // 提交成功
-      console.log("submit!");
+      if (response.token != null) {
+        // 将 登录的 token 保存到本地存储中
+        localStorage.setItem("token", response.token);
+        // 登录弹窗
+        ElNotification({
+          title: "Success",
+          message: "登录成功",
+          type: "success",
+        });
+        // 前往首页
+        router.push({
+          name: "index",
+        });
+      } else {
+        // 提交失败
+        ElNotification({
+          title: "Error",
+          message: "登录失败",
+          type: "error",
+        });
+      }
     } else {
-      // 提交失败
-      console.log("error submit!");
+      // 账号密码输入为空
       return false;
     }
   });
 };
+// apiClient.get("/user").then((ss: any) => console.log(ss));
 // 重置方法
 const resetForm = (formEl: FormInstance | undefined): void => {
   if (!formEl) return;
@@ -110,7 +155,7 @@ const resetForm = (formEl: FormInstance | undefined): void => {
 #loginBody {
   width: 100vw;
   height: 100vh;
-  background: url(../../public/image/authBackImage.jpg) no-repeat center center;
+  background: url("/image/authBackImage.jpg") no-repeat center center;
   display: flex;
   justify-content: center;
   align-items: center;
