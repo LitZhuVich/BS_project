@@ -3,7 +3,6 @@
     <el-form
       ref="ruleFormRef"
       :model="ruleForm"
-      status-icon
       :rules="rules"
       label-width="90px"
       label-suffix="："
@@ -11,13 +10,22 @@
     >
       <h2 class="title">登录</h2>
       <el-form-item label="账号" prop="username">
-        <el-input v-model="ruleForm.username" type="text" autocomplete="off" />
+        <el-input
+          v-model="ruleForm.username"
+          type="text"
+          autocomplete="off"
+          :prefix-icon="User"
+          maxlength="20"
+        />
       </el-form-item>
       <el-form-item label="密码" prop="password">
         <el-input
           v-model="ruleForm.password"
           type="password"
           autocomplete="off"
+          show-password
+          :prefix-icon="Lock"
+          maxlength="20"
         />
       </el-form-item>
       <el-form-item>
@@ -50,9 +58,12 @@
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
+import { ElNotification } from "element-plus";
+import { User, Lock } from "@element-plus/icons-vue";
 import ApiClient from "../request/request";
+import { useRouter } from "vue-router";
 const apiClient = new ApiClient();
-
+const router = useRouter();
 const ruleFormRef = ref<FormInstance>();
 // 存储是否记住我
 // const rememberMe = ref<boolean>(false);
@@ -70,8 +81,6 @@ const validateName = (rule: any, value: any, callback: any): void => {
   } else {
     if (ruleForm.username !== "") {
       if (!ruleFormRef.value) return;
-      // TODO:有待修改
-      ruleFormRef.value.validateField("user", () => null);
     }
     callback();
   }
@@ -83,8 +92,6 @@ const validatePass = (rule: any, value: any, callback: any): void => {
   } else {
     if (ruleForm.username !== "") {
       if (!ruleFormRef.value) return;
-      // TODO:有待修改
-      ruleFormRef.value.validateField("pass", () => null);
     }
     callback();
   }
@@ -101,6 +108,7 @@ interface loginType {
   error: string;
   success: string;
 }
+
 // 提交表单
 const submitForm = (formEl: FormInstance | undefined): void => {
   if (!formEl) return;
@@ -111,10 +119,23 @@ const submitForm = (formEl: FormInstance | undefined): void => {
       if (response.token != null) {
         // 将 登录的 token 保存到本地存储中
         localStorage.setItem("token", response.token);
-        console.log(response.success);
+        // 登录弹窗
+        ElNotification({
+          title: "Success",
+          message: "登录成功",
+          type: "success",
+        });
+        // 前往首页
+        router.push({
+          name: "index",
+        });
       } else {
         // 提交失败
-        console.log(response.error);
+        ElNotification({
+          title: "Error",
+          message: "登录失败",
+          type: "error",
+        });
       }
     } else {
       // 账号密码输入为空
