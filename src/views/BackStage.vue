@@ -3,7 +3,7 @@
     <el-aside width="70px">
       <Aside />
     </el-aside>
-    <el-container style="height: 100vh;">
+    <el-container style="height: 100vh">
       <el-main>
         <Tabs />
       </el-main>
@@ -17,6 +17,10 @@ import { Menu as IconMenu, Message, Setting } from "@element-plus/icons-vue";
 // 引入组件
 import Aside from "../components/BackStage/Aside.vue"; // 侧边栏
 import Tabs from "../components/BackStage/Tabs.vue"; // 标签页
+
+import ApiClient from "../request/request";
+const apiClient = new ApiClient();
+apiClient.get("/user").then((response: any) => console.log(response.user));
 </script>
 
 <style scoped lang="scss">

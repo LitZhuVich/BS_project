@@ -513,6 +513,11 @@ element-plus@^2.3.2:
     memoize-one "^6.0.0"
     normalize-wheel-es "^1.2.0"
 
+es-module-lexer@^1.1.1:
+  version "1.2.1"
+  resolved "https://registry.npmmirror.com/es-module-lexer/-/es-module-lexer-1.2.1.tgz#ba303831f63e6a394983fde2f97ad77b22324527"
+  integrity sha512-9978wrXM50Y4rTMmW5kXIC09ZdXQZqkE4mxhwkd8VbzsGkXGPgV4zWuqQJgCEzYngdo2dYDa0l8xhX4fkSwJSg==
+
 esbuild@^0.17.5:
   version "0.17.15"
   resolved "https://registry.npmmirror.com/esbuild/-/esbuild-0.17.15.tgz#209ebc87cb671ffb79574db93494b10ffaf43cbc"
@@ -691,6 +696,13 @@ magic-string@^0.25.7:
   integrity sha512-RmF0AsMzgt25qzqqLc1+MbHmhdx0ojF2Fvs4XnOqz2ZOBXzzkEwc/dJQZCYHAn7v1jbVOjAZfK8msRn4BxO4VQ==
   dependencies:
     sourcemap-codec "^1.4.8"
+
+magic-string@^0.29.0:
+  version "0.29.0"
+  resolved "https://registry.npmmirror.com/magic-string/-/magic-string-0.29.0.tgz#f034f79f8c43dba4ae1730ffb5e8c4e084b16cf3"
+  integrity sha512-WcfidHrDjMY+eLjlU+8OvwREqHwpgCeKVBUpQ3OhYYuvfaYCUgcbuBzappNzZvg/v8onU3oQj+BYpkOJe9Iw4Q==
+  dependencies:
+    "@jridgewell/sourcemap-codec" "^1.4.13"
 
 magic-string@^0.30.0:
   version "0.30.0"
@@ -953,6 +965,16 @@ unplugin-auto-import@^0.15.2:
     minimatch "^7.4.3"
     unimport "^3.0.3"
     unplugin "^1.3.1"
+
+unplugin-element-plus@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.npmmirror.com/unplugin-element-plus/-/unplugin-element-plus-0.7.0.tgz#e834fa96331c81ce771a163ee7b69fdf476a6852"
+  integrity sha512-gbRIdZlXrWfIZkxLAiNZwUuLaLMYDTBBM51vLR6Um0F6fKhAmGak2uqVrUuvzk5FcqroJ1xKU/o8dEcpNDnLBA==
+  dependencies:
+    "@rollup/pluginutils" "^5.0.2"
+    es-module-lexer "^1.1.1"
+    magic-string "^0.29.0"
+    unplugin "^1.1.0"
 
 unplugin-vue-components@^0.24.1:
   version "0.24.1"

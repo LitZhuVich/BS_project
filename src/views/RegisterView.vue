@@ -3,7 +3,6 @@
     <el-form
       ref="ruleFormRef"
       :model="ruleForm"
-      status-icon
       :rules="rules"
       label-width="90px"
       label-suffix="："
@@ -11,13 +10,22 @@
     >
       <h2 class="title">注册</h2>
       <el-form-item label="账号" prop="username">
-        <el-input v-model="ruleForm.username" type="text" autocomplete="off" />
+        <el-input
+          v-model="ruleForm.username"
+          type="text"
+          autocomplete="off"
+          :prefix-icon="User"
+          maxlength="20"
+        />
       </el-form-item>
       <el-form-item label="密码" prop="password">
         <el-input
           v-model="ruleForm.password"
           type="password"
           autocomplete="off"
+          show-password
+          :prefix-icon="Lock"
+          maxlength="20"
         />
       </el-form-item>
       <el-form-item label="确认密码" prop="password_confirmation">
@@ -25,6 +33,9 @@
           v-model="ruleForm.password_confirmation"
           type="password"
           autocomplete="off"
+          show-password
+          :prefix-icon="Lock"
+          maxlength="20"
         />
       </el-form-item>
       <el-form-item>
@@ -52,7 +63,8 @@
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
-
+import { ElNotification } from "element-plus";
+import { User, Lock } from "@element-plus/icons-vue";
 import ApiClient from "../request/request";
 const apiClient = new ApiClient();
 
@@ -65,8 +77,6 @@ const validateName = (rule: any, value: any, callback: any): void => {
   } else {
     if (ruleForm.username !== "") {
       if (!ruleFormRef.value) return;
-      // TODO:有待修改
-      ruleFormRef.value.validateField("user", () => null);
     }
     callback();
   }
@@ -78,8 +88,6 @@ const validatePass = (rule: any, value: any, callback: any): void => {
   } else {
     if (ruleForm.username !== "") {
       if (!ruleFormRef.value) return;
-      // TODO:有待修改
-      ruleFormRef.value.validateField("pass", () => null);
     }
     callback();
   }
@@ -125,7 +133,22 @@ const submitForm = (formEl: FormInstance | undefined): void => {
         "/register",
         ruleForm
       );
-      console.log("注册成功");
+      if (response.token != null) {
+        // 注册成功 表单信息清空
+        formEl.resetFields();
+        ElNotification({
+          title: "Success",
+          message: "注册成功",
+          type: "success",
+        });
+      } else {
+        // 提交失败
+        ElNotification({
+          title: "Error",
+          message: "注册失败",
+          type: "error",
+        });
+      }
     } else {
       // 账号密码输入为空
       return false;
