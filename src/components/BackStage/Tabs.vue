@@ -1,36 +1,36 @@
 <template>
-<<<<<<< HEAD
-  <div style="margin-bottom: 20px">
-=======
+  <!-- TODO:添加按钮位置不对 -->
+  <!-- TODO:点击之后背景颜色不变白色 -->
   <div class="btnBar">
->>>>>>> 4599645dc971e843bd4f76a8cc136be2c471ca06
     <!--  @click="addTab(editableTabsValue)" -->
-    <el-button size="small">
-      添加
-    </el-button>
+    <el-button size="small"> 添加 </el-button>
   </div>
   <el-tabs v-model="tabValue" type="card" class="demo-tabs">
     <el-tab-pane key="1" label="工单" name="1">
-<<<<<<< HEAD
-      <Order />
-    </el-tab-pane>
-    <el-tab-pane key="2" label="新建工单" name="2">
-      <NewOrder />
-=======
       <!-- TODO:用ElementPlus优化工单视图 -->
       <div class="OrderView">
         <div class="avatar">
           <div>
-            <el-avatar :size="50" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+            <el-avatar
+              :size="50"
+              src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+            />
           </div>
-          <div style="margin-left: 10px;">
+          <div style="margin-left: 10px">
             <h4>Cly</h4>
             <span>可接单</span>
           </div>
         </div>
         <div class="mid">
           <b>工单视图</b>
-          <el-icon style="position: absolute; right: 0;top: 50%;transform: translate(0,-50%);">
+          <el-icon
+            style="
+              position: absolute;
+              right: 0;
+              top: 50%;
+              transform: translate(0, -50%);
+            "
+          >
             <Refresh />
           </el-icon>
         </div>
@@ -49,10 +49,14 @@
       </div>
     </el-tab-pane>
     <el-tab-pane key="2" label="新建工单" name="2">
-
->>>>>>> 4599645dc971e843bd4f76a8cc136be2c471ca06
+      <NewOrder />
     </el-tab-pane>
-    <el-tab-pane v-for="item in tabList" :name="item.name" :key="item.name" closeable>
+    <el-tab-pane
+      v-for="item in tabList"
+      :name="item.name"
+      :key="item.name"
+      closeable
+    >
       <component :is="item.componentName" v-bind="item.data"></component>
     </el-tab-pane>
   </el-tabs>
@@ -60,15 +64,10 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { Refresh } from '@element-plus/icons-vue'
+import { Refresh } from "@element-plus/icons-vue";
 // 引入组件
-// TODO: 工单和新建工单页写完后，替换下面的TEST.vue
-<<<<<<< HEAD
 import Order from "../BackStage/Order.vue";
 import NewOrder from "../BackStage/NewOrder.vue";
-=======
-import Order from '../BackStage/Order.vue';
->>>>>>> 4599645dc971e843bd4f76a8cc136be2c471ca06
 
 interface TabType {
   title: string; // 标签页显示名称
@@ -104,28 +103,6 @@ const tabValue = ref("1");
 // })
 </script>
 
-<<<<<<< HEAD
-<style>
-/* 清除标签下外边距 */
-.el-tabs__header {
-  margin: 0;
-}
-.el-tabs__content {
-  /* 标签内容背景颜色 */
-  background-color: #f3f1f6;
-  /* 标签内容外边距 */
-  padding: 20px;
-  box-sizing: border-box;
-}
-/* 标签行背景颜色 */
-.el-tabs__nav-scroll {
-  background-color: white;
-}
-.demo-tabs > .el-tabs__content {
-  color: #6b778c;
-  font-size: 32px;
-  font-weight: 600;
-=======
 <style scoped lang="scss">
 $views-li: 40px;
 
@@ -135,20 +112,20 @@ $views-li: 40px;
   margin: 0;
 }
 
-.demo-tabs>.el-tabs__content,
-.el-tab-pane {
+.demo-tabs > .el-tabs__content {
   height: 100vh;
 }
 
 .el-tab-pane {
   display: flex;
+  height: 100vh;
 
   .OrderView {
     flex: 2;
     margin: 0 10px;
     background-color: white;
     padding: 20px;
-
+    min-width: 200px;
     .avatar {
       display: flex;
     }
@@ -175,6 +152,5 @@ $views-li: 40px;
     padding: 5px;
     background-color: white;
   }
->>>>>>> 4599645dc971e843bd4f76a8cc136be2c471ca06
 }
 </style>

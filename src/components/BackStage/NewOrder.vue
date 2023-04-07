@@ -42,7 +42,7 @@
         /></el-icon>
       </div>
       <!-- 第二个框架的内容 -->
-      <div class="template_center">
+      <div class="template_center" style="margin-top: 20px">
         <!-- 第二个框架的公司名称表单 -->
         <el-form :label-position="templatePosition">
           <el-form-item label="公司名称">
@@ -101,23 +101,26 @@
       <div class="attribute_center">
         <el-form :model="attribute_input">
           <!-- 图标 -->
-          <el-icon
-            color="lightblue"
-            :size="20"
-            style="position: absolute; left: 95px; top: 630px"
-            ><Location
-          /></el-icon>
-          <div class="attribute_center_one">
-            <el-text>客服姓名</el-text>
-            <el-text>我自己</el-text>
+          <div class="attribute_box_one">
+            <div class="attribute_center_one">
+              <el-text>客服姓名</el-text>
+              <el-text type="primary">我自己</el-text>
+            </div>
+            <el-input
+              v-model="attribute_input.value1"
+              style="max-width: 400px"
+            />
           </div>
-          <el-input v-model="attribute_input.value1" style="max-width: 400px" />
-
-          <div class="attribute_center_two">
-            <el-text>抄送人</el-text>
-            <el-text>我自己</el-text>
+          <div class="attribute_box_two">
+            <div class="attribute_center_two">
+              <el-text>抄送人</el-text>
+              <el-text type="primary">我自己</el-text>
+            </div>
+            <el-input
+              v-model="attribute_input.value2"
+              style="max-width: 800px"
+            />
           </div>
-          <el-input v-model="attribute_input.value2" style="max-width: 800px" />
         </el-form>
       </div>
     </div>
@@ -128,50 +131,33 @@
         <el-text class="sales_title">工单模板：售后设备维修模板</el-text>
       </div>
       <div class="sales_box2">
-        <!-- 图标 -->
-        <el-icon
-          color="lightblue"
-          :size="20"
-          style="position: relative; left: 15px"
-          ><SuitcaseLine
-        /></el-icon>
-        <el-text class="sales_title2">执行人选择</el-text>
-        <el-text style="position: relative; bottom: 5px; left: 1400px"
-          >收起</el-text
-        >
+        <div>
+          <!-- 图标 -->
+          <el-icon
+            color="lightblue"
+            :size="20"
+            style="position: relative; left: 15px"
+            ><SuitcaseLine
+          /></el-icon>
+          <el-text class="sales_title2">执行人选择</el-text>
+        </div>
+        <el-text type="primary"> 收起 </el-text>
       </div>
       <!-- 内容 -->
       <div class="sales_center">
-        <el-form>
-          <!-- Layout布局 -->
-          <el-row :gutter="20">
-            <el-col :span="8">
-              <el-text>工单类型</el-text>
-              <el-select
-                v-model="sales_value1"
-                style="width: 400px; display: block"
-              >
-                <el-option
-                  v-for="item in sales_option"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                /> </el-select
-            ></el-col>
-            <el-col :span="8">
-              <el-text>工单优先级</el-text>
-              <el-select
-                v-model="sales_value2"
-                style="width: 400px; display: block"
-              >
-                <el-option
-                  v-for="item in sales_option2"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                /> </el-select
-            ></el-col>
-          </el-row>
+        <el-form :inline="true" :model="formInline" class="demo-form-inline">
+          <el-form-item label="工单类型">
+            <el-select v-model="formInline.region" placeholder="-">
+              <el-option label="Zone one" value="shanghai" />
+              <el-option label="Zone two" value="beijing" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="工单优先级">
+            <el-select v-model="formInline.region" placeholder="-">
+              <el-option label="Zone one" value="shanghai" />
+              <el-option label="Zone two" value="beijing" />
+            </el-select>
+          </el-form-item>
         </el-form>
       </div>
     </div>
@@ -183,7 +169,7 @@
 </template>
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
-import { Setting, Link, Location, SuitcaseLine } from "@element-plus/icons-vue";
+import { Setting, Link, SuitcaseLine } from "@element-plus/icons-vue";
 //表单排序方向
 //第一个框架
 const attachmentsPosition = ref("right");
@@ -200,6 +186,11 @@ const attachments_input = reactive({
 const attribute_input = reactive({
   value1: "",
   value2: "",
+});
+// 第四个框架
+const formInline = reactive({
+  user: "",
+  region: "",
 });
 //第二个框架的下拉框
 //公司名称下拉框
@@ -303,78 +294,78 @@ const sales_option2 = [
 <style scoped lang="scss">
 .box {
   width: 100vw;
+  padding: 0 20px 0 20px;
+  box-sizing: border-box;
 }
-.attachments {
-  background-color: white;
-  padding: 20px;
-  width: 90%;
-  margin-bottom: 20px;
-}
-.attachments_upload {
-  position: relative;
-  margin-left: 50px;
-  margin-bottom: 0;
-}
-.template_icon {
-  padding-left: 5px;
-}
-.template_box,
-.attribute_box,
-.sales_box {
-  border-bottom: 2px solid #f3f1f6;
-}
+// 模板
+.attachments,
 .template,
 .attribute,
 .sales {
   background-color: white;
   width: 100%;
   margin-bottom: 20px;
+  padding: 20px;
+  box-sizing: border-box;
 }
+
+.attachments_upload {
+  position: relative;
+  margin-left: 50px;
+  margin-bottom: 0;
+}
+
+.template_icon {
+  padding-left: 5px;
+}
+
+.template_box,
+.attribute_box,
+.sales_box {
+  border-bottom: 2px solid #f3f1f6;
+}
+
 .template_title,
 .attribute_title,
 .sales_title {
   font-weight: bold;
   font-size: 15px;
-  padding-left: 20px;
   position: relative;
   bottom: 5px;
 }
-.template_center {
-  padding: 20px;
-}
-.attribute_center_one {
+.attribute_box_one {
   width: 400px;
-  display: flex;
-  justify-content: space-between;
   margin-top: 20px;
 }
-.attribute_center_two {
+.attribute_box_two {
   width: 800px;
+  margin-top: 20px;
+}
+.attribute_center_one,
+.attribute_center_two {
   display: flex;
   justify-content: space-between;
-  margin-top: 10px;
+  margin-bottom: 10px;
 }
-
-.attribute_center {
-  padding: 0px 20px 40px 20px;
-}
-
 .sales_title2 {
   font-weight: bold;
   font-size: 15px;
   padding-left: 20px;
-  position: relative;
-  bottom: 5px;
 }
 
 .sales_box2 {
+  height: 30px;
   border-bottom: 2px solid #f3f1f6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .sales_center {
-  padding: 0px 20px 200px 20px;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
 }
 .add_btn {
-  width: 92%;
-  margin-bottom: 50px;
+  margin-bottom: 20px;
 }
 </style>

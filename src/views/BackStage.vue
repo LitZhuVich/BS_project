@@ -3,41 +3,10 @@
     <el-aside width="70px">
       <Aside />
     </el-aside>
-<<<<<<< HEAD
-
-    <el-container>
-      <el-header style="text-align: right; font-size: 12px">
-        <div class="toolbar">
-          <el-dropdown>
-            <el-icon style="margin-right: 8px; margin-top: 1px">
-              <setting />
-            </el-icon>
-            <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item>View</el-dropdown-item>
-                <el-dropdown-item>Add</el-dropdown-item>
-                <el-dropdown-item>Delete</el-dropdown-item>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
-          <span>Tom</span>
-        </div>
-      </el-header>
-
-=======
     <el-container style="height: 100vh">
->>>>>>> 4599645dc971e843bd4f76a8cc136be2c471ca06
       <el-main>
         <Tabs />
       </el-main>
-<<<<<<< HEAD
-      <el-container style="height: 100vh">
-        <el-main>
-          <Tabs />
-        </el-main>
-      </el-container>
-=======
->>>>>>> 4599645dc971e843bd4f76a8cc136be2c471ca06
     </el-container>
   </el-container>
 </template>
@@ -64,11 +33,6 @@ apiClient.get("/user").then((response: any) => console.log(response.user));
 .layout-container-demo .el-header {
   position: relative;
   color: var(--el-text-color-primary);
-<<<<<<< HEAD
-  position: relative;
-  color: var(--el-text-color-primary);
-=======
->>>>>>> 4599645dc971e843bd4f76a8cc136be2c471ca06
 }
 
 .layout-container-demo .el-aside {
@@ -76,12 +40,12 @@ apiClient.get("/user").then((response: any) => console.log(response.user));
   height: 100vh;
   /* 背景颜色 */
   background-color: $AsideBg;
+  overflow: hidden !important;
 }
 
 .el-container {
   background-color: $GlobalBg;
 }
-<<<<<<< HEAD
 
 .layout-container-demo .el-main {
   padding: 0;
@@ -94,6 +58,4 @@ apiClient.get("/user").then((response: any) => console.log(response.user));
   height: 100%;
   right: 20px;
 }
-=======
->>>>>>> 4599645dc971e843bd4f76a8cc136be2c471ca06
 </style>
