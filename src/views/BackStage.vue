@@ -3,8 +3,7 @@
     <el-aside width="70px">
       <Aside />
     </el-aside>
-
-    <el-container style="height: 100vh">
+    <el-container style="height: 100vh;">
       <el-main>
         <Tabs />
       </el-main>
@@ -67,11 +66,13 @@ const tableData = ref(Array.from({ length: 20 }).fill(item));
 }
 
 .layout-container-demo .el-aside {
-  color: var(--el-text-color-primary);
-  background: var(--el-color-primary-light-8);
   /* 侧边栏高度撑满 */
   height: 100vh;
   /* 背景颜色 */
   background-color: $AsideBg;
+}
+
+.el-container {
+  background-color: $GlobalBg;
 }
 </style>
