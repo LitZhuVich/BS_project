@@ -1,12 +1,4 @@
 <template>
-<<<<<<< HEAD
-  <div>123</div>
-</template>
-
-<script setup lang="ts"></script>
-
-<style scoped lang="scss"></style>
-=======
     <div>
         <h6>所有工单</h6>
         <div>
@@ -105,4 +97,3 @@ const tableData = [
     },
 ]
 </script>
->>>>>>> 4599645dc971e843bd4f76a8cc136be2c471ca06

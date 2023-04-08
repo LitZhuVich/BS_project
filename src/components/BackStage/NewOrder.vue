@@ -5,23 +5,15 @@
     <!-- 文件 -->
     <div class="attachments">
       <!-- 第一个框架的表单 -->
-      <el-form
-        :label-position="attachmentsPosition"
-        label-width="50px"
-        :model="attachments_input"
-        style="max-width: 800px"
-      >
+      <el-form :label-position="attachmentsPosition" label-width="50px" :model="attachments_input"
+        style="max-width: 800px">
         <!-- 标题输入框 -->
         <el-form-item label="标题:">
           <el-input v-model="attachments_input.name" />
         </el-form-item>
         <!-- 描述输入框 -->
         <el-form-item label="描述:">
-          <el-input
-            type="textarea"
-            :rows="5"
-            v-model="attachments_input.region"
-          />
+          <el-input type="textarea" :rows="5" v-model="attachments_input.region" />
         </el-form-item>
         <!-- 按钮 -->
         <div class="attachments_upload">
@@ -37,9 +29,9 @@
         <!-- 标题 -->
         <el-text class="template_title">客户模板切换</el-text>
         <!-- 图标 -->
-        <el-icon color="lightblue" :size="20" class="template_icon"
-          ><Setting
-        /></el-icon>
+        <el-icon color="lightblue" :size="20" class="template_icon">
+          <Setting />
+        </el-icon>
       </div>
       <!-- 第二个框架的内容 -->
       <div class="template_center">
@@ -47,44 +39,20 @@
         <el-form :label-position="templatePosition">
           <el-form-item label="公司名称">
             <!-- 下拉搜索框 -->
-            <el-select
-              v-model="template_value"
-              filterable
-              style="width: 400px"
-              allow-create
-            >
-              <el-option
-                v-for="item in template_option"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
+            <el-select v-model="template_value" filterable style="width: 400px" allow-create>
+              <el-option v-for="item in template_option" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
             <!-- 按钮 -->
-            <el-button type="primary" style="margin-left: 10px"
-              >添加公司</el-button
-            >
+            <el-button type="primary" style="margin-left: 10px">添加公司</el-button>
           </el-form-item>
           <!-- 第二个框架的姓名表单 -->
           <el-form-item label="姓名">
             <!-- 下拉搜索框 -->
-            <el-select
-              v-model="template_value2"
-              filterable
-              style="width: 400px"
-              allow-create
-            >
-              <el-option
-                v-for="item in template_option2"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
+            <el-select v-model="template_value2" filterable style="width: 400px" allow-create>
+              <el-option v-for="item in template_option2" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
             <!-- 按钮 -->
-            <el-button type="primary" style="margin-left: 10px"
-              >新增联系人</el-button
-            >
+            <el-button type="primary" style="margin-left: 10px">新增联系人</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -101,12 +69,9 @@
       <div class="attribute_center">
         <el-form :model="attribute_input">
           <!-- 图标 -->
-          <el-icon
-            color="lightblue"
-            :size="20"
-            style="position: absolute; left: 95px; top: 630px"
-            ><Location
-          /></el-icon>
+          <el-icon color="lightblue" :size="20" style="position: absolute; left: 95px; top: 630px">
+            <Location />
+          </el-icon>
           <div class="attribute_center_one">
             <el-text>客服姓名</el-text>
             <el-text>我自己</el-text>
@@ -129,16 +94,11 @@
       </div>
       <div class="sales_box2">
         <!-- 图标 -->
-        <el-icon
-          color="lightblue"
-          :size="20"
-          style="position: relative; left: 15px"
-          ><SuitcaseLine
-        /></el-icon>
+        <el-icon color="lightblue" :size="20" style="position: relative; left: 15px">
+          <SuitcaseLine />
+        </el-icon>
         <el-text class="sales_title2">执行人选择</el-text>
-        <el-text style="position: relative; bottom: 5px; left: 1400px"
-          >收起</el-text
-        >
+        <el-text style="position: relative; bottom: 5px; left: 1400px">收起</el-text>
       </div>
       <!-- 内容 -->
       <div class="sales_center">
@@ -147,30 +107,14 @@
           <el-row :gutter="20">
             <el-col :span="8">
               <el-text>工单类型</el-text>
-              <el-select
-                v-model="sales_value1"
-                style="width: 400px; display: block"
-              >
-                <el-option
-                  v-for="item in sales_option"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                /> </el-select
-            ></el-col>
+              <el-select v-model="sales_value1" style="width: 400px; display: block">
+                <el-option v-for="item in sales_option" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select></el-col>
             <el-col :span="8">
               <el-text>工单优先级</el-text>
-              <el-select
-                v-model="sales_value2"
-                style="width: 400px; display: block"
-              >
-                <el-option
-                  v-for="item in sales_option2"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                /> </el-select
-            ></el-col>
+              <el-select v-model="sales_value2" style="width: 400px; display: block">
+                <el-option v-for="item in sales_option2" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select></el-col>
           </el-row>
         </el-form>
       </div>
@@ -304,25 +248,30 @@ const sales_option2 = [
 .box {
   width: 100vw;
 }
+
 .attachments {
   background-color: white;
   padding: 20px;
   width: 90%;
   margin-bottom: 20px;
 }
+
 .attachments_upload {
   position: relative;
   margin-left: 50px;
   margin-bottom: 0;
 }
+
 .template_icon {
   padding-left: 5px;
 }
+
 .template_box,
 .attribute_box,
 .sales_box {
   border-bottom: 2px solid #f3f1f6;
 }
+
 .template,
 .attribute,
 .sales {
@@ -330,6 +279,7 @@ const sales_option2 = [
   width: 100%;
   margin-bottom: 20px;
 }
+
 .template_title,
 .attribute_title,
 .sales_title {
@@ -339,15 +289,18 @@ const sales_option2 = [
   position: relative;
   bottom: 5px;
 }
+
 .template_center {
   padding: 20px;
 }
+
 .attribute_center_one {
   width: 400px;
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
 }
+
 .attribute_center_two {
   width: 800px;
   display: flex;
@@ -370,9 +323,11 @@ const sales_option2 = [
 .sales_box2 {
   border-bottom: 2px solid #f3f1f6;
 }
+
 .sales_center {
   padding: 0px 20px 200px 20px;
 }
+
 .add_btn {
   width: 92%;
   margin-bottom: 50px;
