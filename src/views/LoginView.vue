@@ -102,6 +102,7 @@ const rules = reactive<FormRules>({
   username: [{ validator: validateName, trigger: "change" }],
   password: [{ validator: validatePass, trigger: "change" }],
 });
+
 // 返回登录类型接口
 interface loginType {
   token: string;
