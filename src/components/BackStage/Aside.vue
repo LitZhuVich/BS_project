@@ -8,9 +8,10 @@
     </div>
     <el-menu :default-openeds="['1', '3']">
       <el-menu-item-group>
-        <el-menu-item index="1-1">
+        <el-menu-item index="/index">
           <div class="nav-item">
-            <el-popover placement="right" popper-style="text-align:center" content="后台首页" trigger="hover" hide-after="50">
+            <el-popover placement="right" popper-style="text-align:center" content="后台首页" trigger="hover"
+              :hide-after="50">
               <template #reference style="width: 70px; height: 100%">
                 <el-icon>
                   <HomeFilled :color="iconColor" />
@@ -19,9 +20,9 @@
             </el-popover>
           </div>
         </el-menu-item>
-        <el-menu-item index="1-2">
+        <el-menu-item index="/test">
           <div class="nav-item">
-            <el-popover placement="right" popper-style="text-align:center" content="工单" trigger="hover" hide-after="50">
+            <el-popover placement="right" popper-style="text-align:center" content="工单" trigger="hover" :hide-after="50">
               <template #reference>
                 <el-icon>
                   <Message :color="iconColor" />
@@ -32,7 +33,8 @@
         </el-menu-item>
         <el-menu-item index="1-3">
           <div class="nav-item">
-            <el-popover placement="right" popper-style="text-align:center" content="呼叫中心" trigger="hover" hide-after="50">
+            <el-popover placement="right" popper-style="text-align:center" content="呼叫中心" trigger="hover"
+              :hide-after="50">
               <template #reference>
                 <el-icon>
                   <Phone :color="iconColor" />
@@ -43,7 +45,8 @@
         </el-menu-item>
         <el-menu-item index="1-4">
           <div class="nav-item">
-            <el-popover placement="right" popper-style="text-align:center" content="在线客服" trigger="hover" hide-after="50">
+            <el-popover placement="right" popper-style="text-align:center" content="在线客服" trigger="hover"
+              :hide-after="50">
               <template #reference>
                 <el-icon>
                   <ChatDotRound :color="iconColor" />
@@ -54,7 +57,7 @@
         </el-menu-item>
         <el-menu-item index="1-5">
           <div class="nav-item">
-            <el-popover placement="right" popper-style="text-align:center" content="知识库" trigger="hover" hide-after="50">
+            <el-popover placement="right" popper-style="text-align:center" content="知识库" trigger="hover" :hide-after="50">
               <template #reference>
                 <el-icon>
                   <Reading :color="iconColor" />
@@ -65,7 +68,8 @@
         </el-menu-item>
         <el-menu-item index="1-6">
           <div class="nav-item">
-            <el-popover placement="right" popper-style="text-align:center" content="客服管理" trigger="hover" hide-after="50">
+            <el-popover placement="right" popper-style="text-align:center" content="客服管理" trigger="hover"
+              :hide-after="50">
               <template #reference>
                 <el-icon>
                   <Avatar :color="iconColor" />
@@ -76,7 +80,8 @@
         </el-menu-item>
         <el-menu-item index="1-7">
           <div class="nav-item">
-            <el-popover placement="right" popper-style="text-align:center" content="效绩规则" trigger="hover" hide-after="50">
+            <el-popover placement="right" popper-style="text-align:center" content="效绩规则" trigger="hover"
+              :hide-after="50">
               <template #reference>
                 <el-icon>
                   <Operation :color="iconColor" />
@@ -103,7 +108,10 @@ import {
   Operation,
 } from "@element-plus/icons-vue";
 
+// 侧边栏图标颜色
 const iconColor = ref("#ffffff");
+// 侧边栏图标弹出框消失时间 1000=1s
+const hideTime = ref(50);
 </script>
 
 <style scoped lang="scss">

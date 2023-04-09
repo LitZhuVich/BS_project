@@ -5,18 +5,16 @@
     </el-aside>
     <el-container style="height: 100vh">
       <el-main>
-        <Tabs />
+        <!-- 当前页面的子路由会在 router-view 里面展示 -->
+        <router-view />
       </el-main>
     </el-container>
   </el-container>
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { Menu as IconMenu, Message, Setting } from "@element-plus/icons-vue";
 // 引入组件
 import Aside from "../components/BackStage/Aside.vue"; // 侧边栏
-import Tabs from "../components/BackStage/Tabs.vue"; // 标签页
 
 import ApiClient from "../request/request";
 const apiClient = new ApiClient();

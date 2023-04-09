@@ -52,8 +52,8 @@ import { ref } from "vue";
 import { Refresh } from '@element-plus/icons-vue'
 // 引入组件
 // TODO: 工单和新建工单页写完后，替换下面的TEST.vue
-import Order from "../BackStage/Order.vue";
-import NewOrder from "../BackStage/NewOrder.vue";
+import Order from "../Index/Order.vue";
+import NewOrder from "../Index/NewOrder.vue";
 import { styleType } from "element-plus/es/components/table-v2/src/common";
 
 interface TabType {
