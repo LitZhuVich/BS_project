@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosInstance, AxiosResponse } from "axios";
-
+import { useRouter } from "vue-router";
+const router = useRouter();
 export default class ApiClient {
   private axiosInstance: AxiosInstance;
 
@@ -26,13 +27,30 @@ export default class ApiClient {
       (response: AxiosResponse): AxiosResponse => {
         return response;
       },
-      (error: any): Promise<never> => {
+      async (error: any): Promise<never> => {
+        // 如果返回状态码为 401，则说明 Token 已经过期，需要重新获取 Token
         if (error.response && error.response.status === 401) {
           // 处理未授权错误
           console.log(error.response);
-          // console.error(error.message); // 输出其他错误信息
-        } else {
-          // console.error(error.message); // 输出其他错误信息
+          // start 刷新token
+          try {
+            // 发送刷新 Token 的请求
+            const response = await this.axiosInstance.get("/refresh");
+            // 将新的 Token 存储到本地存储中
+            localStorage.setItem("token", response.data.token);
+            // 获取原始请求的配置信息
+            const originalRequest = error.config;
+            // 设置新的 Token 到头部信息中
+            originalRequest.headers.Authorization = `Bearer ${response.data.token}`;
+            // 重新发送原始请求
+            return this.axiosInstance(originalRequest);
+          } catch {
+            // 如果刷新 Token 失败，则跳转到登录页
+            router.push({
+              name: "login",
+            });
+          }
+          // end
         }
         return Promise.reject(error.message);
       }

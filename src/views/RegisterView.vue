@@ -66,7 +66,9 @@ import type { FormInstance, FormRules } from "element-plus";
 import { ElNotification } from "element-plus";
 import { User, Lock } from "@element-plus/icons-vue";
 import ApiClient from "../request/request";
+import { useRouter } from "vue-router";
 const apiClient = new ApiClient();
+const router = useRouter();
 
 const ruleFormRef = ref<FormInstance>();
 
@@ -141,6 +143,10 @@ const submitForm = (formEl: FormInstance | undefined): void => {
           message: "注册成功",
           type: "success",
         });
+        // 前往登录页
+        router.push({
+          name: "login",
+        });
       } else {
         // 提交失败
         ElNotification({
@@ -166,7 +172,7 @@ const resetForm = (formEl: FormInstance | undefined): void => {
 #loginBody {
   width: 100vw;
   height: 100vh;
-  background: url("/image/authBackImage.jpg") no-repeat center center;
+  background: url("/image/authBackImage.jpg") center center;
   display: flex;
   justify-content: center;
   align-items: center;

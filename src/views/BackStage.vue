@@ -40,9 +40,22 @@ apiClient.get("/user").then((response: any) => console.log(response.user));
   height: 100vh;
   /* 背景颜色 */
   background-color: $AsideBg;
+  overflow: hidden !important;
 }
 
 .el-container {
   background-color: $GlobalBg;
+}
+
+.layout-container-demo .el-main {
+  padding: 0;
+}
+
+.layout-container-demo .toolbar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  right: 20px;
 }
 </style>

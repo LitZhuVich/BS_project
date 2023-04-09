@@ -102,6 +102,7 @@ const rules = reactive<FormRules>({
   username: [{ validator: validateName, trigger: "change" }],
   password: [{ validator: validatePass, trigger: "change" }],
 });
+
 // 返回登录类型接口
 interface loginType {
   token: string;
@@ -155,7 +156,7 @@ const resetForm = (formEl: FormInstance | undefined): void => {
 #loginBody {
   width: 100vw;
   height: 100vh;
-  background: url("/image/authBackImage.jpg") no-repeat center center;
+  background: url("/image/authBackImage.jpg") center center;
   display: flex;
   justify-content: center;
   align-items: center;
