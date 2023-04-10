@@ -1,26 +1,33 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import { App } from "vue";
 
-// 引入组件
-import Tabs from "../components/BackStage/Index/Tabs.vue";
-
 const routes: RouteRecordRaw[] = [
-  // 首页
   {
     path: "/",
     name: "backStage",
     components: {
       main: () => import("../views/BackStage.vue"),
     },
-    children: [
-      {
-        path: "index",
-        name: "index",
-        component: Tabs,
-      },
-    ],
     redirect: "/index",
     meta: { requiresAuth: true },
+    children: [
+      {
+        // 首页
+        path: "index",
+        name: "index",
+        components: {
+          Content: () => import("../views/Tabs.vue"),
+        }
+      },
+      {
+        // 工单列表
+        path: "orderList",
+        name: "orderList",
+        components: {
+          Content: () => import("../views/Tabs.vue"),
+        }
+      },
+    ],
   },
   // 登录页面
   {

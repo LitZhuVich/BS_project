@@ -1,12 +1,12 @@
 <template>
   <el-container class="layout-container-demo">
-    <el-aside width="70px">
+    <el-aside width="200px">
       <Aside />
     </el-aside>
     <el-container style="height: 100vh">
       <el-main>
         <!-- 当前页面的子路由会在 router-view 里面展示 -->
-        <router-view />
+        <router-view name="Content" />
       </el-main>
     </el-container>
   </el-container>
