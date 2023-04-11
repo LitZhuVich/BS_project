@@ -11,21 +11,158 @@ const routes: RouteRecordRaw[] = [
     redirect: "/index",
     meta: { requiresAuth: true },
     children: [
+      // 首页
       {
-        // 首页
         path: "index",
         name: "index",
         components: {
-          Content: () => import("../views/Tabs.vue"),
-        }
+          Content: () => import("../views/asideContent/IndexContent.vue"),
+        },
       },
+      // 工单
       {
-        // 工单列表
-        path: "orderList",
-        name: "orderList",
+        path: "order",
+        name: "order",
+        children: [
+          // 发起工单
+          {
+            path: "post",
+            name: "postOrder",
+            components: {
+              Content: () =>
+                import("../views/asideContent/Order/PostContent.vue"),
+            },
+          },
+          // 我的工单
+          {
+            path: "mine",
+            name: "mineOrder",
+            components: {
+              Content: () =>
+                import("../views/asideContent/Order/MineContent.vue"),
+            },
+          },
+          // 发起工单
+          {
+            path: "post",
+            name: "postOrder",
+            components: {
+              Content: () =>
+                import("../views/asideContent/Order/PostContent.vue"),
+            },
+          },
+          // 代办工单池
+          {
+            path: "toBeDone",
+            name: "toBeDoneOrder",
+            components: {
+              Content: () =>
+                import("../views/asideContent/Order/ToBeDoneContent.vue"),
+            },
+          },
+          // 工单列表
+          {
+            path: "list",
+            name: "listOrder",
+            components: {
+              Content: () =>
+                import("../views/asideContent/Order/ListContent.vue"),
+            },
+          },
+          // 工单设置
+          {
+            path: "setting",
+            name: "settingOrder",
+            components: {
+              Content: () =>
+                import("../views/asideContent/Order/SettingContent.vue"),
+            },
+          },
+        ],
+      },
+      // 组织架构
+      {
+        path: "organization",
+        name: "organization",
         components: {
-          Content: () => import("../views/Tabs.vue"),
-        }
+          Content: () =>
+            import("../views/asideContent/OrganizationContent.vue"),
+        },
+      },
+      // 工程师日历
+      {
+        path: "engineerCalendar",
+        name: "engineerCalendar",
+        components: {
+          Content: () =>
+            import("../views/asideContent/EngineerCalendarContent.vue"),
+        },
+      },
+      // 客户管理
+      {
+        path: "customerManagement",
+        name: "customerManagement",
+        components: {
+          Content: () =>
+            import("../views/asideContent/CustomerManagementContent.vue"),
+        },
+      },
+      // 资产管理
+      {
+        path: "asset",
+        name: "asset",
+        children: [
+          // 资产清单
+          {
+            path: "inventory",
+            name: "inventoryAsset",
+            components: {
+              Content: () =>
+                import(
+                  "../views/asideContent/AssetManagement/InventoryContent.vue"
+                ),
+            },
+          },
+          // 资产分类
+          {
+            path: "catefory",
+            name: "cateforyAsset",
+            components: {
+              Content: () =>
+                import(
+                  "../views/asideContent/AssetManagement/CateforyContent.vue"
+                ),
+            },
+          },
+          // 添加资产
+          {
+            path: "add",
+            name: "addAsset",
+            components: {
+              Content: () =>
+                import("../views/asideContent/AssetManagement/AddContent.vue"),
+            },
+          },
+          // 分派资产
+          {
+            path: "assingn",
+            name: "assingnAsset",
+            components: {
+              Content: () =>
+                import(
+                  "../views/asideContent/AssetManagement/AssingnContent.vue"
+                ),
+            },
+          },
+        ],
+      },
+      // 系统设置
+      {
+        path: "setting",
+        name: "setting",
+        components: {
+          Content: () => import("../views/asideContent/SettingContent.vue"),
+        },
       },
     ],
   },
@@ -34,7 +171,7 @@ const routes: RouteRecordRaw[] = [
     path: "/login",
     name: "login",
     components: {
-      main: () => import("../views/LoginView.vue"),
+      main: () => import("../views/auth/LoginView.vue"),
     },
   },
   {
@@ -42,7 +179,7 @@ const routes: RouteRecordRaw[] = [
     path: "/register",
     name: "register",
     components: {
-      main: () => import("../views/RegisterView.vue"),
+      main: () => import("../views/auth/RegisterView.vue"),
     },
   },
 ];

@@ -9,8 +9,8 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    Aside: typeof import('./src/components/BackStage/Aside.vue')['default']
-    Content: typeof import('./src/components/BackStage/Content.vue')['default']
+    Aside: typeof import('./src/components/Aside.vue')['default']
+    Content: typeof import('./src/components/Content.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElButton: typeof import('element-plus/es')['ElButton']
@@ -26,21 +26,15 @@ declare module '@vue/runtime-core' {
     ElMenu: typeof import('element-plus/es')['ElMenu']
     ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
     ElMenuItemGroup: typeof import('element-plus/es')['ElMenuItemGroup']
-    ElOption: typeof import('element-plus/es')['ElOption']
     ElPopover: typeof import('element-plus/es')['ElPopover']
     ElRow: typeof import('element-plus/es')['ElRow']
-    ElSelect: typeof import('element-plus/es')['ElSelect']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
-    ElTabPane: typeof import('element-plus/es')['ElTabPane']
-    ElTabs: typeof import('element-plus/es')['ElTabs']
     ElText: typeof import('element-plus/es')['ElText']
-    NewOrder: typeof import('./src/components/BackStage/Index/NewOrder.vue')['default']
-    Order: typeof import('./src/components/BackStage/Index/Order.vue')['default']
-    OrderList: typeof import('./src/components/BackStage/Index/OrderList.vue')['default']
+    NewOrder: typeof import('./src/components/NewOrder.vue')['default']
+    Order: typeof import('./src/components/orderList/Order.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Tabs: typeof import('./src/components/BackStage/Index/Tabs.vue')['default']
   }
 }

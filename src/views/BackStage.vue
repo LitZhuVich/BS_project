@@ -1,7 +1,7 @@
 <template>
   <el-container class="layout-container-demo">
     <el-aside width="200px">
-      <Aside />
+      <AsideBar />
     </el-aside>
     <el-container style="height: 100vh">
       <el-main>
@@ -14,9 +14,10 @@
 
 <script lang="ts" setup>
 // 引入组件
-import Aside from "../components/BackStage/Aside.vue"; // 侧边栏
+import AsideBar from "../components/Aside.vue"; // 侧边栏
 
 import ApiClient from "../request/request";
+// TODO:测试用户登录之后的功能
 const apiClient = new ApiClient();
 apiClient.get("/user").then((response: any) => console.log(response.user));
 </script>
