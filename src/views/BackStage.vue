@@ -1,22 +1,53 @@
 <template>
   <el-container class="layout-container-demo">
     <el-aside width="200px">
-      <AsideBar />
+      <AsideBar @getBreadcrumbList="getBreadcrumbList" />
     </el-aside>
     <el-container style="height: 100vh">
       <el-main>
-        <!-- 当前页面的子路由会在 router-view 里面展示 -->
+        <HeaderBar />
         <router-view name="Content" />
+        {{ list }}
+        <!-- 当前页面的子路由会在 router-view 里面展示 -->
       </el-main>
     </el-container>
   </el-container>
 </template>
 
 <script lang="ts" setup>
+import { ref, Ref } from "vue";
+import { useRoute } from "vue-router";
+import { useBreadcrumbStore } from "../store/breadcrumb";
+import { storeToRefs } from "pinia";
 // 引入组件
 import AsideBar from "../components/Aside.vue"; // 侧边栏
-
 import ApiClient from "../request/request";
+import HeaderBar from "../components/Header.vue";
+
+const route = useRoute();
+const breadcrumb = useBreadcrumbStore();
+const { list }: any = storeToRefs(breadcrumb);
+interface breadcrumbListType {
+  name: {
+    breadcrumb?: string;
+  };
+  path: string;
+}
+const breadcrumbList = ref<breadcrumbListType[]>([]);
+const getBreadcrumbList = (val: any) => {
+  const matched = route.matched;
+  //  清空面包屑
+  breadcrumbList.value = [];
+  matched.forEach((item) => {
+    if (item.meta.breadcrumb) {
+      breadcrumbList.value.push({
+        name: item.meta.breadcrumb,
+        path: item.path,
+      });
+    }
+  });
+  console.log(val);
+};
 // TODO:测试用户登录之后的功能
 const apiClient = new ApiClient();
 apiClient.get("/user").then((response: any) => console.log(response.user));

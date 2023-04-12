@@ -18,11 +18,14 @@ const routes: RouteRecordRaw[] = [
         components: {
           Content: () => import("../views/asideContent/IndexContent.vue"),
         },
+        meta: { breadcrumb: "首页" },
       },
       // 工单
       {
         path: "order",
         name: "order",
+        redirect: "/order/post",
+        meta: { breadcrumb: "工单" },
         children: [
           // 发起工单
           {
@@ -32,6 +35,7 @@ const routes: RouteRecordRaw[] = [
               Content: () =>
                 import("../views/asideContent/Order/PostContent.vue"),
             },
+            meta: { breadcrumb: "发起工单" },
           },
           // 我的工单
           {
@@ -41,6 +45,7 @@ const routes: RouteRecordRaw[] = [
               Content: () =>
                 import("../views/asideContent/Order/MineContent.vue"),
             },
+            meta: { breadcrumb: "我的工单" },
           },
           // 发起工单
           {
@@ -50,6 +55,7 @@ const routes: RouteRecordRaw[] = [
               Content: () =>
                 import("../views/asideContent/Order/PostContent.vue"),
             },
+            meta: { breadcrumb: "发起工单" },
           },
           // 代办工单池
           {
@@ -59,6 +65,7 @@ const routes: RouteRecordRaw[] = [
               Content: () =>
                 import("../views/asideContent/Order/ToBeDoneContent.vue"),
             },
+            meta: { breadcrumb: "代办工单池" },
           },
           // 工单列表
           {
@@ -68,6 +75,7 @@ const routes: RouteRecordRaw[] = [
               Content: () =>
                 import("../views/asideContent/Order/ListContent.vue"),
             },
+            meta: { breadcrumb: "工单列表" },
           },
           // 工单设置
           {
@@ -77,6 +85,7 @@ const routes: RouteRecordRaw[] = [
               Content: () =>
                 import("../views/asideContent/Order/SettingContent.vue"),
             },
+            meta: { breadcrumb: "工单设置" },
           },
         ],
       },
@@ -88,6 +97,7 @@ const routes: RouteRecordRaw[] = [
           Content: () =>
             import("../views/asideContent/OrganizationContent.vue"),
         },
+        meta: { breadcrumb: "组织架构" },
       },
       // 工程师日历
       {
@@ -97,6 +107,7 @@ const routes: RouteRecordRaw[] = [
           Content: () =>
             import("../views/asideContent/EngineerCalendarContent.vue"),
         },
+        meta: { breadcrumb: "工程师日历" },
       },
       // 客户管理
       {
@@ -106,11 +117,14 @@ const routes: RouteRecordRaw[] = [
           Content: () =>
             import("../views/asideContent/CustomerManagementContent.vue"),
         },
+        meta: { breadcrumb: "客户管理" },
       },
       // 资产管理
       {
         path: "asset",
         name: "asset",
+        redirect: "/asset/inventory",
+        meta: { breadcrumb: "资产" },
         children: [
           // 资产清单
           {
@@ -122,6 +136,7 @@ const routes: RouteRecordRaw[] = [
                   "../views/asideContent/AssetManagement/InventoryContent.vue"
                 ),
             },
+            meta: { breadcrumb: "资产清单" },
           },
           // 资产分类
           {
@@ -133,6 +148,7 @@ const routes: RouteRecordRaw[] = [
                   "../views/asideContent/AssetManagement/CateforyContent.vue"
                 ),
             },
+            meta: { breadcrumb: "资产分类" },
           },
           // 添加资产
           {
@@ -142,6 +158,7 @@ const routes: RouteRecordRaw[] = [
               Content: () =>
                 import("../views/asideContent/AssetManagement/AddContent.vue"),
             },
+            meta: { breadcrumb: "添加资产" },
           },
           // 分派资产
           {
@@ -153,6 +170,7 @@ const routes: RouteRecordRaw[] = [
                   "../views/asideContent/AssetManagement/AssingnContent.vue"
                 ),
             },
+            meta: { breadcrumb: "分派资产" },
           },
         ],
       },
@@ -163,6 +181,7 @@ const routes: RouteRecordRaw[] = [
         components: {
           Content: () => import("../views/asideContent/SettingContent.vue"),
         },
+        meta: { breadcrumb: "系统设置" },
       },
     ],
   },

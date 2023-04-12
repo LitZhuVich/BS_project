@@ -7,27 +7,18 @@
           <Shop :color="iconColor" />
         </el-icon>
       </div>
-      <el-menu default-active="2" class="el-menu-vertical-demo" router>
+      <el-menu
+        default-active="/index"
+        class="el-menu-vertical-demo"
+        router
+        :unique-opened="true"
+      >
         <!-- 首页控制台 -->
         <el-menu-item index="/index">
-          <div class="nav-item">
-            <el-popover
-              placement="right"
-              popper-style="text-align:center"
-              content="首页控制台"
-              trigger="hover"
-              :hide-after="50"
-            >
-              <template #reference style="width: 70px; height: 100%">
-                <div>
-                  <el-icon>
-                    <HomeFilled :color="iconColor" />
-                  </el-icon>
-                  <span>首页控制台</span>
-                </div>
-              </template>
-            </el-popover>
-          </div>
+          <el-icon>
+            <HomeFilled :color="iconColor" />
+          </el-icon>
+          <span>首页控制台</span>
         </el-menu-item>
         <!-- 工单管理：发起工单、我的工单、代办工单池、工单列表 -->
         <el-sub-menu>
@@ -112,6 +103,32 @@ import {
   Avatar,
   Operation,
 } from "@element-plus/icons-vue";
+import { useRoute } from "vue-router";
+import { useBreadcrumbStore } from "../store/breadcrumb";
+import { storeToRefs } from "pinia";
+
+const route = useRoute();
+const breadcrumb = useBreadcrumbStore();
+const { list }: any = storeToRefs(breadcrumb);
+interface breadcrumbListType {
+  name: string;
+  path: string;
+}
+const breadcrumbList = ref<breadcrumbListType[]>([]);
+const getBreadcrumbList = (itemName: string, itemPath: string) => {
+  const matched = route.matched;
+  //  清空面包屑
+  breadcrumbList.value = [];
+  matched.forEach((item) => {
+    if (item.meta.breadcrumb) {
+      breadcrumbList.value.push({
+        name: itemName,
+        path: itemPath,
+      });
+    }
+  });
+  console.log(itemName, itemPath);
+};
 
 // 侧边栏图标颜色
 const iconColor = ref("#ffffff");
