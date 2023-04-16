@@ -109,26 +109,6 @@ import { storeToRefs } from "pinia";
 
 const route = useRoute();
 const breadcrumb = useBreadcrumbStore();
-const { list }: any = storeToRefs(breadcrumb);
-interface breadcrumbListType {
-  name: string;
-  path: string;
-}
-const breadcrumbList = ref<breadcrumbListType[]>([]);
-const getBreadcrumbList = (itemName: string, itemPath: string) => {
-  const matched = route.matched;
-  //  清空面包屑
-  breadcrumbList.value = [];
-  matched.forEach((item) => {
-    if (item.meta.breadcrumb) {
-      breadcrumbList.value.push({
-        name: itemName,
-        path: itemPath,
-      });
-    }
-  });
-  console.log(itemName, itemPath);
-};
 
 // 侧边栏图标颜色
 const iconColor = ref("#ffffff");

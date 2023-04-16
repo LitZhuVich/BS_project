@@ -10,10 +10,10 @@
         </el-breadcrumb-item>
         <el-breadcrumb-item
           v-for="(item, index) of list"
+          :to="list[0].url"
           :key="index"
-          :to="item.path"
         >
-          {{ item.name }}
+          {{ list[0].title }}
         </el-breadcrumb-item>
       </el-breadcrumb>
     </template>
@@ -30,7 +30,7 @@
     </template>
     <template #extra>
       <div class="flex items-center">
-        <el-button type="danger" class="ml-2">登出</el-button>
+        <el-button type="danger" class="ml-2" @click="logout">登出</el-button>
       </div>
     </template>
   </el-page-header>
@@ -39,45 +39,59 @@
 import { ref } from "vue";
 import { ArrowRight } from "@element-plus/icons-vue";
 import { ElNotification as notify } from "element-plus";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter, onBeforeRouteUpdate } from "vue-router";
 import { useBreadcrumbStore } from "../store/breadcrumb";
 import { storeToRefs } from "pinia";
+import ApiClient from "../request/request";
+const apiClient = new ApiClient();
 const route = useRoute();
+const router = useRouter();
 const breadcrumb = useBreadcrumbStore();
 const { list }: any = storeToRefs(breadcrumb);
-// console.log(breadcrumb.list);
-
-const emit = defineEmits(["getBreadcrumbList"]);
+// 监听路由变化
+onBeforeRouteUpdate((to: any, from: any, next) => {
+  breadcrumb.list = to.meta.breadcrumb;
+  next();
+});
+// 返回上一级路由
 const onBack = () => {
-  notify("点击了Back");
+  // notify("点击了Back");
+  router.go(-1);
 };
 interface breadcrumbListType {
-  name: {
-    breadcrumb?: string;
-  };
-  path: string;
+  title: string;
+  url: string;
 }
 const breadcrumbList = ref<breadcrumbListType[]>([]);
 const getBreadcrumbList = () => {
   const matched = route.matched;
   //  清空面包屑
   breadcrumbList.value = [];
-  matched.forEach((item) => {
-    if (item.meta.breadcrumb) {
+  matched.forEach((item: any) => {
+    if (item.meta && item.meta.breadcrumb) {
       breadcrumbList.value.push({
-        name: item.meta.breadcrumb,
-        path: item.path,
+        title: item.meta.breadcrumb[0].title,
+        url: item.meta.breadcrumb[0].url,
       });
     }
   });
   breadcrumb.list = breadcrumbList.value;
-  emit("getBreadcrumbList", list);
 };
-
+// 默认显示面包屑
 getBreadcrumbList();
 // 重置 breadcrumb
 const BreadcrumbListReset = () => {
   breadcrumb.$reset();
+};
+// 登出
+const logout = async (): Promise<void> => {
+  const response = await apiClient.post("/logout");
+  console.log(response);
+  localStorage.removeItem("token");
+  notify("登出成功");
+  router.push({
+    name: "login",
+  });
 };
 </script>
 <style scoped lang="scss">

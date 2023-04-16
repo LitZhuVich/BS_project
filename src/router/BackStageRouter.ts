@@ -18,14 +18,16 @@ const routes: RouteRecordRaw[] = [
         components: {
           Content: () => import("../views/asideContent/IndexContent.vue"),
         },
-        meta: { breadcrumb: "首页" },
+        meta: {
+          breadcrumb: [{ title: "首页", url: "/index" }],
+        },
       },
       // 工单
       {
         path: "order",
         name: "order",
         redirect: "/order/post",
-        meta: { breadcrumb: "工单" },
+        meta: { breadcrumb: [{ title: "工单", url: "/order" }] },
         children: [
           // 发起工单
           {
@@ -35,7 +37,9 @@ const routes: RouteRecordRaw[] = [
               Content: () =>
                 import("../views/asideContent/Order/PostContent.vue"),
             },
-            meta: { breadcrumb: "发起工单" },
+            meta: {
+              breadcrumb: [{ title: "发起工单", url: "/order/post" }],
+            },
           },
           // 我的工单
           {
@@ -45,17 +49,9 @@ const routes: RouteRecordRaw[] = [
               Content: () =>
                 import("../views/asideContent/Order/MineContent.vue"),
             },
-            meta: { breadcrumb: "我的工单" },
-          },
-          // 发起工单
-          {
-            path: "post",
-            name: "postOrder",
-            components: {
-              Content: () =>
-                import("../views/asideContent/Order/PostContent.vue"),
+            meta: {
+              breadcrumb: [{ title: "我的工单", url: "/order/mine" }],
             },
-            meta: { breadcrumb: "发起工单" },
           },
           // 代办工单池
           {
@@ -65,7 +61,9 @@ const routes: RouteRecordRaw[] = [
               Content: () =>
                 import("../views/asideContent/Order/ToBeDoneContent.vue"),
             },
-            meta: { breadcrumb: "代办工单池" },
+            meta: {
+              breadcrumb: [{ title: "代办工单池", url: "/order/toBeDone" }],
+            },
           },
           // 工单列表
           {
@@ -75,7 +73,9 @@ const routes: RouteRecordRaw[] = [
               Content: () =>
                 import("../views/asideContent/Order/ListContent.vue"),
             },
-            meta: { breadcrumb: "工单列表" },
+            meta: {
+              breadcrumb: [{ title: "工单列表", url: "/order/list" }],
+            },
           },
           // 工单设置
           {
@@ -85,7 +85,9 @@ const routes: RouteRecordRaw[] = [
               Content: () =>
                 import("../views/asideContent/Order/SettingContent.vue"),
             },
-            meta: { breadcrumb: "工单设置" },
+            meta: {
+              breadcrumb: [{ title: "工单设置", url: "/order/setting" }],
+            },
           },
         ],
       },
@@ -97,7 +99,9 @@ const routes: RouteRecordRaw[] = [
           Content: () =>
             import("../views/asideContent/OrganizationContent.vue"),
         },
-        meta: { breadcrumb: "组织架构" },
+        meta: {
+          breadcrumb: [{ title: "组织架构", url: "/organization" }],
+        },
       },
       // 工程师日历
       {
@@ -107,7 +111,9 @@ const routes: RouteRecordRaw[] = [
           Content: () =>
             import("../views/asideContent/EngineerCalendarContent.vue"),
         },
-        meta: { breadcrumb: "工程师日历" },
+        meta: {
+          breadcrumb: [{ title: "工程师日历", url: "/engineerCalendar" }],
+        },
       },
       // 客户管理
       {
@@ -117,14 +123,18 @@ const routes: RouteRecordRaw[] = [
           Content: () =>
             import("../views/asideContent/CustomerManagementContent.vue"),
         },
-        meta: { breadcrumb: "客户管理" },
+        meta: {
+          breadcrumb: [{ title: "客户管理", url: "/customerManagement" }],
+        },
       },
       // 资产管理
       {
         path: "asset",
         name: "asset",
         redirect: "/asset/inventory",
-        meta: { breadcrumb: "资产" },
+        meta: {
+          breadcrumb: [{ title: "资产", url: "/asset" }],
+        },
         children: [
           // 资产清单
           {
@@ -136,7 +146,9 @@ const routes: RouteRecordRaw[] = [
                   "../views/asideContent/AssetManagement/InventoryContent.vue"
                 ),
             },
-            meta: { breadcrumb: "资产清单" },
+            meta: {
+              breadcrumb: [{ title: "资产清单", url: "/asset/inventory" }],
+            },
           },
           // 资产分类
           {
@@ -148,7 +160,9 @@ const routes: RouteRecordRaw[] = [
                   "../views/asideContent/AssetManagement/CateforyContent.vue"
                 ),
             },
-            meta: { breadcrumb: "资产分类" },
+            meta: {
+              breadcrumb: [{ title: "资产分类", url: "/asset/catefory" }],
+            },
           },
           // 添加资产
           {
@@ -158,7 +172,9 @@ const routes: RouteRecordRaw[] = [
               Content: () =>
                 import("../views/asideContent/AssetManagement/AddContent.vue"),
             },
-            meta: { breadcrumb: "添加资产" },
+            meta: {
+              breadcrumb: [{ title: "添加资产", url: "/asset/add" }],
+            },
           },
           // 分派资产
           {
@@ -170,7 +186,9 @@ const routes: RouteRecordRaw[] = [
                   "../views/asideContent/AssetManagement/AssingnContent.vue"
                 ),
             },
-            meta: { breadcrumb: "分派资产" },
+            meta: {
+              breadcrumb: [{ title: "分派资产", url: "/asset/assingn" }],
+            },
           },
         ],
       },
@@ -181,7 +199,9 @@ const routes: RouteRecordRaw[] = [
         components: {
           Content: () => import("../views/asideContent/SettingContent.vue"),
         },
-        meta: { breadcrumb: "系统设置" },
+        meta: {
+          breadcrumb: [{ title: "系统设置", url: "/asset/setting" }],
+        },
       },
     ],
   },
