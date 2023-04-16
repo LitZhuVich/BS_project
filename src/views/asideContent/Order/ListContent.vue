@@ -4,7 +4,10 @@
     <div class="OrderView">
       <div class="avatar">
         <div>
-          <el-avatar :size="50" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+          <el-avatar
+            :size="50"
+            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+          />
         </div>
         <div style="margin-left: 10px">
           <h4>Cly</h4>
@@ -13,12 +16,14 @@
       </div>
       <div class="mid">
         <b>工单视图</b>
-        <el-icon style="
-                                                                                            position: absolute;
-                                                                                            right: 0;
-                                                                                            top: 50%;
-                                                                                            transform: translate(0, -50%);
-                                                                                          ">
+        <el-icon
+          style="
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translate(0, -50%);
+          "
+        >
           <Refresh />
         </el-icon>
       </div>
@@ -43,7 +48,7 @@ import { ref } from "vue";
 import { Refresh } from "@element-plus/icons-vue";
 // 引入组件
 // TODO: 工单和新建工单页写完后，替换下面的TEST.vue
-import Order from "../components/BackStage/Index/Order.vue";
+// import Order from "../../../components/orderlist/Order";
 
 interface TabType {
   title: string; // 标签页显示名称
@@ -77,11 +82,9 @@ const tabValue = ref("1");
 //         test: '数据'
 //     }
 // })
-
 </script>
 
-
-<style scoped lang="scss" >
+<style scoped lang="scss">
 $views-li: 40px;
 
 #Order {
@@ -113,12 +116,10 @@ $views-li: 40px;
       display: flex;
       justify-content: space-between;
     }
-
   }
 
   .OrderList {
     background-color: white;
   }
-
 }
 </style>

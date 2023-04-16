@@ -60,7 +60,7 @@ import { reactive, ref } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
 import { ElNotification } from "element-plus";
 import { User, Lock } from "@element-plus/icons-vue";
-import ApiClient from "../request/request";
+import ApiClient from "../../request/request";
 import { useRouter } from "vue-router";
 const apiClient = new ApiClient();
 const router = useRouter();
@@ -144,7 +144,6 @@ const submitForm = (formEl: FormInstance | undefined): void => {
     }
   });
 };
-// apiClient.get("/user").then((ss: any) => console.log(ss));
 // 重置方法
 const resetForm = (formEl: FormInstance | undefined): void => {
   if (!formEl) return;
