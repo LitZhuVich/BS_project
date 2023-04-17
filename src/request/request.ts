@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosInstance, AxiosResponse } from "axios";
 import { useRouter } from "vue-router";
 const router = useRouter();
+
 export default class ApiClient {
   private axiosInstance: AxiosInstance;
 

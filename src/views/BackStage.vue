@@ -1,22 +1,30 @@
 <template>
   <el-container class="layout-container-demo">
-    <el-aside width="70px">
-      <Aside />
+    <el-aside width="200px">
+      <AsideBar />
     </el-aside>
     <el-container style="height: 100vh">
       <el-main>
+        <HeaderBar />
+        <router-view name="Content" />
         <!-- 当前页面的子路由会在 router-view 里面展示 -->
-        <router-view />
       </el-main>
     </el-container>
   </el-container>
 </template>
 
 <script lang="ts" setup>
+import { ref, Ref } from "vue";
+import { useRoute } from "vue-router";
+// import { useBreadcrumbStore } from "../store/breadcrumb";
+// import { storeToRefs } from "pinia";
 // 引入组件
-import Aside from "../components/BackStage/Aside.vue"; // 侧边栏
-
+import AsideBar from "../components/Aside.vue"; // 侧边栏
 import ApiClient from "../request/request";
+import HeaderBar from "../components/Header.vue";
+const route = useRoute();
+
+// TODO:测试用户登录之后的功能
 const apiClient = new ApiClient();
 apiClient.get("/user").then((response: any) => console.log(response.user));
 </script>
@@ -38,8 +46,6 @@ apiClient.get("/user").then((response: any) => console.log(response.user));
 .layout-container-demo .el-aside {
   /* 侧边栏高度撑满 */
   height: 100vh;
-  /* 背景颜色 */
-  background-color: $AsideBg;
   overflow: hidden !important;
 }
 

@@ -65,7 +65,7 @@ import { reactive, ref } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
 import { ElNotification } from "element-plus";
 import { User, Lock } from "@element-plus/icons-vue";
-import ApiClient from "../request/request";
+import ApiClient from "../../request/request";
 import { useRouter } from "vue-router";
 const apiClient = new ApiClient();
 const router = useRouter();
