@@ -3,7 +3,8 @@
         <h6>所有工单</h6>
         <div></div>
     </div>
-    <el-table :data="tableData" stripe style="width: 100%">
+    <el-table :data="tableData" stripe style="width: 100%" size="small">
+        <el-table-column type="selection" />
         <el-table-column prop="code" label="编码" />
         <el-table-column prop="orderStatus" label="工单状态" />
         <el-table-column prop="title" label="标题" />
