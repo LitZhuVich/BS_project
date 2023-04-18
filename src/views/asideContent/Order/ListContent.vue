@@ -14,11 +14,11 @@
       <div class="mid">
         <b>工单视图</b>
         <el-icon style="
-                          position: absolute;
-                          right: 0;
-                          top: 50%;
-                          transform: translate(0, -50%);
-                        ">
+                            position: absolute;
+                            right: 0;
+                            top: 50%;
+                            transform: translate(0, -50%);
+                          ">
           <Refresh />
         </el-icon>
       </div>
@@ -65,7 +65,7 @@ $views-li: 40px;
 
 #Order {
   display: grid;
-  grid-template-columns: 1fr 5fr;
+  grid-template-columns: 1fr 6fr;
   column-gap: 10px;
   height: 100%;
 
