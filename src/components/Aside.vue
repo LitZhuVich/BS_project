@@ -1,8 +1,8 @@
 <template>
     <el-row class="tac">
         <el-col :span="24">
-            <el-menu active-text-color="#0065f8" router default-active="/index" text-color="#fff" unique-opened="true"
-                background-color="#31c3f6">
+            <el-menu active-text-color="#0065f8" router default-active="/index" text-color="#fff"
+                :unique-opened="unique_opened" background-color="#31c3f6">
                 <!-- 首页控制台 -->
                 <el-menu-item index="/index">
                     <el-icon>
@@ -11,7 +11,7 @@
                     <span>首页控制台</span>
                 </el-menu-item>
                 <!-- 工单管理：发起工单、我的工单、代办工单池、工单列表 -->
-                <el-sub-menu>
+                <el-sub-menu index="/order">
                     <template #title>
                         <el-icon>
                             <document />
@@ -93,6 +93,8 @@ import { storeToRefs } from "pinia";
 
 const route = useRoute();
 const breadcrumb = useBreadcrumbStore();
+// 下拉框是否只能下拉一个
+const unique_opened = ref(true);
 
 </script>
 

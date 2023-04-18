@@ -4,10 +4,7 @@
     <div class="OrderView">
       <div class="avatar">
         <div>
-          <el-avatar
-            :size="50"
-            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-          />
+          <el-avatar :size="50" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
         </div>
         <div style="margin-left: 10px">
           <h4>Cly</h4>
@@ -16,14 +13,12 @@
       </div>
       <div class="mid">
         <b>工单视图</b>
-        <el-icon
-          style="
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translate(0, -50%);
-          "
-        >
+        <el-icon style="
+                          position: absolute;
+                          right: 0;
+                          top: 50%;
+                          transform: translate(0, -50%);
+                        ">
           <Refresh />
         </el-icon>
       </div>
@@ -63,25 +58,6 @@ interface TabListType extends TabType {
 const tabList = ref<TabListType[]>([]);
 // 默认显示工单页面
 const tabValue = ref("1");
-
-// // 添加标签页
-// const addTab = (tab: TabType) => {
-//     // 保证相同组件路径标签页name标识唯一
-//     const name = `${tab.componentName}_${Date.now()}`
-//     tabList.value.push({
-//         ...tab,// TODO:不知道这三个.是什么意思，待弄懂 -CLY
-//         name
-//     })
-//     tabValue.value = name
-// }
-
-// addTab({
-//     title: '标签1',
-//     componentName: 'tag1',
-//     data: {
-//         test: '数据'
-//     }
-// })
 </script>
 
 <style scoped lang="scss">
@@ -91,7 +67,7 @@ $views-li: 40px;
   display: grid;
   grid-template-columns: 1fr 5fr;
   column-gap: 10px;
-  height: 100vh;
+  height: 100%;
 
   .OrderView {
     background-color: white;
@@ -119,7 +95,10 @@ $views-li: 40px;
   }
 
   .OrderList {
+    width: 100%;
     background-color: white;
+    padding: 0 10px;
+    box-sizing: border-box;
   }
 }
 </style>
