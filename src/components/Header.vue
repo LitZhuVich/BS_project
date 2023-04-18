@@ -10,10 +10,10 @@
         </el-breadcrumb-item>
         <el-breadcrumb-item
           v-for="(item, index) of list"
-          :to="list[0].url"
+          :to="item.url"
           :key="index"
         >
-          {{ list[0].title }}
+          {{ item.title }}
         </el-breadcrumb-item>
       </el-breadcrumb>
     </template>
