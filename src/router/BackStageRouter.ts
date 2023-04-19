@@ -47,7 +47,7 @@ const routes: RouteRecordRaw[] = [
             name: "mineOrder",
             components: {
               Content: () =>
-                import("../views/asideContent/Order/MineContent.vue"),
+                import("../views/asideContent/Order/MyOrder.vue"),
             },
             meta: {
               breadcrumb: [{ title: "我的工单", url: "/order/mine" }],

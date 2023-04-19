@@ -4,7 +4,9 @@
     <div class="row">
       <div class="grid-content">
         <div class="image Comment">
-          <el-icon class="icon" color="#409EFC" :size="25"><Comment /></el-icon>
+          <el-icon class="icon" color="#409EFC" :size="25">
+            <Comment />
+          </el-icon>
         </div>
         <div class="content">
           <el-text tag="b" size="large">10</el-text>
@@ -61,7 +63,9 @@
         <div class="grid-content notice">
           <div class="header">
             <div class="image">
-              <el-icon :size="20" color="#11c9cb"><Bell /></el-icon>
+              <el-icon :size="20" color="#11c9cb">
+                <Bell />
+              </el-icon>
             </div>
             公告
           </div>
@@ -72,7 +76,9 @@
         <div class="grid-content myOrderList">
           <div class="header">
             <div class="image">
-              <el-icon :size="20" color="#11c9cb"><Odometer /></el-icon>
+              <el-icon :size="20" color="#11c9cb">
+                <Odometer />
+              </el-icon>
             </div>
             我处理的工单
           </div>
@@ -108,8 +114,8 @@ import {
 import lineGrape from "../../components/visualGraph/line.vue";
 import barGrape from "../../components/visualGraph/bar.vue";
 import pieGrape from "../../components/visualGraph/pie.vue";
-import myOrderList from "../../components/myOrderList.vue";
-import notice from "../../components/notice.vue";
+import myOrderList from "../../components/index/myOrderList.vue";
+import notice from "../../components/index/notice.vue";
 </script>
 <style lang="scss" scoped>
 .content {
@@ -117,11 +123,13 @@ import notice from "../../components/notice.vue";
   box-sizing: border-box;
   display: grid;
   row-gap: 10px;
+
   .grid-content {
     border-radius: 4px;
     background-color: white;
     box-shadow: 2px 2px 5px #ccc;
   }
+
   .row {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
@@ -142,25 +150,31 @@ import notice from "../../components/notice.vue";
         display: grid;
         place-items: center;
       }
+
       .Comment {
         background-color: rgba($color: #409efc, $alpha: 0.2);
       }
+
       .SuccessFilled {
         background-color: rgba($color: #67c23a, $alpha: 0.2);
       }
+
       .Promotion {
         background-color: rgba($color: #e6a23c, $alpha: 0.2);
       }
     }
   }
+
   .main {
     display: grid;
     grid-template-columns: 1fr 2fr;
     column-gap: 10px;
+
     .left {
       display: grid;
       grid-template-rows: 200px 530px;
       row-gap: 10px;
+
       .header {
         height: 50px;
         border-bottom: 1px solid #ccc;
@@ -168,6 +182,7 @@ import notice from "../../components/notice.vue";
         align-items: center;
         padding-left: 10px;
         box-sizing: border-box;
+
         .image {
           width: 35px;
           height: 35px;
@@ -178,6 +193,7 @@ import notice from "../../components/notice.vue";
           margin-right: 5px;
         }
       }
+
       // TODO 公告样式，目前是mode版
       .notice_content {
         height: 100px;
@@ -185,11 +201,13 @@ import notice from "../../components/notice.vue";
         place-items: center;
         color: #ccc;
       }
+
       .orderList_content {
         padding: 10px;
         box-sizing: border-box;
       }
     }
+
     .right {
       display: grid;
       grid-template-areas:
@@ -197,21 +215,23 @@ import notice from "../../components/notice.vue";
         "bar pie";
       grid-template-rows: 400px 330px;
       gap: 10px;
+
       .line {
         grid-area: line;
         width: 100%;
         padding: 10px;
         box-sizing: border-box;
       }
+
       .bar {
         grid-area: bar;
         width: 560px;
       }
+
       .pie {
         grid-area: pie;
         width: 560px;
       }
     }
   }
-}
-</style>
+}</style>

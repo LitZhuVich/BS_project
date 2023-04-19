@@ -1,12 +1,6 @@
 <template>
-  <el-input
-    v-model="search"
-    placeholder="输入情况说明内容查找对应的工单"
-    :prefix-icon="Search"
-    autosize
-    maxlength="50"
-    show-word-limit
-  />
+  <el-input v-model="search" placeholder="输入情况说明内容查找对应的工单" :prefix-icon="Search" autosize maxlength="50"
+    show-word-limit />
   <el-table :data="filterTableData" stripe style="width: 100%" height="400">
     <el-table-column prop="status" label="工单状态" width="140" fixed>
       <template #default="scope">
@@ -14,10 +8,7 @@
           <el-tag :type="tagStatusType(scope.row.state.status)">
             {{ scope.row.state.status }}
           </el-tag>
-          <el-tag
-            :type="tagSituationsType(scope.row.state.situations)"
-            effect="plain"
-          >
+          <el-tag :type="tagSituationsType(scope.row.state.situations)" effect="plain">
             {{ scope.row.state.situations }}
           </el-tag>
         </div>

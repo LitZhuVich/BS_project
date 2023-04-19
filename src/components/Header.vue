@@ -2,28 +2,17 @@
   <el-page-header @back="onBack" class="header">
     <template #breadcrumb>
       <el-breadcrumb :separator-icon="ArrowRight" class="breadcrumb">
-        <el-breadcrumb-item
-          :to="{ name: 'index' }"
-          @click="BreadcrumbListReset"
-        >
+        <el-breadcrumb-item :to="{ name: 'index' }" @click="BreadcrumbListReset">
           微工单管理系统
         </el-breadcrumb-item>
-        <el-breadcrumb-item
-          v-for="(item, index) of list"
-          :to="item.url"
-          :key="index"
-        >
+        <el-breadcrumb-item v-for="(item, index) of list" :to="item.url" :key="index">
           {{ item.title }}
         </el-breadcrumb-item>
       </el-breadcrumb>
     </template>
     <template #content>
       <div class="flex items-center">
-        <el-avatar
-          class="mr-3"
-          :size="32"
-          src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-        />
+        <el-avatar class="mr-3" :size="32" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
         <span class="text-large font-600 mr-3"> litzhu </span>
         <el-tag type="info" plain>admin</el-tag>
       </div>
