@@ -5,15 +5,23 @@
     <!-- 文件 -->
     <div class="attachments">
       <!-- 第一个框架的表单 -->
-      <el-form :label-position="attachmentsPosition" label-width="50px" :model="attachments_input"
-        style="max-width: 800px">
+      <el-form
+        :label-position="attachmentsPosition"
+        label-width="50px"
+        :model="attachments_input"
+        style="max-width: 800px"
+      >
         <!-- 标题输入框 -->
         <el-form-item label="标题:">
           <el-input v-model="attachments_input.name" />
         </el-form-item>
         <!-- 描述输入框 -->
         <el-form-item label="描述:">
-          <el-input type="textarea" :rows="5" v-model="attachments_input.region" />
+          <el-input
+            type="textarea"
+            :rows="5"
+            v-model="attachments_input.region"
+          />
         </el-form-item>
         <!-- 按钮 -->
         <div class="attachments_upload">
@@ -39,20 +47,44 @@
         <el-form :label-position="templatePosition">
           <el-form-item label="公司名称">
             <!-- 下拉搜索框 -->
-            <el-select v-model="template_value" filterable style="width: 400px" allow-create>
-              <el-option v-for="item in template_option" :key="item.value" :label="item.label" :value="item.value" />
+            <el-select
+              v-model="template_value"
+              filterable
+              style="width: 400px"
+              allow-create
+            >
+              <el-option
+                v-for="item in template_option"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
             </el-select>
             <!-- 按钮 -->
-            <el-button type="primary" style="margin-left: 10px">添加公司</el-button>
+            <el-button type="primary" style="margin-left: 10px"
+              >添加公司</el-button
+            >
           </el-form-item>
           <!-- 第二个框架的姓名表单 -->
           <el-form-item label="姓名">
             <!-- 下拉搜索框 -->
-            <el-select v-model="template_value2" filterable style="width: 400px" allow-create>
-              <el-option v-for="item in template_option2" :key="item.value" :label="item.label" :value="item.value" />
+            <el-select
+              v-model="template_value2"
+              filterable
+              style="width: 400px"
+              allow-create
+            >
+              <el-option
+                v-for="item in template_option2"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
             </el-select>
             <!-- 按钮 -->
-            <el-button type="primary" style="margin-left: 10px">新增联系人</el-button>
+            <el-button type="primary" style="margin-left: 10px"
+              >新增联系人</el-button
+            >
           </el-form-item>
         </el-form>
       </div>
@@ -74,14 +106,20 @@
               <el-text>客服姓名</el-text>
               <el-text type="primary">我自己</el-text>
             </div>
-            <el-input v-model="attribute_input.value1" style="max-width: 400px" />
+            <el-input
+              v-model="attribute_input.value1"
+              style="max-width: 400px"
+            />
           </div>
           <div class="attribute_box_two">
             <div class="attribute_center_two">
               <el-text>抄送人</el-text>
               <el-text type="primary">我自己</el-text>
             </div>
-            <el-input v-model="attribute_input.value2" style="max-width: 800px" />
+            <el-input
+              v-model="attribute_input.value2"
+              style="max-width: 800px"
+            />
           </div>
         </el-form>
       </div>
@@ -95,7 +133,11 @@
       <div class="sales_box2">
         <div>
           <!-- 图标 -->
-          <el-icon color="lightblue" :size="20" style="position: relative; left: 15px">
+          <el-icon
+            color="lightblue"
+            :size="20"
+            style="position: relative; left: 15px"
+          >
             <SuitcaseLine />
           </el-icon>
           <el-text class="sales_title2">执行人选择</el-text>

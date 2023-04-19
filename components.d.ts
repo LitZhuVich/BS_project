@@ -34,6 +34,10 @@ declare module '@vue/runtime-core' {
     ElMenuItemGroup: typeof import('element-plus/es')['ElMenuItemGroup']
     ElOption: typeof import('element-plus/es')['ElOption']
     ElPageHeader: typeof import('element-plus/es')['ElPageHeader']
+<<<<<<< HEAD
+=======
+    ElPagination: typeof import('element-plus/es')['ElPagination']
+>>>>>>> 6b0e68d6b7bd1e2a5e2ae91e25eaaa586c544007
     ElRow: typeof import('element-plus/es')['ElRow']
     ElSelect: typeof import('element-plus/es')['ElSelect']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
