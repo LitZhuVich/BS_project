@@ -38,5 +38,6 @@ declare module '@vue/runtime-core' {
     Order: typeof import('./src/components/orderList/Order.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    ToBeDoneOrder: typeof import('./src/components/orderList/ToBeDoneOrder.vue')['default']
   }
 }
