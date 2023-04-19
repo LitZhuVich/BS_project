@@ -56,7 +56,7 @@ apiClient.get("/user").then((response: any) => console.log(response.user));
 .layout-container-demo .el-main {
   padding: 0;
   display: grid;
-  grid-template-rows: 1fr 5fr;
+  grid-template-rows: 1fr 6fr;
 }
 
 .layout-container-demo .toolbar {

@@ -35,9 +35,9 @@ $views-li: 40px;
   column-gap: 10px;
   height: 100%;
 
-
   .OrderList {
     width: 100%;
+    height: 100%;
     background-color: white;
     padding: 0 10px;
     box-sizing: border-box;

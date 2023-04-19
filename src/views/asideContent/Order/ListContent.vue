@@ -4,10 +4,7 @@
     <div class="OrderView">
       <div class="avatar">
         <div>
-          <el-avatar
-            :size="50"
-            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-          />
+          <el-avatar :size="50" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
         </div>
         <div style="margin-left: 10px">
           <h4>Cly</h4>
@@ -15,25 +12,13 @@
         </div>
       </div>
       <div class="mid">
-<<<<<<< HEAD
-        <b>工单视图</b>
-        <el-icon style="
-                            position: absolute;
-                            right: 0;
-                            top: 50%;
-                            transform: translate(0, -50%);
-                          ">
-=======
         <el-text tag="b">工单视图</el-text>
-        <el-icon
-          style="
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translate(0, -50%);
-          "
-        >
->>>>>>> 6e7d8189f33c89afdeb6c6f0f1fb6da7e070693b
+        <el-icon style="
+              position: absolute;
+              right: 0;
+              top: 50%;
+              transform: translate(0, -50%);
+            ">
           <Refresh />
         </el-icon>
       </div>
