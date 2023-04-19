@@ -24,7 +24,7 @@
           :size="32"
           src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
         />
-        <span class="text-large font-600 mr-3"> litzhu </span>
+        <span class="text-large font-600 mr-3"> Cly </span>
         <el-tag type="info" plain>admin</el-tag>
       </div>
     </template>
