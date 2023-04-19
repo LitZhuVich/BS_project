@@ -5,6 +5,7 @@ import { defineStore } from "pinia";
 export const useBreadcrumbStore = defineStore("breadcrumbs", {
   state: () => {
     return {
+      // 保存面包屑数据
       list: {},
     };
   },

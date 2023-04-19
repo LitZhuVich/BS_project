@@ -1,6 +1,6 @@
 <template>
   <el-container class="layout-container-demo">
-    <el-aside width="200px">
+    <el-aside width="180px">
       <AsideBar />
     </el-aside>
     <el-container style="height: 100vh">
@@ -46,8 +46,6 @@ apiClient.get("/user").then((response: any) => console.log(response.user));
 .layout-container-demo .el-aside {
   /* 侧边栏高度撑满 */
   height: 100vh;
-  /* 背景颜色 */
-  background-color: $AsideBg;
   overflow: hidden !important;
 }
 
@@ -57,6 +55,8 @@ apiClient.get("/user").then((response: any) => console.log(response.user));
 
 .layout-container-demo .el-main {
   padding: 0;
+  display: grid;
+  grid-template-rows: 1fr 5fr;
 }
 
 .layout-container-demo .toolbar {
