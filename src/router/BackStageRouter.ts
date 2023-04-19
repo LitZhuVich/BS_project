@@ -121,7 +121,7 @@ const routes: RouteRecordRaw[] = [
         name: "customerManagement",
         components: {
           Content: () =>
-            import("../views/asideContent/CustomerManagementContent.vue"),
+            import("../views/asideContent/Customer/CustomerManagementContent.vue"),
         },
         meta: {
           breadcrumb: [{ title: "客户管理", url: "/customerManagement" }],
