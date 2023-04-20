@@ -218,7 +218,8 @@ const filterTableData = computed(() =>
     }
   }
   .content {
-    height: 545px;
+    height: calc(100vh - 180px);
+
     background-color: white;
     display: flex;
     align-items: center;

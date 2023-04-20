@@ -12,6 +12,7 @@ declare module '@vue/runtime-core' {
     Aside: typeof import('./src/components/Aside.vue')['default']
     Bar: typeof import('./src/components/visualGraph/bar.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
+    ElAutoResizer: typeof import('element-plus/es')['ElAutoResizer']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
     ElBreadcrumbItem: typeof import('element-plus/es')['ElBreadcrumbItem']
@@ -34,15 +35,13 @@ declare module '@vue/runtime-core' {
     ElMenuItemGroup: typeof import('element-plus/es')['ElMenuItemGroup']
     ElOption: typeof import('element-plus/es')['ElOption']
     ElPageHeader: typeof import('element-plus/es')['ElPageHeader']
-<<<<<<< HEAD
-=======
     ElPagination: typeof import('element-plus/es')['ElPagination']
->>>>>>> 6b0e68d6b7bd1e2a5e2ae91e25eaaa586c544007
     ElRow: typeof import('element-plus/es')['ElRow']
     ElSelect: typeof import('element-plus/es')['ElSelect']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
+    ElTableV2: typeof import('element-plus/es')['ElTableV2']
     ElTag: typeof import('element-plus/es')['ElTag']
     ElText: typeof import('element-plus/es')['ElText']
     Header: typeof import('./src/components/Header.vue')['default']

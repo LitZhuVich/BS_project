@@ -16,7 +16,7 @@ const routes: RouteRecordRaw[] = [
         path: "index",
         name: "index",
         components: {
-          Content: () => import("../views/asideContent/IndexContent.vue"),
+          Content: () => import("../views/asideContent/IndexC.vue"),
         },
         meta: {
           breadcrumb: [{ title: "首页", url: "/index" }],

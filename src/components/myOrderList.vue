@@ -7,7 +7,12 @@
     maxlength="50"
     show-word-limit
   />
-  <el-table :data="filterTableData" stripe style="width: 100%" height="400">
+  <el-table
+    :data="filterTableData"
+    style="width: 100%"
+    stripe
+    :height="index.TableHeight"
+  >
     <el-table-column prop="status" label="工单状态" width="140" fixed>
       <template #default="scope">
         <div style="display: flex; align-items: center">
@@ -29,6 +34,10 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { Search } from "@element-plus/icons-vue";
+import { useBreadcrumbStore } from "../store/breadcrumb";
+import { storeToRefs } from "pinia";
+const breadcrumb = useBreadcrumbStore();
+const { index } = storeToRefs(breadcrumb);
 const tableData = [
   {
     state: {

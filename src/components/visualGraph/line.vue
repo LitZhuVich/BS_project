@@ -137,7 +137,7 @@ onMounted(() => {
   //  选择渲染数据
   chart.setOption(option);
   // 当窗口大小变化时重新绘制图表
-  window.onresize = function () {
+  window.onresize = () => {
     chart.resize();
   };
 });
@@ -148,7 +148,8 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
+  padding: 10px;
+  box-sizing: border-box;
   // .el-dropdown-link {
   //   cursor: pointer;
   //   color: var(--el-color-primary);

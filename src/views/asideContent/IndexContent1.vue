@@ -86,11 +86,13 @@
           <!-- TODO:显示总体工单信息、进行中的工单、日汇总工单，有个下拉框显示时间，分别有全部、部门、自己、三个数据量 -->
           <lineGrape />
         </div>
-        <div class="grid-content bar">
-          <barGrape />
-        </div>
-        <div class="grid-content pie">
-          <pieGrape />
+        <div class="bar_pie">
+          <div class="grid-content bar">
+            <barGrape />
+          </div>
+          <div class="grid-content pie">
+            <pieGrape />
+          </div>
         </div>
       </div>
     </div>
@@ -124,13 +126,13 @@ import notice from "../../components/notice.vue";
   .row {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    grid-template-rows: 100px;
-    column-gap: 10px;
+    gap: 10px;
 
     .grid-content {
       display: flex;
       justify-content: space-around;
       align-items: center;
+      height: 100px;
 
       .Comment,
       .SuccessFilled,
@@ -154,11 +156,15 @@ import notice from "../../components/notice.vue";
   }
   .main {
     display: grid;
-    grid-template-columns: 1fr 2fr;
-    column-gap: 10px;
+    // grid-template-columns: 1fr 2fr;
+    // grid-template-columns: minmax(200px, 1fr) minmax(200px, 2fr);
+    grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+    grid-template-rows: calc(100vh - 250px);
+    gap: 10px;
     .left {
       display: grid;
-      grid-template-rows: 200px 530px;
+      // grid-template-rows: 200px 530px;
+      grid-template-rows: 1fr 3.5fr;
       row-gap: 10px;
       .header {
         height: 50px;
@@ -191,24 +197,29 @@ import notice from "../../components/notice.vue";
     }
     .right {
       display: grid;
-      grid-template-areas:
-        "line line"
-        "bar pie";
-      grid-template-rows: 400px 330px;
+      grid-template-rows: repeat(auto-fit, minmax(300px, 1fr));
       gap: 10px;
+
       .line {
-        grid-area: line;
         width: 100%;
         padding: 10px;
         box-sizing: border-box;
       }
-      .bar {
-        grid-area: bar;
-        width: 560px;
-      }
-      .pie {
-        grid-area: pie;
-        width: 560px;
+      .bar_pie {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        // grid-template-rows: repeat(2, minmax(300px, 1fr));
+        // grid-template-rows: 200px 200px;
+        gap: 10px;
+        .line {
+          min-height: 300px;
+        }
+        .bar {
+          min-height: 300px;
+        }
+        .pie {
+          min-height: 300px;
+        }
       }
     }
   }
