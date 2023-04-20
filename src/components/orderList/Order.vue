@@ -29,10 +29,10 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 // 引入图标
-import { Search } from '@element-plus/icons-vue'
+import { Search } from "@element-plus/icons-vue";
 
 // 选择的搜索方式
-const searchOptionChoosed = ref('')
+const searchOptionChoosed = ref("");
 // 搜索方式
 const searchOptions = [
   {
@@ -69,7 +69,7 @@ const searchOptions = [
   }
 ]
 // 搜索框
-const searchValue = ref('')
+const searchValue = ref("");
 
 // 表单数据
 const tableData = [

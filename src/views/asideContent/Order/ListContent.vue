@@ -7,7 +7,7 @@
           <el-avatar :size="50" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
         </div>
         <div style="margin-left: 10px">
-          <h4>Cly</h4>
+          <h4>litzhu</h4>
           <el-text>可接单</el-text>
         </div>
       </div>
@@ -27,7 +27,7 @@
         <ul>
           <li>所有工单<i>10</i></li>
           <li>待分配工单<i>1</i></li>
-          <li>待处理工单<i>1</i></li>
+          <li>待处理工单<i>3</i></li>
           <li>已处理工单<i>6</i></li>
         </ul>
       </div>
@@ -67,7 +67,7 @@ $views-li: 40px;
   display: grid;
   grid-template-columns: 1fr 6fr;
   column-gap: 10px;
-  height: 100%;
+  height: calc(100% - 90px);
 
   .OrderView {
     background-color: white;

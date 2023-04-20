@@ -294,7 +294,7 @@ const sales_option2 = [
 </script>
 <style scoped lang="scss">
 .box {
-  padding: 0 20px 0 20px;
+  padding: 10px;
   box-sizing: border-box;
 }
 

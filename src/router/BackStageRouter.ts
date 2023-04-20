@@ -231,16 +231,16 @@ const router = createRouter({
 });
 // TODO:这个是路由守卫。启用的时候可以强制网站必须登录才能访问
 // 创建路由守卫
-// router.beforeEach((to, from, next) => {
-//   // 获取 token 值
-//   const isAuthToken = localStorage.getItem("token");
-//   // 检查token是否存在 如果不存在 前往登录页面
-//   if (to.meta.requiresAuth && !isAuthToken) {
-//     next("/login");
-//   } else {
-//     next();
-//   }
-// });
+router.beforeEach((to, from, next) => {
+  // 获取 token 值
+  const isAuthToken = localStorage.getItem("token");
+  // 检查token是否存在 如果不存在 前往登录页面
+  if (to.meta.requiresAuth && !isAuthToken) {
+    next("/login");
+  } else {
+    next();
+  }
+});
 // 封装初始化前台路由
 export const initBackStageRouter = (app: App<Element>) => {
   app.use(router);
