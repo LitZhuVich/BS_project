@@ -7,6 +7,11 @@ export const useBreadcrumbStore = defineStore("breadcrumbs", {
     return {
       // 保存面包屑数据
       list: {},
+      // 首页数据
+      index: {
+        // 首页我的表单高度
+        TableHeight: 300,
+      },
     };
   },
 });

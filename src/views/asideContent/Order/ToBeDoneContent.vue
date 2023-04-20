@@ -231,8 +231,18 @@ const tagSituationsType = (value: string): string => {
     }
   }
 
-  .el-table {
-    height: calc(100%);
+  .content {
+    height: calc(100vh - 180px);
+
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+
+    .el-table {
+      height: calc(100%);
+    }
   }
 }
 </style>
