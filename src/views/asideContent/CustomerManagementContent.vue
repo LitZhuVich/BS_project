@@ -3,25 +3,10 @@
     <div class="function">
       <!-- 按钮搜索框 -->
       <div class="function_input">
-        <el-input
-          v-model="searchName"
-          placeholder="输入公司名查找客户"
-          :prefix-icon="Search"
-          class="search-input"
-        />
-        <el-input
-          v-model="searchPhone"
-          placeholder="输入手机号查找客户"
-          :prefix-icon="Search"
-          class="search-input"
-        />
+        <el-input v-model="searchName" placeholder="输入公司名查找客户" :prefix-icon="Search" class="search-input" />
+        <el-input v-model="searchPhone" placeholder="输入手机号查找客户" :prefix-icon="Search" class="search-input" />
         <el-select v-model="value" clearable placeholder="分类查找">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
+          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
       </div>
       <!-- 按钮 -->
@@ -34,13 +19,7 @@
     </div>
     <!-- 显示客户页 -->
     <div class="content">
-      <el-table
-        :data="filterTableData"
-        stripe
-        style="width: 100%"
-        border
-        height="450"
-      >
+      <el-table :data="filterTableData" stripe style="width: 100%" border height="450">
         <el-table-column type="selection" width="60" align="center" fiexd />
         <el-table-column prop="customerService" label="公司名称" sortable />
         <el-table-column prop="source" label="客户来源" />
@@ -62,18 +41,10 @@
       <div>
         <div class="demo-pagination-block">
           <el-config-provider :locale="zhCn">
-            <el-pagination
-              v-model:current-page="currentPage4"
-              v-model:page-size="pageSize4"
-              :page-sizes="[10, 20, 30, 40]"
-              :small="small"
-              :disabled="disabled"
-              :background="background"
-              layout="sizes, prev, pager, next, jumper"
-              :total="40"
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-          /></el-config-provider>
+            <el-pagination v-model:current-page="currentPage4" v-model:page-size="pageSize4"
+              :page-sizes="[10, 20, 30, 40]" :small="small" :disabled="disabled" :background="background"
+              layout="sizes, prev, pager, next, jumper" :total="40" @size-change="handleSizeChange"
+              @current-change="handleCurrentChange" /></el-config-provider>
         </div>
       </div>
     </div>
@@ -320,12 +291,15 @@ const filterTableData = computed(() =>
 .customerBox {
   padding: 10px;
   box-sizing: border-box;
+
   .function {
     background-color: white;
     padding: 10px;
     box-sizing: border-box;
+
     .function_input {
       display: flex;
+
       .search-input {
         width: 200px;
         margin-bottom: 10px;
@@ -333,6 +307,7 @@ const filterTableData = computed(() =>
       }
     }
   }
+
   .content {
     height: 545px;
     background-color: white;
@@ -345,9 +320,11 @@ const filterTableData = computed(() =>
     box-sizing: border-box;
   }
 }
-.demo-pagination-block + .demo-pagination-block {
+
+.demo-pagination-block+.demo-pagination-block {
   margin-top: 10px;
 }
+
 .demo-pagination-block .demonstration {
   margin-bottom: 16px;
 }

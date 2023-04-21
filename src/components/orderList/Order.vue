@@ -1,22 +1,11 @@
 <template>
   <div class="top-operation">
     <h5>所有工单</h5>
-    <div style="display: flex">
+    <div style="display: flex;">
       <el-select v-model="searchOptionChoosed" placeholder="搜索方式">
-        <el-option
-          v-for="item in searchOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
+        <el-option v-for="item in searchOptions" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
-      <el-input
-        v-model="searchValue"
-        class="search-box"
-        size="small"
-        placeholder="请输入编号"
-        :suffix-icon="Search"
-      />
+      <el-input v-model="searchValue" class="search-box" size="small" placeholder="请输入编号" :suffix-icon="Search" />
       <el-button :icon="Search">高级查询</el-button>
     </div>
   </div>
@@ -47,38 +36,38 @@ const searchOptionChoosed = ref("");
 // 搜索方式
 const searchOptions = [
   {
-    value: "编号",
-    label: "编号",
+    value: '编号',
+    label: '编号',
   },
   {
-    value: "客服姓名",
-    label: "客服姓名",
+    value: '客服姓名',
+    label: '客服姓名',
   },
   {
-    value: "工单状态",
-    label: "工单状态",
+    value: '工单状态',
+    label: '工单状态',
   },
   {
-    value: "优先级",
-    label: "优先级",
+    value: '优先级',
+    label: '优先级',
   },
   {
-    value: "创建人",
-    label: "创建人",
+    value: '创建人',
+    label: '创建人',
   },
   {
-    value: "工单类型",
-    label: "工单类型",
+    value: '工单类型',
+    label: '工单类型',
   },
   {
-    value: "工单来源",
-    label: "工单来源",
+    value: '工单来源',
+    label: '工单来源',
   },
   {
-    value: "SLA服务目标",
-    label: "SLA服务目标",
-  },
-];
+    value: 'SLA服务目标',
+    label: 'SLA服务目标',
+  }
+]
 // 搜索框
 const searchValue = ref("");
 

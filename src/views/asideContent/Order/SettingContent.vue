@@ -80,7 +80,6 @@
 import { ref, computed, reactive } from "vue";
 import { Plus } from "@element-plus/icons-vue";
 
-const dialogTableVisible = ref(false);
 const dialogFormVisible = ref(false);
 const formLabelWidth = "140px";
 
