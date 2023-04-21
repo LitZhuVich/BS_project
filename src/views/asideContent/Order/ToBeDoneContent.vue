@@ -9,8 +9,8 @@
         <el-input v-model="search" class="search-box" placeholder="请输入编号" :suffix-icon="Search" />
       </div>
     </div>
-    <el-table :data="filterTableData" stripe style="width: 100%">
-      <el-table-column type="selection" />
+    <el-table :data="filterTableData" stripe style="width: 100%" border>
+      <el-table-column type="selection" align="center" fixed />
       <el-table-column prop="code" label="编码" />
       <el-table-column prop="orderStatus" label="工单状态">
         <template #default="scope">
@@ -38,13 +38,24 @@
       <el-table-column prop="source" label="工单来源" />
       <el-table-column prop="target" label="SLA服务目标" />
       <el-table-column prop="updateTime" label="更新时间" />
+      <el-table-column prop="remainder" label="剩余时间(分钟)" />
       <el-table-column prop="description" label="工单描述" />
     </el-table>
+    <div class="demo-pagination-block">
+      <el-config-provider :locale="zhCn">
+        <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize" :page-sizes="[10, 20, 30, 40]"
+          layout="sizes, prev, pager, next, jumper" :total="40" @size-change="handleSizeChange"
+          @current-change="handleCurrentChange" /></el-config-provider>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, computed } from "vue";
+// ElConfigProvider 组件
+import { ElConfigProvider } from "element-plus";
+// 引入中文包
+import zhCn from "element-plus/lib/locale/lang/zh-cn";
 // 引入图标
 import { Search } from '@element-plus/icons-vue'
 const as = (index: number) => {
@@ -104,6 +115,7 @@ const tableData = [
     source: "工单工作台",
     target: "按时解决",
     updateTime: "2022-12-06 15:01:57",
+    remainder: 20,
     description: "测试",
   },
   {
@@ -118,17 +130,7 @@ const tableData = [
     source: "工单工作台",
     target: "按时解决",
     updateTime: "2022-12-06 15:01:57",
-    description: "测试",
-  },
-  {
-    code: "25972567",
-    orderStatus: "已开启",
-    title: "服务器故障",
-    customerService: "张晶晶",
-    priority: "一般",
-    createTime: "2022-12-06 14:58:14",
-    target: "按时解决",
-    updateTime: "2022-12-06 15:01:57",
+    remainder: 20,
     description: "测试",
   },
   {
@@ -143,6 +145,22 @@ const tableData = [
     source: "工单工作台",
     target: "按时解决",
     updateTime: "2022-12-06 15:01:57",
+    remainder: 20,
+    description: "测试",
+  },
+  {
+    code: "25972567",
+    orderStatus: "已开启",
+    title: "服务器故障",
+    customerService: "张晶晶",
+    priority: "一般",
+    createTime: "2022-12-06 14:58:14",
+    founder: "管理组|盛军测试",
+    type: "",
+    source: "工单工作台",
+    target: "按时解决",
+    updateTime: "2022-12-06 15:01:57",
+    remainder: 20,
     description: "测试",
   },
 ];
@@ -202,6 +220,16 @@ const tagSituationsType = (value: string): string => {
       return "情况不对";
   }
 };
+
+//分页框
+const currentPage = ref(1);// 当前页面
+const pageSize = ref(10);// 一页多少数据
+const handleSizeChange = (val: number) => {
+  console.log(`每页${val}个数据`);
+};
+const handleCurrentChange = (val: number) => {
+  console.log(`当前在第${val}页`);
+};
 </script>
 
 <style scoped lang="scss">
@@ -212,8 +240,8 @@ const tagSituationsType = (value: string): string => {
   background-color: white;
 
   .top-operation {
-    height: 40px;
-    line-height: 40px;
+    height: 50px;
+    line-height: 50px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -243,6 +271,11 @@ const tagSituationsType = (value: string): string => {
     .el-table {
       height: calc(100%);
     }
+  }
+
+  .demo-pagination-block {
+    height: 50px;
+    line-height: 50px;
   }
 }
 </style>

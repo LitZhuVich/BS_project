@@ -1,7 +1,7 @@
 <template>
   <div id="Order">
     <div class="OrderList">
-      <Customer />
+      <customer />
     </div>
   </div>
 </template>

@@ -1,14 +1,13 @@
 <template>
   <el-row class="tac">
     <el-col :span="24">
-      <el-menu
-        active-text-color="#0065f8"
-        router
-        default-active="/index"
-        text-color="#fff"
-        :unique-opened="unique_opened"
-        background-color="#31c3f6"
-      >
+      <el-menu active-text-color="#0065f8" router default-active="/index" text-color="#fff" :unique-opened="unique_opened"
+        background-color="#31c3f6">
+        <div class="logo-bar">
+          <el-icon>
+            <SetUp />
+          </el-icon>
+        </div>
         <!-- 首页控制台 -->
         <el-menu-item index="/index">
           <el-icon>
@@ -84,6 +83,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import {
+  SetUp,
   Document,
   Menu as IconMenu,
   Setting,
@@ -110,5 +110,13 @@ const unique_opened = ref(true);
 .el-menu {
   // 高度撑满
   height: 100vh;
+
+  .logo-bar {
+    font-size: 36px;
+    text-align: center;
+    color: white;
+    height: 80px;
+    line-height: 80px;
+  }
 }
 </style>

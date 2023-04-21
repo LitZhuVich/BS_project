@@ -5,28 +5,52 @@
                 <el-option v-for="item in searchOptions" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
             <el-input v-model="searchValue" class="search-box" size="small" placeholder="请输入公司名称" :suffix-icon="Search" />
-            <el-button :icon="Search">高级查询</el-button>
+        </div>
+        <div>
+            <!-- 按钮 -->
+            <div class="function_button">
+                <el-button type="success" plain :icon="Plus">新增客户</el-button>
+                <el-button type="info" plain :icon="EditPen">编辑</el-button>
+                <el-button type="danger" plain :icon="CloseBold">批量删除</el-button>
+                <el-button type="success" plain :icon="Plus">添加客户到分组</el-button>
+            </div>
         </div>
     </div>
-    <el-table :data="tableData" stripe style="width: 100%" size="small">
-        <el-table-column type="selection" />
+    <el-table :data="tableData" stripe style="width: 100%" border>
+        <el-table-column type="selection" width="60" align="center" />
         <el-table-column prop="companyName" label="公司名称" />
         <el-table-column prop="createTime" label="创建时间" />
         <el-table-column prop="lastUpdater" label="最后更新人" />
         <el-table-column prop="lastUpdateTime" label="最后更新时间" />
         <el-table-column prop="serviceBalance" label="服务余额" />
         <el-table-column prop="customerSource" label="客户来源" />
-        <el-table-column prop="receptionTeam" label="受理客服组" />
         <el-table-column prop="companyAddress" label="公司地址" />
+        <el-table-column prop="phone" label="手机号" />
         <el-table-column prop="remark" label="备注" />
         <el-table-column prop="classification" label="产品分类" />
+        <el-table-column prop="createTime" label="操作" width="160">
+            <template #default="scope">
+                <el-button type="primary">修改</el-button>
+                <el-button type="danger">删除</el-button>
+            </template>
+        </el-table-column>
     </el-table>
+    <div class="demo-pagination-block">
+        <el-config-provider :locale="zhCn">
+            <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize" :page-sizes="[10, 20, 30, 40]"
+                layout="sizes, prev, pager, next, jumper" :total="40" @size-change="handleSizeChange"
+                @current-change="handleCurrentChange" /></el-config-provider>
+    </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from "vue";
+// ElConfigProvider 组件
+import { ElConfigProvider } from "element-plus";
+// 引入中文包
+import zhCn from "element-plus/lib/locale/lang/zh-cn";
 // 引入图标
-import { Search } from '@element-plus/icons-vue'
+import { Search, Plus, EditPen, CloseBold } from '@element-plus/icons-vue'
 
 // 选择的搜索方式
 const searchOptionChoosed = ref('按公司名称搜')
@@ -57,8 +81,8 @@ const tableData = [
         lastUpdateTime: "2023-02-27 15:30:56",
         serviceBalance: "0.00",
         customerSource: "客户管理单独",
-        receptionTeam: "服务工程师组,客服",
         companyAddress: "历下区盛福花园",
+        phone: "15272235226",
         remark: "1212",
         classification: "票据",
     }, {
@@ -68,8 +92,8 @@ const tableData = [
         lastUpdateTime: "2023-02-27 15:30:56",
         serviceBalance: "0.00",
         customerSource: "客户管理单独",
-        receptionTeam: "服务工程师组,客服",
         companyAddress: "历下区盛福花园",
+        phone: "15272235226",
         remark: "1212",
         classification: "票据",
     }, {
@@ -79,8 +103,8 @@ const tableData = [
         lastUpdateTime: "2023-02-27 15:30:56",
         serviceBalance: "0.00",
         customerSource: "客户管理单独",
-        receptionTeam: "服务工程师组,客服",
         companyAddress: "历下区盛福花园",
+        phone: "15272235226",
         remark: "1212",
         classification: "票据",
     }, {
@@ -90,8 +114,8 @@ const tableData = [
         lastUpdateTime: "2023-02-27 15:30:56",
         serviceBalance: "0.00",
         customerSource: "客户管理单独",
-        receptionTeam: "服务工程师组,客服",
         companyAddress: "历下区盛福花园",
+        phone: "15272235226",
         remark: "1212",
         classification: "票据",
     }, {
@@ -101,20 +125,28 @@ const tableData = [
         lastUpdateTime: "2023-02-27 15:30:56",
         serviceBalance: "0.00",
         customerSource: "客户管理单独",
-        receptionTeam: "服务工程师组,客服",
         companyAddress: "历下区盛福花园",
+        phone: "15272235226",
         remark: "1212",
         classification: "票据",
     },
 ];
+//分页框
+const currentPage = ref(1);
+const pageSize = ref(10);
+const handleSizeChange = (val: number) => {
+    console.log(`每页${val}条数据`);
+};
+const handleCurrentChange = (val: number) => {
+    console.log(`当前在第${val}页`);
+};
 </script>
 
 <style scoped lang="scss">
 .top-operation {
     padding-top: 10px;
-    height: 40px;
+    height: 80px;
     line-height: 40px;
-    display: flex;
     align-items: center;
 
     .el-select {
@@ -128,5 +160,10 @@ const tableData = [
         font-size: 14px;
         margin-right: 10px;
     }
+}
+
+.demo-pagination-block {
+    height: 50px;
+    line-height: 50px;
 }
 </style>
