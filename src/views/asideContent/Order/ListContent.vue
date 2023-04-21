@@ -4,10 +4,7 @@
     <div class="OrderView">
       <div class="avatar">
         <div>
-          <el-avatar
-            :size="50"
-            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-          />
+          <el-avatar :size="50" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
         </div>
         <div style="margin-left: 10px">
           <h4>litzhu</h4>
@@ -16,14 +13,12 @@
       </div>
       <div class="mid">
         <el-text tag="b">工单视图</el-text>
-        <el-icon
-          style="
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translate(0, -50%);
-          "
-        >
+        <el-icon style="
+              position: absolute;
+              right: 0;
+              top: 50%;
+              transform: translate(0, -50%);
+            ">
           <Refresh />
         </el-icon>
       </div>
@@ -70,7 +65,7 @@ $views-li: 40px;
 
 #Order {
   display: grid;
-  grid-template-columns: 1fr 5fr;
+  grid-template-columns: 1fr 6fr;
   column-gap: 10px;
   height: calc(100% - 90px);
 

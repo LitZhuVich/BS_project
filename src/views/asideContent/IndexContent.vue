@@ -3,7 +3,9 @@
     <div class="row">
       <div class="grid-content">
         <div class="image Comment">
-          <el-icon class="icon" color="#409EFC" :size="25"><Comment /></el-icon>
+          <el-icon class="icon" color="#409EFC" :size="25">
+            <Comment />
+          </el-icon>
         </div>
         <div class="content">
           <el-text tag="b" style="font-size: 30px">10</el-text>
@@ -102,8 +104,8 @@ import {
 import lineGrape from "../../components/visualGraph/line.vue";
 import barGrape from "../../components/visualGraph/bar.vue";
 import pieGrape from "../../components/visualGraph/pie.vue";
-import myOrderList from "../../components/myOrderList.vue";
-import notice from "../../components/notice.vue";
+import myOrderList from "../../components/index/myOrderList.vue";
+import notice from "../../components/index/notice.vue";
 </script>
 <style lang="scss" scoped>
 .IndexContent {
@@ -117,6 +119,7 @@ import notice from "../../components/notice.vue";
     box-shadow: 2px 2px 5px #ccc;
     overflow: hidden;
   }
+
   .row {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -150,6 +153,7 @@ import notice from "../../components/notice.vue";
       }
     }
   }
+
   .main {
     height: 730px;
     display: grid;
@@ -212,7 +216,7 @@ import notice from "../../components/notice.vue";
   }
   @media (max-width: 1440px) {
     .main {
-      height: 900px;
+      height: 1000px;
       grid-template-areas:
         "notice notice myOrderList myOrderList myOrderList myOrderList"
         "line line line line line line"
@@ -248,6 +252,7 @@ import notice from "../../components/notice.vue";
       height: 400px;
     }
   }
+
   @media (max-width: 868px) {
     .main {
       height: 1500px;
