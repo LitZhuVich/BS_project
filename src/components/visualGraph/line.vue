@@ -21,11 +21,14 @@
       </template>
     </el-dropdown>
   </div>
-  <div ref="chartRef" style="width: 100%; height: 100%"></div>
+  <div
+    ref="chartRef"
+    :style="{ width: chartStyle.chartWidth, height: chartStyle.chartHeight }"
+  ></div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, Ref } from "vue";
+import { onMounted, onUnmounted, ref, Ref } from "vue";
 import * as echarts from "echarts";
 import "echarts/lib/chart/line";
 import "echarts/lib/component/tooltip";
@@ -51,95 +54,105 @@ for (let i = 0; i < 8; i++) {
   dateArray.push(dateString);
   date.setDate(date.getDate() + 1);
 }
+// 初始化数据
+const data = {
+  xData: dateArray,
+  yData: {
+    push: [5, 2, 1, 4, 8, 6, 5, 2],
+    dealWith: [3, 2, 34, 6, 2, 3, 5, 1],
+    finish: [5, 2, 1, 3, 2, 34, 6, 2],
+  },
+};
+// 样式
+const chartStyle = {
+  chartWidth: "100%",
+  chartHeight: "100%",
+};
+// 配置项
+const option: any = {
+  tooltip: {
+    trigger: "axis",
+    axisPointer: {
+      type: "cross",
+      label: {
+        backgroundColor: "#6a7985",
+      },
+    },
+  },
+  legend: {
+    data: ["当日发布工单数", "当日处理工单数", "当日完成工单数"],
+    left: "center",
+  },
+  toolbox: {
+    feature: {
+      saveAsImage: {},
+    },
+  },
+  grid: {
+    left: "3%",
+    right: "4%",
+    containLabel: true,
+  },
+  xAxis: [
+    {
+      type: "category",
+      boundaryGap: false,
+      data: data.xData,
+    },
+  ],
+  yAxis: [
+    {
+      type: "value",
+    },
+  ],
+  series: [
+    {
+      name: "当日发布工单数",
+      type: "line",
+      stack: "Total",
+      areaStyle: {},
+      emphasis: {
+        focus: "series",
+      },
+      data: data.yData.push,
+    },
+    {
+      name: "当日处理工单数",
+      type: "line",
+      stack: "Total",
+      areaStyle: {},
+      emphasis: {
+        focus: "series",
+      },
+      data: data.yData.dealWith,
+    },
+    {
+      name: "当日完成工单数",
+      type: "line",
+      stack: "Total",
+      areaStyle: {},
+      emphasis: {
+        focus: "series",
+      },
+      data: data.yData.finish,
+    },
+  ],
+};
 // 初始化 ECharts 实例
 const chartRef: Ref<any> = ref(null);
 onMounted(() => {
   const chart = echarts.init(chartRef.value);
-  // 初始化数据
-  const data = {
-    xData: dateArray,
-    yData: {
-      push: [5, 2, 1, 4, 8, 6, 5, 2],
-      dealWith: [3, 2, 34, 6, 2, 3, 5, 1],
-      finish: [5, 2, 1, 3, 2, 34, 6, 2],
-    },
-  };
-  // 配置项
-  const option: any = {
-    tooltip: {
-      trigger: "axis",
-      axisPointer: {
-        type: "cross",
-        label: {
-          backgroundColor: "#6a7985",
-        },
-      },
-    },
-    legend: {
-      data: ["当日发布工单数", "当日处理工单数", "当日完成工单数"],
-      left: "center",
-    },
-    toolbox: {
-      feature: {
-        saveAsImage: {},
-      },
-    },
-    grid: {
-      left: "3%",
-      right: "4%",
-      containLabel: true,
-    },
-    xAxis: [
-      {
-        type: "category",
-        boundaryGap: false,
-        data: data.xData,
-      },
-    ],
-    yAxis: [
-      {
-        type: "value",
-      },
-    ],
-    series: [
-      {
-        name: "当日发布工单数",
-        type: "line",
-        stack: "Total",
-        areaStyle: {},
-        emphasis: {
-          focus: "series",
-        },
-        data: data.yData.push,
-      },
-      {
-        name: "当日处理工单数",
-        type: "line",
-        stack: "Total",
-        areaStyle: {},
-        emphasis: {
-          focus: "series",
-        },
-        data: data.yData.dealWith,
-      },
-      {
-        name: "当日完成工单数",
-        type: "line",
-        stack: "Total",
-        areaStyle: {},
-        emphasis: {
-          focus: "series",
-        },
-        data: data.yData.finish,
-      },
-    ],
-  };
   //  选择渲染数据
   chart.setOption(option);
   // 当窗口大小变化时重新绘制图表
-  window.onresize = () => {
+  window.addEventListener("resize", () => {
+    chartStyle.chartWidth = chartRef.value.clientWidth + "px";
+    chartStyle.chartHeight = chartRef.value.clientHeight + "px";
     chart.resize();
-  };
+  });
+});
+onUnmounted(() => {
+  window.removeEventListener("resize", () => {});
 });
 </script>
 

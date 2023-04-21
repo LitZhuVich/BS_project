@@ -29,7 +29,11 @@
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm(ruleFormRef)">
+        <el-button
+          type="primary"
+          @click="submitForm(ruleFormRef)"
+          @keyup.enter="submitForm(ruleFormRef)"
+        >
           登录
         </el-button>
         <el-button @click="resetForm(ruleFormRef)"> 重置 </el-button>
@@ -62,6 +66,7 @@ import { ElNotification } from "element-plus";
 import { User, Lock } from "@element-plus/icons-vue";
 import ApiClient from "../../request/request";
 import { useRouter } from "vue-router";
+import axios from "axios";
 const apiClient = new ApiClient();
 const router = useRouter();
 const ruleFormRef = ref<FormInstance>();
@@ -73,7 +78,6 @@ const ruleForm = reactive({
   username: "",
   password: "",
 });
-
 // 检测用户名
 const validateName = (rule: any, value: any, callback: any): void => {
   if (value === "") {

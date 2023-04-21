@@ -1,13 +1,12 @@
 <template>
-  <!-- TODO:需要有折线图、可视化图、是后台系统的牌面所在 -->
-  <div class="content">
+  <div class="IndexContent">
     <div class="row">
       <div class="grid-content">
         <div class="image Comment">
           <el-icon class="icon" color="#409EFC" :size="25"><Comment /></el-icon>
         </div>
         <div class="content">
-          <el-text tag="b" size="large">10</el-text>
+          <el-text tag="b" style="font-size: 30px">10</el-text>
           <el-text tag="b">待回复的</el-text>
         </div>
       </div>
@@ -18,7 +17,7 @@
           </el-icon>
         </div>
         <div class="content">
-          <el-text tag="b" size="large">20</el-text>
+          <el-text tag="b" style="font-size: 30px">20</el-text>
           <el-text tag="b">总已解决的</el-text>
         </div>
       </div>
@@ -29,7 +28,7 @@
           </el-icon>
         </div>
         <div class="content">
-          <el-text tag="b" size="large">2</el-text>
+          <el-text tag="b" style="font-size: 30px">2</el-text>
           <el-text tag="b">今已解决的</el-text>
         </div>
       </div>
@@ -40,58 +39,54 @@
           </el-icon>
         </div>
         <div class="content">
-          <el-text tag="b" size="large">18</el-text>
+          <el-text tag="b" style="font-size: 30px">18</el-text>
           <el-text tag="b">组已解决的</el-text>
         </div>
       </div>
-      <div class="grid-content">
+      <div class="grid-content Promotion">
         <div class="image Promotion">
           <el-icon class="icon" color="#E6A23C" :size="25">
             <Promotion />
           </el-icon>
         </div>
         <div class="content">
-          <el-text tag="b" size="large">5</el-text>
+          <el-text tag="b" style="font-size: 30px">5</el-text>
           <el-text tag="b">超时的</el-text>
         </div>
       </div>
     </div>
     <div class="main">
-      <div class="left">
-        <div class="grid-content notice">
-          <div class="header">
-            <div class="image">
-              <el-icon :size="20" color="#11c9cb"><Bell /></el-icon>
-            </div>
-            公告
+      <div class="grid-content notice">
+        <div class="header">
+          <div class="image">
+            <el-icon :size="20" color="#11c9cb"><Bell /></el-icon>
           </div>
-          <div class="notice_content">
-            <notice />
-          </div>
+          公告
         </div>
-        <div class="grid-content myOrderList">
-          <div class="header">
-            <div class="image">
-              <el-icon :size="20" color="#11c9cb"><Odometer /></el-icon>
-            </div>
-            我处理的工单
-          </div>
-          <div class="orderList_content">
-            <myOrderList />
-          </div>
+        <div class="notice_content">
+          <notice />
         </div>
       </div>
-      <div class="right">
-        <div class="grid-content line">
-          <!-- TODO:显示总体工单信息、进行中的工单、日汇总工单，有个下拉框显示时间，分别有全部、部门、自己、三个数据量 -->
-          <lineGrape />
+      <div class="grid-content myOrderList">
+        <div class="header">
+          <div class="image">
+            <el-icon :size="20" color="#11c9cb"><Odometer /></el-icon>
+          </div>
+          我处理的工单
         </div>
-        <div class="grid-content bar">
-          <barGrape />
+        <div class="orderList_content">
+          <myOrderList />
         </div>
-        <div class="grid-content pie">
-          <pieGrape />
-        </div>
+      </div>
+      <div class="grid-content line">
+        <!-- TODO:显示总体工单信息、进行中的工单、日汇总工单，有个下拉框显示时间，分别有全部、部门、自己、三个数据量 -->
+        <lineGrape />
+      </div>
+      <div class="grid-content bar">
+        <barGrape />
+      </div>
+      <div class="grid-content pie">
+        <pieGrape />
       </div>
     </div>
   </div>
@@ -111,105 +106,167 @@ import myOrderList from "../../components/myOrderList.vue";
 import notice from "../../components/notice.vue";
 </script>
 <style lang="scss" scoped>
-.content {
+.IndexContent {
   padding: 10px;
   box-sizing: border-box;
   display: grid;
-  row-gap: 10px;
+  gap: 10px;
   .grid-content {
     border-radius: 4px;
     background-color: white;
     box-shadow: 2px 2px 5px #ccc;
+    overflow: hidden;
   }
   .row {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    grid-template-rows: 100px;
-    column-gap: 10px;
-
+    gap: 10px;
     .grid-content {
       display: flex;
       justify-content: space-around;
       align-items: center;
-
-      .Comment,
-      .SuccessFilled,
-      .Promotion {
+      height: 100px;
+      .image {
+        width: 60px;
+        height: 60px;
         border-radius: 50%;
-        width: 70px;
-        height: 70px;
-        display: grid;
-        place-items: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .SuccessFilled {
+        background-color: rgba($color: #67c23a, $alpha: 0.2);
       }
       .Comment {
         background-color: rgba($color: #409efc, $alpha: 0.2);
       }
-      .SuccessFilled {
-        background-color: rgba($color: #67c23a, $alpha: 0.2);
-      }
       .Promotion {
         background-color: rgba($color: #e6a23c, $alpha: 0.2);
+      }
+      .content {
+        display: flex;
+        flex-direction: column;
       }
     }
   }
   .main {
+    height: 730px;
     display: grid;
-    grid-template-columns: 1fr 2fr;
-    column-gap: 10px;
-    .left {
-      display: grid;
-      grid-template-rows: 200px 530px;
-      row-gap: 10px;
-      .header {
-        height: 50px;
-        border-bottom: 1px solid #ccc;
-        display: flex;
-        align-items: center;
-        padding-left: 10px;
-        box-sizing: border-box;
-        .image {
-          width: 35px;
-          height: 35px;
-          border-radius: 50%;
-          display: grid;
-          place-items: center;
-          background-color: rgba($color: #11c9cb, $alpha: 0.2);
-          margin-right: 5px;
-        }
-      }
-      // TODO 公告样式，目前是mode版
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-areas:
+      "notice notice line line line line"
+      "notice notice line line line line"
+      "notice notice line line line line"
+      "myOrderList myOrderList bar bar pie pie"
+      "myOrderList myOrderList bar bar pie pie";
+    gap: 10px;
+    // grid-template-rows: repeat(auto-fit, minmax(300px, 1fr));
+    // grid-template-columns: 1fr 2fr;
+    // grid-template-rows: 1fr 2fr 2fr;
+
+    .notice {
+      grid-area: notice;
       .notice_content {
         height: 100px;
         display: grid;
         place-items: center;
         color: #ccc;
       }
+    }
+    .myOrderList {
+      grid-area: myOrderList;
       .orderList_content {
         padding: 10px;
         box-sizing: border-box;
       }
     }
-    .right {
-      display: grid;
+    .notice .header,
+    .myOrderList .header {
+      height: 50px;
+      border-bottom: 1px solid #ccc;
+      display: flex;
+      align-items: center;
+      padding-left: 10px;
+      box-sizing: border-box;
+      .image {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background-color: rgba($color: #11c9cb, $alpha: 0.2);
+        margin-right: 5px;
+      }
+    }
+
+    .line {
+      grid-area: line;
+    }
+    .bar {
+      grid-area: bar;
+    }
+    .pie {
+      grid-area: pie;
+    }
+  }
+  @media (max-width: 1440px) {
+    .main {
+      height: 900px;
       grid-template-areas:
-        "line line"
-        "bar pie";
-      grid-template-rows: 400px 330px;
-      gap: 10px;
-      .line {
-        grid-area: line;
-        width: 100%;
-        padding: 10px;
-        box-sizing: border-box;
-      }
-      .bar {
-        grid-area: bar;
-        width: 560px;
-      }
-      .pie {
-        grid-area: pie;
-        width: 560px;
-      }
+        "notice notice myOrderList myOrderList myOrderList myOrderList"
+        "line line line line line line"
+        "bar bar bar pie pie pie"
+        "bar bar bar pie pie pie";
+    }
+    .line {
+      height: 300px;
+    }
+    .bar {
+      height: 300px;
+    }
+    .pie {
+      height: 300px;
+    }
+  }
+  @media (max-width: 1050px) {
+    .main {
+      height: 1200px;
+      grid-template-areas:
+        "notice notice myOrderList myOrderList myOrderList myOrderList"
+        "line line line line line line"
+        "bar bar pie pie pie pie"
+        "bar bar pie pie pie pie";
+    }
+    .line {
+      height: 400px;
+    }
+    .bar {
+      height: 400px;
+    }
+    .pie {
+      height: 400px;
+    }
+  }
+  @media (max-width: 868px) {
+    .main {
+      height: 1500px;
+      grid-template-areas:
+        "notice notice notice notice notice notice"
+        "myOrderList myOrderList myOrderList myOrderList myOrderList myOrderList"
+        "line line line line line line"
+        "line line line line line line"
+        "bar bar bar bar bar bar"
+        "pie pie pie pie pie pie";
+    }
+    .line {
+      height: 300px;
+    }
+    .bar {
+      height: 300px;
+    }
+    .pie {
+      height: 300px;
     }
   }
 }

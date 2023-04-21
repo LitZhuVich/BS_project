@@ -39,7 +39,11 @@
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm(ruleFormRef)">
+        <el-button
+          type="primary"
+          @click="submitForm(ruleFormRef)"
+          @keyup.enter="submitForm(ruleFormRef)"
+        >
           注册
         </el-button>
         <el-button @click="resetForm(ruleFormRef)"> 重置 </el-button>
