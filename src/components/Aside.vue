@@ -1,8 +1,14 @@
 <template>
   <el-row class="tac">
     <el-col :span="24">
-      <el-menu active-text-color="#0065f8" router default-active="/index" text-color="#fff" :unique-opened="unique_opened"
-        background-color="#31c3f6">
+      <el-menu
+        active-text-color="#0065f8"
+        router
+        default-active="/index"
+        text-color="#fff"
+        :unique-opened="unique_opened"
+        background-color="#31c3f6"
+      >
         <div class="logo-bar">
           <el-icon>
             <SetUp />
@@ -23,7 +29,7 @@
             </el-icon>
             <span>工单管理</span>
           </template>
-          <el-menu-item-group title="">
+          <el-menu-item-group>
             <el-menu-item index="/order/post">发起工单</el-menu-item>
             <el-menu-item index="/order/mine">我的工单</el-menu-item>
             <el-menu-item index="/order/toBeDone">代办工单池</el-menu-item>
@@ -94,7 +100,7 @@ import {
   Menu,
 } from "@element-plus/icons-vue";
 import { useRoute } from "vue-router";
-import { useBreadcrumbStore } from "../store/breadcrumb";
+import { useBreadcrumbStore } from "../store/store";
 import { storeToRefs } from "pinia";
 
 const route = useRoute();

@@ -8,9 +8,9 @@ export default class ApiClient {
   constructor() {
     this.axiosInstance = axios.create({
       // 本地测试的后端接口
-      // baseURL: "http://www.bstestserver.com/api/v1",
+      baseURL: "http://www.bstestserver.com/api/v1",
       // 远程测试的后端接口
-      baseURL: "http://bs_project.svvs.top/api/v1",
+      // baseURL: "http://bs_project.svvs.top/api/v1",
     });
     // 发送拦截
     this.axiosInstance.interceptors.request.use(
@@ -35,7 +35,7 @@ export default class ApiClient {
         if (error.response && error.response.status === 401) {
           // 处理未授权错误
           console.log(error.response);
-          // // start 刷新token
+          // start 刷新token
           // try {
           //   // 发送刷新 Token 的请求
           //   const response = await this.axiosInstance.get("/refresh");
@@ -76,6 +76,29 @@ export default class ApiClient {
     config?: AxiosRequestConfig
   ): Promise<T> {
     const response = await this.axiosInstance.post<T>(url, data, config);
+    return response.data;
+  }
+  // put 方法
+  async put<T>(
+    url: string,
+    data?: any,
+    config?: AxiosRequestConfig
+  ): Promise<T> {
+    const response = await this.axiosInstance.put<T>(url, data, config);
+    return response.data;
+  }
+  // patch 方法
+  async patch<T>(
+    url: string,
+    data?: any,
+    config?: AxiosRequestConfig
+  ): Promise<T> {
+    const response = await this.axiosInstance.patch<T>(url, data, config);
+    return response.data;
+  }
+  // delete 方法
+  async delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
+    const response = await this.axiosInstance.delete<T>(url, config);
     return response.data;
   }
 }

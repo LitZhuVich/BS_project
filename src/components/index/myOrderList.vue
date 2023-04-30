@@ -1,14 +1,28 @@
 <template>
-  <el-input v-model="search" placeholder="输入情况说明内容查找对应的工单" :prefix-icon="Search" autosize maxlength="50"
-    show-word-limit />
-  <el-table :data="filterTableData" style="width: 100%" stripe :height="index.TableHeight">
+  <el-input
+    v-model="search"
+    placeholder="输入情况说明内容查找对应的工单"
+    :prefix-icon="Search"
+    autosize
+    maxlength="50"
+    show-word-limit
+  />
+  <el-table
+    :data="filterTableData"
+    style="width: 100%"
+    stripe
+    :height="TableHeight"
+  >
     <el-table-column prop="status" label="工单状态" width="140" fixed>
-      <template #default="scope">
+      <template #default="scope: any">
         <div style="display: flex; align-items: center">
           <el-tag :type="tagStatusType(scope.row.state.status)">
             {{ scope.row.state.status }}
           </el-tag>
-          <el-tag :type="tagSituationsType(scope.row.state.situations)" effect="plain">
+          <el-tag
+            :type="tagSituationsType(scope.row.state.situations)"
+            effect="plain"
+          >
             {{ scope.row.state.situations }}
           </el-tag>
         </div>
@@ -20,10 +34,10 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { Search } from "@element-plus/icons-vue";
-import { useBreadcrumbStore } from "../../store/breadcrumb";
+import { useIndexStore } from "../../store/store";
 import { storeToRefs } from "pinia";
-const breadcrumb = useBreadcrumbStore();
-const { index } = storeToRefs(breadcrumb);
+const breadcrumb = useIndexStore();
+const { TableHeight } = storeToRefs(breadcrumb);
 const tableData = [
   {
     state: {
@@ -103,9 +117,7 @@ const tableData = [
     content: "No. 189, Grove St, Los Angeles",
   },
 ];
-const as = (index: number) => {
-  console.log(index);
-};
+
 // 接收输入框的值
 const search = ref("");
 // 过滤显示
@@ -124,7 +136,7 @@ const tagStatusType = (value: string): string => {
     case "待确认":
       return "danger";
     case "处理中":
-      return "primary";
+      return ""; // 默认是 primary
     case "已接收":
       return "warning";
     default:

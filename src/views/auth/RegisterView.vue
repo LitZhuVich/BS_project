@@ -71,9 +71,9 @@ import { ElNotification } from "element-plus";
 import { User, Lock } from "@element-plus/icons-vue";
 import ApiClient from "../../request/request";
 import { useRouter } from "vue-router";
+
 const apiClient = new ApiClient();
 const router = useRouter();
-
 const ruleFormRef = ref<FormInstance>();
 
 // 检测用户名
@@ -126,7 +126,9 @@ interface registerType {
     username: string;
     id: number;
   };
-  token: string;
+  data: {
+    token: string;
+  };
 }
 
 // 提交表单
@@ -139,7 +141,7 @@ const submitForm = (formEl: FormInstance | undefined): void => {
         "/register",
         ruleForm
       );
-      if (response.token != null) {
+      if (response.data.token != null) {
         // 注册成功 表单信息清空
         formEl.resetFields();
         ElNotification({

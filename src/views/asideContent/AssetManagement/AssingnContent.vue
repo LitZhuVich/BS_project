@@ -48,7 +48,7 @@
         <el-table-column prop="remainder" label="来源" />
         <el-table-column prop="description" label="资产地址" />
         <el-table-column label="操作" width="160">
-          <template #default="scope">
+          <template #default="scope: any">
             <el-button type="primary" @click="dialogFormVisible = true">{{
               scope.row.add
             }}</el-button>
@@ -102,7 +102,7 @@
             <el-table-column prop="no" label="工程师编号" sortable />
             <el-table-column prop="gcname" label="工程师名字" />
             <el-table-column prop="priority" label="目前的状态">
-              <template #default="scope">
+              <template #default="scope: any">
                 <div style="display: flex; align-items: center">
                   <el-tag :type="tagStatusType(scope.row.orderStatus2)">
                     {{ scope.row.orderStatus2 }}

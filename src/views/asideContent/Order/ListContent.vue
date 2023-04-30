@@ -4,21 +4,26 @@
     <div class="OrderView">
       <div class="avatar">
         <div>
-          <el-avatar :size="50" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+          <el-avatar
+            :size="50"
+            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+          />
         </div>
         <div style="margin-left: 10px">
-          <h4>litzhu</h4>
+          <h4>{{ userInfo.username }}</h4>
           <el-text>可接单</el-text>
         </div>
       </div>
       <div class="mid">
         <el-text tag="b">工单视图</el-text>
-        <el-icon style="
-              position: absolute;
-              right: 0;
-              top: 50%;
-              transform: translate(0, -50%);
-            ">
+        <el-icon
+          style="
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translate(0, -50%);
+          "
+        >
           <Refresh />
         </el-icon>
       </div>
@@ -41,6 +46,12 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { Refresh } from "@element-plus/icons-vue";
+import { useUserStore } from "../../../store/store";
+import { storeToRefs } from "pinia";
+// 实例化
+const userStore = useUserStore();
+const { userInfo }: any = storeToRefs(userStore);
+
 // 引入组件
 // TODO: 工单和新建工单页写完后，替换下面的TEST.vue
 // import Order from "../../../components/orderlist/Order";

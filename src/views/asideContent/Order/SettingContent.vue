@@ -66,7 +66,7 @@
         <el-table-column prop="creattime" label="创建时间" />
         <el-table-column prop="notes" label="备注" />
         <el-table-column prop="createTime" label="操作" width="160">
-          <template #default="scope">
+          <template #default="scope: any">
             <el-button type="primary">{{ scope.row.add }}</el-button>
             <el-button type="danger">{{ scope.row.delete }}</el-button>
           </template>

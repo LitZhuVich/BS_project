@@ -14,19 +14,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, Ref } from "vue";
-import { useRoute } from "vue-router";
-// import { useBreadcrumbStore } from "../store/breadcrumb";
-// import { storeToRefs } from "pinia";
 // 引入组件
 import AsideBar from "../components/Aside.vue"; // 侧边栏
-import ApiClient from "../request/request";
 import HeaderBar from "../components/Header.vue";
-const route = useRoute();
-
-// TODO:测试用户登录之后的功能
-const apiClient = new ApiClient();
-apiClient.get("/user").then((response: any) => console.log(response.user));
 </script>
 
 <style scoped lang="scss">

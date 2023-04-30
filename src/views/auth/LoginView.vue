@@ -66,7 +66,7 @@ import { ElNotification } from "element-plus";
 import { User, Lock } from "@element-plus/icons-vue";
 import ApiClient from "../../request/request";
 import { useRouter } from "vue-router";
-import axios from "axios";
+
 const apiClient = new ApiClient();
 const router = useRouter();
 const ruleFormRef = ref<FormInstance>();
@@ -109,7 +109,9 @@ const rules = reactive<FormRules>({
 
 // 返回登录类型接口
 interface loginType {
-  token: string;
+  data: {
+    token: string;
+  };
   error: string;
   success: string;
 }
@@ -121,9 +123,9 @@ const submitForm = (formEl: FormInstance | undefined): void => {
     if (valid) {
       const response: loginType = await apiClient.post("/login", ruleForm);
       // 提交成功
-      if (response.token != null) {
+      if (response.data.token != null) {
         // 将 登录的 token 保存到本地存储中
-        localStorage.setItem("token", response.token);
+        localStorage.setItem("token", response.data.token);
         // 登录弹窗
         ElNotification({
           title: "Success",

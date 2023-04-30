@@ -62,7 +62,8 @@
             :total="40"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-        /></el-config-provider>
+          />
+        </el-config-provider>
       </div>
     </div>
   </div>
