@@ -8,9 +8,9 @@ export default class ApiClient {
   constructor() {
     this.axiosInstance = axios.create({
       // 本地测试的后端接口
-      baseURL: "http://www.bstestserver.com/api/v1",
+      // baseURL: "http://www.bstestserver.com/api/v1",
       // 远程测试的后端接口
-      // baseURL: "http://bs_project.svvs.top/api/v1",
+      baseURL: "http://bs_project.svvs.top/api/v1",
     });
     // 发送拦截
     this.axiosInstance.interceptors.request.use(
