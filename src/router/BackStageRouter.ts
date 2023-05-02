@@ -9,7 +9,10 @@ const routes: RouteRecordRaw[] = [
       main: () => import("../views/BackStage.vue"),
     },
     redirect: "/index",
-    meta: { requiresAuth: true },
+    meta: {
+      requiresAuth: true,
+      permissions: ["admin", "engineer", "customer_representative"],
+    },
     children: [
       // 首页
       {
@@ -20,6 +23,7 @@ const routes: RouteRecordRaw[] = [
         },
         meta: {
           breadcrumb: [{ title: "首页", url: "/index" }],
+          permissions: ["admin", "engineer", "customer_representative"],
         },
       },
       // 工单
@@ -39,6 +43,7 @@ const routes: RouteRecordRaw[] = [
             },
             meta: {
               breadcrumb: [{ title: "发起工单", url: "/order/post" }],
+              permissions: ["admin", "customer_representative"],
             },
           },
           // 我的工单
@@ -51,6 +56,7 @@ const routes: RouteRecordRaw[] = [
             },
             meta: {
               breadcrumb: [{ title: "我的工单", url: "/order/mine" }],
+              permissions: ["admin", "engineer", "customer_representative"],
             },
           },
           // 代办工单池
@@ -63,6 +69,7 @@ const routes: RouteRecordRaw[] = [
             },
             meta: {
               breadcrumb: [{ title: "代办工单池", url: "/order/toBeDone" }],
+              permissions: ["admin", "engineer"],
             },
           },
           // 工单列表
@@ -75,6 +82,7 @@ const routes: RouteRecordRaw[] = [
             },
             meta: {
               breadcrumb: [{ title: "工单列表", url: "/order/list" }],
+              permissions: ["admin", "engineer"],
             },
           },
           // 工单设置
@@ -87,6 +95,7 @@ const routes: RouteRecordRaw[] = [
             },
             meta: {
               breadcrumb: [{ title: "工单设置", url: "/order/setting" }],
+              permissions: ["admin"],
             },
           },
         ],
@@ -101,6 +110,7 @@ const routes: RouteRecordRaw[] = [
         },
         meta: {
           breadcrumb: [{ title: "组织架构", url: "/organization" }],
+          permissions: ["admin"],
         },
       },
       // 工程师日历
@@ -113,6 +123,7 @@ const routes: RouteRecordRaw[] = [
         },
         meta: {
           breadcrumb: [{ title: "工程师日历", url: "/engineerCalendar" }],
+          permissions: ["admin"],
         },
       },
       // 客户管理
@@ -127,6 +138,7 @@ const routes: RouteRecordRaw[] = [
         },
         meta: {
           breadcrumb: [{ title: "客户管理", url: "/customerManagement" }],
+          permissions: ["admin"],
         },
       },
       // 资产管理
@@ -136,6 +148,7 @@ const routes: RouteRecordRaw[] = [
         redirect: "/asset/inventory",
         meta: {
           breadcrumb: [{ title: "资产", url: "/asset" }],
+          permissions: ["admin"],
         },
         children: [
           // 资产清单
@@ -150,6 +163,7 @@ const routes: RouteRecordRaw[] = [
             },
             meta: {
               breadcrumb: [{ title: "资产清单", url: "/asset/inventory" }],
+              permissions: ["admin"],
             },
           },
           // 资产分类
@@ -164,6 +178,7 @@ const routes: RouteRecordRaw[] = [
             },
             meta: {
               breadcrumb: [{ title: "资产分类", url: "/asset/catefory" }],
+              permissions: ["admin"],
             },
           },
           // 添加资产
@@ -176,6 +191,7 @@ const routes: RouteRecordRaw[] = [
             },
             meta: {
               breadcrumb: [{ title: "添加资产", url: "/asset/add" }],
+              permissions: ["admin"],
             },
           },
           // 分派资产
@@ -190,6 +206,7 @@ const routes: RouteRecordRaw[] = [
             },
             meta: {
               breadcrumb: [{ title: "分派资产", url: "/asset/assingn" }],
+              permissions: ["admin"],
             },
           },
         ],
@@ -203,6 +220,7 @@ const routes: RouteRecordRaw[] = [
         },
         meta: {
           breadcrumb: [{ title: "系统设置", url: "/asset/setting" }],
+          permissions: ["admin", "engineer", "customer_representative"],
         },
       },
     ],
@@ -232,18 +250,31 @@ const router = createRouter({
   routes, // 路由配置
 });
 //TODO:这个是路由守卫。启用的时候可以强制网站必须登录才能访问
+
 //创建路由守卫
 router.beforeEach((to, from, next) => {
   // 获取 token 值
   const isAuthToken = localStorage.getItem("token");
-  // 检查token是否存在 如果不存在 前往登录页面
+  // 检查是否需要登录验证，如果需要但用户没有登录，则跳转到登录页
   if (to.meta.requiresAuth && !isAuthToken) {
     next("/login");
-  } else {
-    next();
+    return;
   }
+  const permissions: any = to.meta.permissions;
+  // 检查用户权限，如果没有权限则跳转到无权限访问提示页面
+  if (permissions && sessionStorage.getItem("role")) {
+    const userRole: string = sessionStorage.getItem("role")!;
+    if (!permissions.includes(userRole)) {
+      next("/index");
+      return;
+    }
+  }
+
+  // 如果通过验证，则进行页面跳转
+  next();
 });
-// 封装初始化前台路由
+
+// 封装初始化后台路由
 export const initBackStageRouter = (app: App<Element>) => {
   app.use(router);
 };

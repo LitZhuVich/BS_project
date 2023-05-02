@@ -10,10 +10,10 @@
         </el-breadcrumb-item>
         <el-breadcrumb-item
           v-for="(item, index) of list"
-          :to="item.url"
+          :to="(item as any).url"
           :key="index"
         >
-          {{ item.title }}
+          {{ (item as any).title }}
         </el-breadcrumb-item>
       </el-breadcrumb>
     </template>
@@ -25,7 +25,9 @@
           src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
         />
         <span class="text-large font-600 mr-3"> {{ userInfo.username }} </span>
-        <el-tag type="info" plain>{{ userInfo.role_name }}</el-tag>
+        <el-tag type="info" plain class="permissions">
+          {{ roleNamae }}
+        </el-tag>
       </div>
     </template>
     <template #extra>
@@ -36,42 +38,45 @@
   </el-page-header>
 </template>
 <script lang="ts" setup>
-import { ref } from "vue";
+import { computed } from "vue";
+
 import { ArrowRight } from "@element-plus/icons-vue";
 import { ElNotification as notify } from "element-plus";
-import { useRoute, useRouter, onBeforeRouteUpdate } from "vue-router";
-import { useBreadcrumbStore, useUserStore } from "../store/store";
+import { useRoute, useRouter } from "vue-router";
+import { useBreadcrumbStore } from "../store/store";
 import { storeToRefs } from "pinia";
 import ApiClient from "../request/request";
 const apiClient = new ApiClient();
 const route = useRoute();
 const router = useRouter();
+// 接收父元素的数据
+const props = defineProps(["userInfo"]);
+
 // 实例化
 const breadcrumbStore = useBreadcrumbStore();
-const userStore = useUserStore();
 // 执行方法
 breadcrumbStore.getBreadcrumbList(route);
-userStore.fetchUserInfo();
 // 响应式 数据
 const { list }: any = storeToRefs(breadcrumbStore);
-const { userInfo }: any = storeToRefs(userStore);
 
-// 监听路由变化
-onBeforeRouteUpdate((to: any, from: any, next) => {
-  breadcrumbStore.list = to.meta.breadcrumb;
-  next();
-});
 // 返回上一级路由
 const onBack = () => {
   // notify("点击了Back");
   router.go(-1);
 };
-interface breadcrumbListType {
-  title: string;
-  url: string;
-}
-const breadcrumbList = ref<breadcrumbListType[]>([]);
-
+// 计算客户角色转换为中文
+let roleNamae = computed(() => {
+  switch (props.userInfo.role_name) {
+    case "admin":
+      return "管理员";
+    case "engineer":
+      return "工程师";
+    case "customer_representative":
+      return "客户";
+    default:
+      return "你是？";
+  }
+});
 // 重置 breadcrumbStore
 const BreadcrumbListReset = () => {
   breadcrumbStore.ResertBreadcrumb();
@@ -80,7 +85,6 @@ const BreadcrumbListReset = () => {
 // 登出
 const logout = async (): Promise<void> => {
   const response = await apiClient.post("/logout");
-  console.log(response);
   localStorage.removeItem("token");
   notify("登出成功");
   router.push({
@@ -94,5 +98,9 @@ const logout = async (): Promise<void> => {
   box-sizing: border-box;
   background-color: white;
   border-bottom: 1px solid var(--el-border-color);
+
+  .permissions {
+    margin-left: 1rem;
+  }
 }
 </style>

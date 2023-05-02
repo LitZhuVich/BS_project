@@ -33,6 +33,7 @@
           type="primary"
           @click="submitForm(ruleFormRef)"
           @keyup.enter="submitForm(ruleFormRef)"
+          :loading="loading"
         >
           登录
         </el-button>
@@ -66,7 +67,7 @@ import { ElNotification } from "element-plus";
 import { User, Lock } from "@element-plus/icons-vue";
 import ApiClient from "../../request/request";
 import { useRouter } from "vue-router";
-
+import type { apiResponseToken } from "../../model/interface";
 const apiClient = new ApiClient();
 const router = useRouter();
 const ruleFormRef = ref<FormInstance>();
@@ -78,6 +79,7 @@ const ruleForm = reactive({
   username: "",
   password: "",
 });
+
 // 检测用户名
 const validateName = (rule: any, value: any, callback: any): void => {
   if (value === "") {
@@ -107,25 +109,23 @@ const rules = reactive<FormRules>({
   password: [{ validator: validatePass, trigger: "change" }],
 });
 
-// 返回登录类型接口
-interface loginType {
-  data: {
-    token: string;
-  };
-  error: string;
-  success: string;
-}
+// 加载
+const loading = ref<boolean>(false);
 
 // 提交表单
 const submitForm = (formEl: FormInstance | undefined): void => {
   if (!formEl) return;
+  loading.value = true;
   formEl.validate(async (valid) => {
     if (valid) {
-      const response: loginType = await apiClient.post("/login", ruleForm);
+      const response: apiResponseToken = await apiClient.post(
+        "/login",
+        ruleForm
+      );
       // 提交成功
-      if (response.data.token != null) {
+      if (response!.data.token != null) {
         // 将 登录的 token 保存到本地存储中
-        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("token", response!.data.token);
         // 登录弹窗
         ElNotification({
           title: "Success",
@@ -136,6 +136,7 @@ const submitForm = (formEl: FormInstance | undefined): void => {
         router.push({
           name: "index",
         });
+        loading.value = false;
       } else {
         // 提交失败
         ElNotification({
@@ -143,8 +144,10 @@ const submitForm = (formEl: FormInstance | undefined): void => {
           message: "登录失败",
           type: "error",
         });
+        loading.value = false;
       }
     } else {
+      loading.value = false;
       // 账号密码输入为空
       return false;
     }

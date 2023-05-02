@@ -43,6 +43,7 @@
           type="primary"
           @click="submitForm(ruleFormRef)"
           @keyup.enter="submitForm(ruleFormRef)"
+          :loading="loading"
         >
           注册
         </el-button>
@@ -69,6 +70,7 @@ import { reactive, ref } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
 import { ElNotification } from "element-plus";
 import { User, Lock } from "@element-plus/icons-vue";
+import type { apiResponseToken } from "../../model/interface";
 import ApiClient from "../../request/request";
 import { useRouter } from "vue-router";
 
@@ -120,28 +122,20 @@ const rules = reactive<FormRules>({
   password: [{ validator: validatePass, trigger: "change" }],
   password_confirmation: [{ validator: validatePass2, trigger: "change" }],
 });
-// 返回注册类型接口
-interface registerType {
-  user: {
-    username: string;
-    id: number;
-  };
-  data: {
-    token: string;
-  };
-}
-
+// 加载
+const loading = ref<boolean>(false);
 // 提交表单
 const submitForm = (formEl: FormInstance | undefined): void => {
   if (!formEl) return;
+  loading.value = true;
   formEl.validate(async (valid) => {
     if (valid) {
       // 提交成功
-      const response: registerType = await apiClient.post(
+      const response: apiResponseToken = await apiClient.post(
         "/register",
         ruleForm
       );
-      if (response.data.token != null) {
+      if (response!.data.token != null) {
         // 注册成功 表单信息清空
         formEl.resetFields();
         ElNotification({
@@ -153,6 +147,7 @@ const submitForm = (formEl: FormInstance | undefined): void => {
         router.push({
           name: "login",
         });
+        loading.value = false;
       } else {
         // 提交失败
         ElNotification({
@@ -160,8 +155,10 @@ const submitForm = (formEl: FormInstance | undefined): void => {
           message: "注册失败",
           type: "error",
         });
+        loading.value = false;
       }
     } else {
+      loading.value = false;
       // 账号密码输入为空
       return false;
     }
