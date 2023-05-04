@@ -16,7 +16,7 @@ export const useUserStore = defineStore("user", {
   actions: {
     // 获取用户信息
     async fetchUserInfo() {
-  try {
+      try {
         const userInfo: apiResponseUser = await apiClient.get("/user");
         this.userInfo = userInfo!.data;
         sessionStorage.setItem("role", this.userInfo.role_name);

@@ -8,9 +8,9 @@ import { useRouter } from "vue-router";
 
 // 定义一些公共的请求参数，避免重复写在每个请求中 PS.用那一个就可以注释另外一个
 // 远程测试的后端接口
-const BASE_URL = "http://bs_project.svvs.top/api/v1";
+// const BASE_URL = "http://bs_project.svvs.top/api/v1";
 // 本地测试的后端接口
-// const BASE_URL = "http://www.bstestserver.com/api/v1";
+const BASE_URL = "http://www.bstestserver.com/api/v1";
 // 请求头
 const HEADERS = {
   "Content-Type": "application/json",

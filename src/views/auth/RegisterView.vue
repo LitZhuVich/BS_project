@@ -135,7 +135,7 @@ const submitForm = (formEl: FormInstance | undefined): void => {
         "/register",
         ruleForm
       );
-      if (response!.data.token != null) {
+      if (response!.data.access_token != null) {
         // 注册成功 表单信息清空
         formEl.resetFields();
         ElNotification({

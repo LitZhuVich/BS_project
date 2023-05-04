@@ -91,6 +91,7 @@ const validateName = (rule: any, value: any, callback: any): void => {
     callback();
   }
 };
+
 // 检测密码
 const validatePass = (rule: any, value: any, callback: any): void => {
   if (value === "") {
@@ -123,9 +124,13 @@ const submitForm = (formEl: FormInstance | undefined): void => {
         ruleForm
       );
       // 提交成功
-      if (response!.data.token != null) {
+      if (response!.data.access_token != null) {
         // 将 登录的 token 保存到本地存储中
-        localStorage.setItem("token", response!.data.token);
+        localStorage.setItem("token", response!.data.access_token);
+        localStorage.setItem(
+          "expires_in",
+          response!.data.expires_in.toString()
+        );
         // 登录弹窗
         ElNotification({
           title: "Success",
@@ -153,6 +158,7 @@ const submitForm = (formEl: FormInstance | undefined): void => {
     }
   });
 };
+
 // 重置方法
 const resetForm = (formEl: FormInstance | undefined): void => {
   if (!formEl) return;

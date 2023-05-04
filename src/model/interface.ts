@@ -23,7 +23,9 @@ export interface apiResponse<T> {
 
 // 令牌
 interface token {
-  token: string;
+  access_token: string;
+  token_type: string;
+  expires_in: number;
 }
 
 // 使用泛型创建具体的接口类型
