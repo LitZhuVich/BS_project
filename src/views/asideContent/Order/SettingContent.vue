@@ -159,10 +159,13 @@ const filterTableData = computed(() =>
 
 <style scoped lang="scss">
 .customerBox {
+  margin: 10px;
   padding: 10px;
   box-sizing: border-box;
+  height: calc(100% - 120px);
+  background-color: white;
+
   .function {
-    background-color: white;
     padding: 15px;
     box-sizing: border-box;
     overflow: auto;

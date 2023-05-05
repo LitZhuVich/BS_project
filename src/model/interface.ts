@@ -21,14 +21,15 @@ export interface apiResponse<T> {
   message: string;
 }
 
-// 令牌
-interface token {
+// 令牌类型
+interface tokenType {
   access_token: string;
   token_type: string;
   expires_in: number;
 }
 
 // 使用泛型创建具体的接口类型
+export type apiResponseData = apiResponse<string> | undefined;
 export type apiResponseUser = apiResponse<user> | undefined;
 export type apiResponseOrder = apiResponse<order> | undefined;
 export type apiResponseRole = apiResponse<role> | undefined;
@@ -47,4 +48,4 @@ export type apiResponseAsset = apiResponse<asset> | undefined;
 export type apiResponseAssetCategories =
   | apiResponse<asset_categories>
   | undefined;
-export type apiResponseToken = apiResponse<token> | undefined;
+export type apiResponseToken = apiResponse<tokenType> | undefined;

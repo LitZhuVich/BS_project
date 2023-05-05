@@ -159,6 +159,9 @@ const resetForm = (formEl: FormInstance | undefined) => {
 .AddContentbox {
   padding: 10px;
   box-sizing: border-box;
+  height: calc(100% - 120px);
+  background-color: white;
+  margin: 10px;
   .scp_btn {
     width: 340px;
   }

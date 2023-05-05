@@ -4,10 +4,7 @@
     <div class="OrderView">
       <div class="avatar">
         <div>
-          <el-avatar
-            :size="50"
-            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-          />
+          <el-avatar :size="50" :src="userInfo.avator" />
         </div>
         <div style="margin-left: 10px">
           <h4>{{ userInfo.username }}</h4>
@@ -78,8 +75,8 @@ $views-li: 40px;
   display: grid;
   grid-template-columns: 1fr 6fr;
   column-gap: 10px;
-  height: calc(100% - 90px);
-
+  height: calc(100% - 120px);
+  margin: 10px;
   .OrderView {
     background-color: white;
     padding: 20px;

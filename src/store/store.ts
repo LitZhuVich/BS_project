@@ -43,7 +43,7 @@ export const useBreadcrumbStore = defineStore("breadcrumb", {
     // 获取面包屑数据
     getBreadcrumbList(route: any) {
       const { matched } = route;
-      // 将没有 meta.breadcrumb 的路由数据过滤掉，再生成相应的面包屑列表，
+      // 将没有 meta.breadcrumb和meta 的路由数据过滤掉，再生成相应的面包屑列表，
       this.list = matched
         .filter((item: any) => item.meta && item.meta.breadcrumb)
         .map((item: any) => ({
@@ -59,7 +59,7 @@ export const useBreadcrumbStore = defineStore("breadcrumb", {
     updateBreadcrumb() {
       // 监听路由变化改变数据
       onBeforeRouteUpdate((to: any, from: any, next) => {
-        this.list = to.meta.breadcrumb;
+        this.getBreadcrumbList(to);
         next();
       });
     },

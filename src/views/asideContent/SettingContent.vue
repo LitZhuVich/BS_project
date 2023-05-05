@@ -122,8 +122,12 @@ const options = [
 </script>
 <style lang="scss" scoped>
 .Settingbox {
+  margin: 10px;
   padding: 10px;
   box-sizing: border-box;
+  height: calc(100% - 120px);
+  background-color: white;
+
   .div_box {
     width: 80px;
     height: 50px;

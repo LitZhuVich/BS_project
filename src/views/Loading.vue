@@ -6,6 +6,7 @@
     </div>
   </transition>
 </template>
+
 <script setup lang="ts">
 const props = defineProps(["text", "loading"]);
 </script>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Loading from "./views/Loading.vue";
 import { ref } from "vue";
-const loading = ref(false);
+const loading = ref<boolean>(false);
 // 显示加载动画
 const showLoading = () => {
   loading.value = true;

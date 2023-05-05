@@ -17,10 +17,12 @@
 // 引入组件
 import AsideBar from "../components/Aside.vue"; // 侧边栏
 import HeaderBar from "../components/Header.vue";
+import type { apiResponseUser } from "../model/interface";
 import { useUserStore } from "../store/store";
 import { storeToRefs } from "pinia";
 const userStore = useUserStore();
 // 获取用户信息 保存到数据缓存中
+
 userStore.fetchUserInfo();
 const { userInfo }: any = storeToRefs(userStore);
 </script>
