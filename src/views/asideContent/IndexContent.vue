@@ -106,7 +106,16 @@ import barGrape from "../../components/visualGraph/bar.vue";
 import pieGrape from "../../components/visualGraph/pie.vue";
 import myOrderList from "../../components/index/myOrderList.vue";
 import notice from "../../components/index/notice.vue";
+
+import { ref } from "vue";
+import ApiClient from "../../request/request";
+const apiClient = ApiClient.getInstance();
+
+const getOrderInfo = async () => {
+  const orderRes = await apiClient.get("/");
+};
 </script>
+
 <style lang="scss" scoped>
 .IndexContent {
   padding: 10px;

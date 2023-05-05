@@ -40,7 +40,7 @@ import { User, Lock } from "@element-plus/icons-vue";
 import ApiClient from "../../request/request";
 import { useRouter } from "vue-router";
 import type { apiResponseToken } from "../../model/interface";
-const apiClient = new ApiClient();
+const apiClient = ApiClient.getInstance();
 const router = useRouter();
 const ruleFormRef = ref<FormInstance>();
 // 存储是否记住我

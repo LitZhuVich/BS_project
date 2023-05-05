@@ -205,6 +205,9 @@ const filterTableData = computed(() =>
 .customerBox {
   padding: 10px;
   box-sizing: border-box;
+  height: calc(100% - 120px);
+  background-color: white;
+  margin: 10px;
   .function {
     background-color: white;
     padding: 10px;

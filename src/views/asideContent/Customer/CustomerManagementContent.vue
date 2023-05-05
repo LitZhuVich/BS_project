@@ -33,25 +33,28 @@
           </div>
         </div>
       </div>
-      <el-table :data="tableData" stripe style="width: 100%" border>
-        <el-table-column type="selection" width="60" align="center" />
-        <el-table-column prop="companyName" label="公司名称" />
-        <el-table-column prop="createTime" label="创建时间" />
-        <el-table-column prop="lastUpdater" label="最后更新人" />
-        <el-table-column prop="lastUpdateTime" label="最后更新时间" />
-        <el-table-column prop="serviceBalance" label="服务余额" />
-        <el-table-column prop="customerSource" label="客户来源" />
-        <el-table-column prop="companyAddress" label="公司地址" />
-        <el-table-column prop="phone" label="手机号" />
-        <el-table-column prop="remark" label="备注" />
-        <el-table-column prop="classification" label="产品分类" />
-        <el-table-column prop="createTime" label="操作" width="160">
-          <template #default="scope">
-            <el-button type="primary">修改</el-button>
-            <el-button type="danger">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+      <div class="table">
+        <el-table :data="tableData" stripe style="width: 100%" border>
+          <el-table-column type="selection" width="60" align="center" />
+          <el-table-column prop="companyName" label="公司名称" />
+          <el-table-column prop="createTime" label="创建时间" />
+          <el-table-column prop="lastUpdater" label="最后更新人" />
+          <el-table-column prop="lastUpdateTime" label="最后更新时间" />
+          <el-table-column prop="serviceBalance" label="服务余额" />
+          <el-table-column prop="customerSource" label="客户来源" />
+          <el-table-column prop="companyAddress" label="公司地址" />
+          <el-table-column prop="phone" label="手机号" />
+          <el-table-column prop="remark" label="备注" />
+          <el-table-column prop="classification" label="产品分类" />
+          <el-table-column prop="createTime" label="操作" width="160">
+            <template #default="scope">
+              <el-button type="primary">修改</el-button>
+              <el-button type="danger">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+
       <div class="demo-pagination-block">
         <el-config-provider :locale="zhCn">
           <el-pagination
@@ -81,6 +84,9 @@ import { ElConfigProvider } from "element-plus";
 import zhCn from "element-plus/lib/locale/lang/zh-cn";
 // 引入图标
 import { Search, Plus, EditPen, CloseBold } from "@element-plus/icons-vue";
+import ApiClient from "../../../request/request";
+import type { apiResponseUser } from "../../../model/interface";
+const apiClient = ApiClient.getInstance();
 
 // 选择的搜索方式
 const searchOptionChoosed = ref("按公司名称搜");
@@ -103,68 +109,98 @@ const searchOptions = [
 const searchValue = ref("");
 
 // 表单数据
-const tableData = [
-  {
-    companyName: "A客户",
-    createTime: "2023-02-27 15:29:55",
-    lastUpdater: "盛军测试",
-    lastUpdateTime: "2023-02-27 15:30:56",
-    serviceBalance: "0.00",
-    customerSource: "客户管理单独",
-    companyAddress: "历下区盛福花园",
-    phone: "15272235226",
-    remark: "1212",
-    classification: "票据",
-  },
-  {
-    companyName: "A客户",
-    createTime: "2023-02-27 15:29:55",
-    lastUpdater: "盛军测试",
-    lastUpdateTime: "2023-02-27 15:30:56",
-    serviceBalance: "0.00",
-    customerSource: "客户管理单独",
-    companyAddress: "历下区盛福花园",
-    phone: "15272235226",
-    remark: "1212",
-    classification: "票据",
-  },
-  {
-    companyName: "A客户",
-    createTime: "2023-02-27 15:29:55",
-    lastUpdater: "盛军测试",
-    lastUpdateTime: "2023-02-27 15:30:56",
-    serviceBalance: "0.00",
-    customerSource: "客户管理单独",
-    companyAddress: "历下区盛福花园",
-    phone: "15272235226",
-    remark: "1212",
-    classification: "票据",
-  },
-  {
-    companyName: "A客户",
-    createTime: "2023-02-27 15:29:55",
-    lastUpdater: "盛军测试",
-    lastUpdateTime: "2023-02-27 15:30:56",
-    serviceBalance: "0.00",
-    customerSource: "客户管理单独",
-    companyAddress: "历下区盛福花园",
-    phone: "15272235226",
-    remark: "1212",
-    classification: "票据",
-  },
-  {
-    companyName: "A客户",
-    createTime: "2023-02-27 15:29:55",
-    lastUpdater: "盛军测试",
-    lastUpdateTime: "2023-02-27 15:30:56",
-    serviceBalance: "0.00",
-    customerSource: "客户管理单独",
-    companyAddress: "历下区盛福花园",
-    phone: "15272235226",
-    remark: "1212",
-    classification: "票据",
-  },
-];
+// const tableData = [
+//   {
+//     companyName: "A客户",
+//     createTime: "2023-02-27 15:29:55",
+//     lastUpdater: "盛军测试",
+//     lastUpdateTime: "2023-02-27 15:30:56",
+//     serviceBalance: "0.00",
+//     customerSource: "客户管理单独",
+//     companyAddress: "历下区盛福花园",
+//     phone: "15272235226",
+//     remark: "1212",
+//     classification: "票据",
+//   },
+//   {
+//     companyName: "A客户",
+//     createTime: "2023-02-27 15:29:55",
+//     lastUpdater: "盛军测试",
+//     lastUpdateTime: "2023-02-27 15:30:56",
+//     serviceBalance: "0.00",
+//     customerSource: "客户管理单独",
+//     companyAddress: "历下区盛福花园",
+//     phone: "15272235226",
+//     remark: "1212",
+//     classification: "票据",
+//   },
+//   {
+//     companyName: "A客户",
+//     createTime: "2023-02-27 15:29:55",
+//     lastUpdater: "盛军测试",
+//     lastUpdateTime: "2023-02-27 15:30:56",
+//     serviceBalance: "0.00",
+//     customerSource: "客户管理单独",
+//     companyAddress: "历下区盛福花园",
+//     phone: "15272235226",
+//     remark: "1212",
+//     classification: "票据",
+//   },
+//   {
+//     companyName: "A客户",
+//     createTime: "2023-02-27 15:29:55",
+//     lastUpdater: "盛军测试",
+//     lastUpdateTime: "2023-02-27 15:30:56",
+//     serviceBalance: "0.00",
+//     customerSource: "客户管理单独",
+//     companyAddress: "历下区盛福花园",
+//     phone: "15272235226",
+//     remark: "1212",
+//     classification: "票据",
+//   },
+//   {
+//     companyName: "A客户",
+//     createTime: "2023-02-27 15:29:55",
+//     lastUpdater: "盛军测试",
+//     lastUpdateTime: "2023-02-27 15:30:56",
+//     serviceBalance: "0.00",
+//     customerSource: "客户管理单独",
+//     companyAddress: "历下区盛福花园",
+//     phone: "15272235226",
+//     remark: "1212",
+//     classification: "票据",
+//   },
+//   {
+//     companyName: "A客户",
+//     createTime: "2023-02-27 15:29:55",
+//     lastUpdater: "盛军测试",
+//     lastUpdateTime: "2023-02-27 15:30:56",
+//     serviceBalance: "0.00",
+//     customerSource: "客户管理单独",
+//     companyAddress: "历下区盛福花园",
+//     phone: "15272235226",
+//     remark: "1212",
+//     classification: "票据",
+//   },
+// ];
+const tableData = ref([]);
+
+const getTableData = async (): Promise<void> => {
+  try {
+    const response = await apiClient.get<apiResponseUser>(
+      "/getAllCustomerRepresentative"
+    );
+    // console.log(response!.data);
+    // tableData.value = response!.data.map((user: any) => ({
+    //   name: user.username,
+    //   age: user.age,
+    //   address: user.address,
+    // }));
+  } catch (error) {
+    console.log(error);
+  }
+};
+getTableData();
 //分页框
 const currentPage = ref(1);
 const pageSize = ref(10);
@@ -194,8 +230,8 @@ $views-li: 40px;
 
 #Order {
   column-gap: 10px;
-  height: 100%;
-
+  height: calc(100% - 120px);
+  margin: 10px;
   .OrderList {
     width: 100%;
     height: 100%;
@@ -221,7 +257,9 @@ $views-li: 40px;
         margin-right: 10px;
       }
     }
-
+    .table {
+      height: 600px;
+    }
     .demo-pagination-block {
       display: flex;
       align-items: center;

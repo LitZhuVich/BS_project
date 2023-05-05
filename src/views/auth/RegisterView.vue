@@ -74,7 +74,7 @@ import type { apiResponseToken } from "../../model/interface";
 import ApiClient from "../../request/request";
 import { useRouter } from "vue-router";
 
-const apiClient = new ApiClient();
+const apiClient = ApiClient.getInstance();
 const router = useRouter();
 const ruleFormRef = ref<FormInstance>();
 
