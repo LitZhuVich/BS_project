@@ -203,6 +203,9 @@ const tableData = [
 .Inventory {
   padding: 10px;
   box-sizing: border-box;
+  height: calc(100% - 120px);
+  background-color: white;
+  margin: 10px;
   .Inventory_box {
     background: white;
     padding: 10px;

@@ -1,378 +1,200 @@
 <template>
   <!-- 新建工单背景 -->
   <div class="box">
-    <!-- 第一个框架 -->
-    <!-- 文件 -->
-    <div class="attachments">
-      <!-- 第一个框架的表单 -->
-      <el-form
-        :label-position="attachmentsPosition"
-        label-width="50px"
-        :model="attachments_input"
-        style="max-width: 800px"
-      >
+    <!-- 标题、描述、添加附件 -->
+    <div class="box-item attachments">
+      <el-form :label-position="attachmentsPosition" label-width="75px" :model="orderData" style="max-width: 800px">
         <!-- 标题输入框 -->
-        <el-form-item label="标题:">
-          <el-input v-model="attachments_input.name" />
+        <el-form-item label="工单标题:">
+          <el-input v-model="orderData.name" />
         </el-form-item>
         <!-- 描述输入框 -->
-        <el-form-item label="描述:">
-          <el-input
-            type="textarea"
-            :rows="5"
-            v-model="attachments_input.region"
-          />
+        <el-form-item label="工单描述:">
+          <el-input type="textarea" :rows="5" v-model="orderData.descript" />
         </el-form-item>
-        <!-- 按钮 -->
-        <div class="attachments_upload">
-          <el-button type="primary" :icon="Link">添加附件</el-button>
-        </div>
       </el-form>
+      <!-- 添加附件按钮 -->
+      <div class="attachments_upload">
+        <!-- TODO: 需要做添加附件功能 -->
+        <el-upload v-model:file-list="fileList" class="upload-demo"
+          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" multiple :limit="3">
+          <el-button type="primary">添加附件</el-button>
+          <template #tip>
+            <div class="el-upload__tip">
+              最多只能上传3个附件
+            </div>
+          </template>
+        </el-upload>
+      </div>
     </div>
-    <!-- 第二个框架 -->
-    <!-- 客户模板 -->
-    <div class="template">
-      <!-- 第二个框架的背景 -->
+    <!-- 客户信息 -->
+    <div class="box-item template">
       <div class="template_box">
         <!-- 标题 -->
-        <el-text class="template_title">客户模板切换</el-text>
+        <el-text class="title">客户信息</el-text>
         <!-- 图标 -->
         <el-icon color="lightblue" :size="20" class="template_icon">
           <Setting />
         </el-icon>
       </div>
-      <!-- 第二个框架的内容 -->
       <div class="template_center" style="margin-top: 20px">
-        <!-- 第二个框架的公司名称表单 -->
-        <el-form :label-position="templatePosition">
-          <el-form-item label="公司名称">
-            <!-- 下拉搜索框 -->
-            <el-select
-              v-model="template_value"
-              filterable
-              style="width: 400px"
-              allow-create
-            >
-              <el-option
-                v-for="item in template_option"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-            <!-- 按钮 -->
-            <el-button type="primary" style="margin-left: 10px"
-              >添加公司</el-button
-            >
-          </el-form-item>
-          <!-- 第二个框架的姓名表单 -->
-          <el-form-item label="姓名">
-            <!-- 下拉搜索框 -->
-            <el-select
-              v-model="template_value2"
-              filterable
-              style="width: 400px"
-              allow-create
-            >
-              <el-option
-                v-for="item in template_option2"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-            <!-- 按钮 -->
-            <el-button type="primary" style="margin-left: 10px"
-              >新增联系人</el-button
-            >
-          </el-form-item>
+        <!-- 客户信息表单 -->
+        <el-form :label-position="templatePosition" :model="customerData">
+          <el-select class="data-box" v-model="customerData.customerName" multiple filterable allow-create
+            default-first-option :reserve-keyword="false" placeholder="请输入客户名称">
+            <el-option v-for="item in customerData.customerNameList" :label="item" :value="item" />
+          </el-select>
+          <el-select class="data-box" v-model="customerData.contacter" multiple filterable allow-create
+            default-first-option :reserve-keyword="false" placeholder="请输入联系人">
+            <el-option v-for="item in customerData.contacterList" :label="item" :value="item" />
+          </el-select>
+          <el-input class="data-box" v-model="customerData.phone" placeholder="请输入联系电话" />
+          <el-input class="data-box" v-model="customerData.servicePlace" placeholder="请输入服务地区" />
+          <el-input class="data-box" v-model="customerData.address" placeholder="请输入详细地址" />
         </el-form>
       </div>
     </div>
-    <!-- 第三个框架 -->
-    <!-- 属性 -->
-    <div class="attribute">
-      <!-- 第三个框架的背景 -->
-      <div class="attribute_box">
+    <!-- 到达时间、优先级 -->
+    <div class="box-item attribute">
+      <div class="template_box">
         <!-- 标题 -->
-        <el-text class="attribute_title">属性</el-text>
+        <el-text class="title">其他</el-text>
+        <!-- 图标 -->
+        <el-icon color="lightblue" :size="20" class="template_icon">
+          <Link />
+        </el-icon>
       </div>
       <!-- 内容 -->
       <div class="attribute_center">
-        <el-form :model="attribute_input">
+        <el-form :model="otherData">
           <!-- 图标 -->
-          <div class="attribute_box_one">
-            <div class="attribute_center_one">
-              <el-text>客服姓名</el-text>
-              <el-text type="primary">我自己</el-text>
+          <div class="attribute_box">
+            <div class="attribute_center">
+              <el-text>到达时间</el-text>
             </div>
-            <el-input
-              v-model="attribute_input.value1"
-              style="max-width: 400px"
-            />
+            <el-date-picker v-model="otherData.time" type="datetime" placeholder="请选择到达时间" />
           </div>
-          <div class="attribute_box_two">
-            <div class="attribute_center_two">
-              <el-text>抄送人</el-text>
-              <el-text type="primary">我自己</el-text>
+          <div class="attribute_box">
+            <div class="attribute_center">
+              <el-text>优先级</el-text>
             </div>
-            <el-input
-              v-model="attribute_input.value2"
-              style="max-width: 800px"
-            />
+            <el-select v-model="customerData.contacter" placeholder="请选择工单优先级" style="width: 400px">
+              <el-option label="cly" value="cly" />
+              <el-option label="litZhu" value="litZhu" />
+              <el-option label="申月初五" value="申月初五" />
+            </el-select>
           </div>
-        </el-form>
-      </div>
-    </div>
-    <!-- 第四个框架 -->
-    <!-- 售后 -->
-    <div class="sales">
-      <div class="sales_box">
-        <el-text class="sales_title">工单模板：售后设备维修模板</el-text>
-      </div>
-      <div class="sales_box2">
-        <div>
-          <!-- 图标 -->
-          <el-icon
-            color="lightblue"
-            :size="20"
-            style="position: relative; left: 15px"
-          >
-            <SuitcaseLine />
-          </el-icon>
-          <el-text class="sales_title2">执行人选择</el-text>
-        </div>
-        <el-text type="primary"> 收起 </el-text>
-      </div>
-      <!-- 内容 -->
-      <div class="sales_center">
-        <el-form :inline="true" :model="formInline" class="demo-form-inline">
-          <el-form-item label="工单类型">
-            <el-select v-model="formInline.region" placeholder="-">
-              <el-option label="Zone one" value="shanghai" />
-              <el-option label="Zone two" value="beijing" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="工单优先级">
-            <el-select v-model="formInline.region" placeholder="-">
-              <el-option label="Zone one" value="shanghai" />
-              <el-option label="Zone two" value="beijing" />
-            </el-select>
-          </el-form-item>
         </el-form>
       </div>
     </div>
     <!-- 按钮 -->
     <div class="add_btn" style="display: flex; justify-content: end">
-      <el-button type="primary" size="large">添加</el-button>
+      <el-button type="primary" size="large">发布工单</el-button>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
-import { Setting, Link, SuitcaseLine } from "@element-plus/icons-vue";
+import { Setting, Link } from "@element-plus/icons-vue";
+import type { UploadProps, UploadUserFile } from 'element-plus'
 //表单排序方向
-//第一个框架
 const attachmentsPosition = ref("right");
-//第二个框架
 const templatePosition = ref("top");
 
-//表单数据绑定
-//第一个框架
-const attachments_input = reactive({
+/*
+--------------表单数据绑定--------------
+*/
+// 工单基本信息
+const orderData = reactive({
   name: "",
-  region: "",
+  descript: "",
 });
-//第三个框架
-const attribute_input = reactive({
-  value1: "",
-  value2: "",
+// 附件
+const fileList = ref<UploadUserFile[]>([])
+// 客户信息
+const customerData = reactive({
+  customerName: "",
+  customerNameList: [],
+  contacter: "",
+  contacterList: [],
+  phone: "",
+  servicePlace: "",
+  address: "",
 });
-// 第四个框架
-const formInline = reactive({
-  user: "",
-  region: "",
-});
-//第二个框架的下拉框
-//公司名称下拉框
-const template_value = ref("-");
-const template_option = [
-  {
-    value: "Option1",
-    label: "Option1",
-  },
-  {
-    value: "Option2",
-    label: "Option2",
-  },
-  {
-    value: "Option3",
-    label: "Option3",
-  },
-  {
-    value: "Option4",
-    label: "Option4",
-  },
-  {
-    value: "Option5",
-    label: "Option5",
-  },
-];
-//姓名下拉框
-const template_value2 = ref("-");
-const template_option2 = [
-  {
-    value: "Option1",
-    label: "Option1",
-  },
-  {
-    value: "Option2",
-    label: "Option2",
-  },
-  {
-    value: "Option3",
-    label: "Option3",
-  },
-  {
-    value: "Option4",
-    label: "Option4",
-  },
-  {
-    value: "Option5",
-    label: "Option5",
-  },
-];
-//第三个框架的下拉框
-//工单类型的下拉框
-const sales_value1 = ref("-");
-const sales_option = [
-  {
-    value: "-",
-    label: "-",
-  },
-  {
-    value: "问题",
-    label: "问题",
-  },
-  {
-    value: "事物",
-    label: "事物",
-  },
-  {
-    value: "故障",
-    label: "故障",
-  },
-  {
-    value: "任务",
-    label: "任务",
-  },
-];
-//工单优先级的下拉框
-const sales_value2 = ref("-");
-const sales_option2 = [
-  {
-    value: "-",
-    label: "-",
-  },
-  {
-    value: "低",
-    label: "低",
-  },
-  {
-    value: "正常",
-    label: "正常",
-  },
-  {
-    value: "高",
-    label: "高",
-  },
-  {
-    value: "紧急",
-    label: "紧急",
-  },
-];
+// 其他
+const otherData = reactive({
+  time: '',
+  priority: '',
+})
 </script>
 <style scoped lang="scss">
 .box {
   padding: 10px;
   box-sizing: border-box;
-}
 
-// 模板
-.attachments,
-.template,
-.attribute,
-.sales {
-  background-color: white;
-  width: 100%;
-  margin-bottom: 20px;
-  padding: 20px;
-  box-sizing: border-box;
-}
+  .attachments {
+    display: flex;
+    justify-content: space-between;
 
-.attachments_upload {
-  position: relative;
-  margin-left: 50px;
-  margin-bottom: 0;
-}
+    .el-form,
+    .attachments_upload {
+      flex-grow: 1;
+    }
+  }
 
-.template_icon {
-  padding-left: 5px;
-}
+  // 模板
+  .box-item {
+    background-color: white;
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 20px;
+    box-sizing: border-box;
 
-.template_box,
-.attribute_box,
-.sales_box {
-  border-bottom: 2px solid #f3f1f6;
-}
 
-.template_title,
-.attribute_title,
-.sales_title {
-  font-weight: bold;
-  font-size: 15px;
-  position: relative;
-  bottom: 5px;
-}
+    // 添加附件
+    .attachments_upload {
+      position: relative;
+      margin-left: 50px;
+      margin-bottom: 0;
+    }
 
-.attribute_box_one {
-  width: 400px;
-  margin-top: 20px;
-}
+    // 标题栏
+    .template_box {
+      border-bottom: 2px solid #f3f1f6;
 
-.attribute_box_two {
-  width: 800px;
-  margin-top: 20px;
-}
+      // 标题
+      .title {
+        font-weight: bold;
+        font-size: 15px;
+        position: relative;
+        bottom: 5px;
+      }
 
-.attribute_center_one,
-.attribute_center_two {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
+      // 标题右侧图标
+      .template_icon {
+        padding-left: 5px;
+      }
+    }
 
-.sales_title2 {
-  font-weight: bold;
-  font-size: 15px;
-  padding-left: 20px;
-}
+    .attribute_box {
+      width: 400px;
+      margin-top: 20px;
 
-.sales_box2 {
-  height: 30px;
-  border-bottom: 2px solid #f3f1f6;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+      .attribute_center {
+        margin-bottom: 10px;
 
-.sales_center {
-  min-height: 100px;
-  display: flex;
-  align-items: center;
-}
+        .el-form {
+          display: flex;
+        }
+      }
 
-.add_btn {
-  margin-bottom: 20px;
+    }
+
+    .data-box {
+      width: 400px !important;
+      line-height: 40px;
+      margin: 20px;
+    }
+  }
 }
 </style>

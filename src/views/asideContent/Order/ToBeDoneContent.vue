@@ -274,9 +274,9 @@ const handleCurrentChange = (val: number) => {
 
 <style scoped lang="scss">
 .whole {
-  margin-top: 10px;
+  margin: 10px;
   padding: 0 10px;
-  height: calc(100% - 140px);
+  height: calc(100% - 120px);
   background-color: white;
 
   .top-operation {

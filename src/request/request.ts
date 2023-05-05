@@ -4,7 +4,9 @@ import axios, {
   AxiosResponse,
   AxiosError,
 } from "axios";
+
 import { useRouter } from "vue-router";
+import type { apiResponseToken } from "../model/interface";
 
 // 定义一些公共的请求参数，避免重复写在每个请求中 PS.用那一个就可以注释另外一个
 // 远程测试的后端接口
@@ -23,6 +25,7 @@ export default class ApiClient {
   private axiosInstance: AxiosInstance;
 
   constructor() {
+    // 创建了一个实例
     this.axiosInstance = axios.create({
       baseURL: BASE_URL,
       headers: HEADERS,
@@ -52,48 +55,39 @@ export default class ApiClient {
           console.log(error.response);
           // start 刷新token
           // TODO:token过期刷新.PS:别删这段注释的代码！后端还未完成
-          // const refreshToken = async (): Promise<AxiosResponse> => {
-          //   const token = localStorage.getItem("token");
-          //   const refreshToken = localStorage.getItem("refreshToken");
-          //   // 如果本地没有 Token 或 RefreshToken，则跳转到登录页
-          //   if (!token || !refreshToken) {
-          //     router.push({ name: "login" });
-          //     return Promise.reject("未登录或登录信息已过期");
-          //   }
-          //   return await axios.post(`${BASE_URL}/refresh`, {
-          //     token,
-          //     refresh_token: refreshToken,
-          //   });
-          // };
-          // try {
-          //   // 发送刷新 Token 的请求
-          //   const response = await this.axiosInstance.get("/refresh");
-          //   // 将新的 Token 存储到本地存储中
-          //   localStorage.setItem("token", response.data.token);
-          //   // 获取原始请求的配置信息
-          //   const originalRequest = error.config;
-          //   // 设置新的 Token 到头部信息中
-          //   originalRequest.headers.Authorization = `Bearer ${response.data.token}`;
-          //   // 重新发送原始请求
-          //   return this.axiosInstance(originalRequest);
-          // } catch(error) {
-          //   // 如果刷新 Token 失败，则跳转到登录页
-          //   router.push({
-          //     name: "login",
-          //   });
-          //  return Promise.reject(error);
-          // }
-          // // end
-
-          router.push({
-            name: "login",
-          });
+          try {
+            const token = localStorage.getItem("token");
+            if (!token) {
+              router.push({ name: "login" });
+              return Promise.reject("未登录或登录信息已过期");
+            }
+            // 发送刷新 Token 的请求
+            const response: apiResponseToken = await this.axiosInstance.get(
+              "/refresh"
+            );
+            // 将新的 Token 存储到本地存储中
+            localStorage.setItem("token", response!.data.access_token);
+            // 获取原始请求的配置信息
+            const originalRequest: any = error.config;
+            // 设置新的 Token 到头部信息中
+            originalRequest.headers.Authorization = `Bearer ${
+              response!.data.access_token
+            }`;
+            // 重新发送原始请求
+            return this.axiosInstance(originalRequest);
+          } catch (error) {
+            // 如果刷新 Token 失败，则跳转到登录页
+            router.push({
+              name: "login",
+            });
+            return Promise.reject(error);
+          }
         }
         return Promise.reject(error.message);
       }
     );
   }
-
+  // 引入该文件之后调用此方法
   public static getInstance(): ApiClient {
     // 防止多次实例化
     if (!ApiClient.instance) {
@@ -169,4 +163,23 @@ export default class ApiClient {
       return undefined;
     }
   }
+
+  // 并发请求方法
+  public async all<T>(requests: Array<Promise<T>>): Promise<Array<T>> {
+    try {
+      const responses = await Promise.all(requests);
+      return responses;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  }
+  // TODO:别删
+  // 并发请求的使用方法
+  //  const apiClient = ApiClient.getInstance();
+  // const usersRequest = apiClient.get("/users");
+  // const productsRequest = apiClient.get("/products");
+
+  // const [users, products] = await apiClient.all([usersRequest, productsRequest]);
+  // console.log(users, products);
 }

@@ -253,9 +253,9 @@ const tagSituationsType = (value: string): string => {
 </script>
 <style lang="scss" scoped>
 .content {
-  height: calc(100% - 121px);
+  height: calc(100% - 140px);
   background-color: white;
-  margin-top: 10px;
+  margin: 10px;
   padding: 10px;
 
   .top-operation {

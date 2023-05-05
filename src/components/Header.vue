@@ -19,11 +19,7 @@
     </template>
     <template #content>
       <div class="flex items-center">
-        <el-avatar
-          class="mr-3"
-          :size="32"
-          src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-        />
+        <el-avatar class="mr-3" :size="32" :src="userInfo.avator" />
         <span class="text-large font-600 mr-3"> {{ userInfo.username }} </span>
         <el-tag type="info" plain class="permissions">
           {{ roleNamae }}
@@ -38,27 +34,29 @@
   </el-page-header>
 </template>
 <script lang="ts" setup>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 
 import { ArrowRight } from "@element-plus/icons-vue";
 import { ElNotification as notify } from "element-plus";
 import { useRoute, useRouter } from "vue-router";
-import { useBreadcrumbStore } from "../store/store";
+import type { apiResponseData } from "../model/interface";
+import { useBreadcrumbStore, useUserStore } from "../store/store";
 import { storeToRefs } from "pinia";
 import ApiClient from "../request/request";
-const apiClient = new ApiClient();
+const apiClient = ApiClient.getInstance();
 const route = useRoute();
 const router = useRouter();
 // 接收父元素的数据
 const props = defineProps(["userInfo"]);
-
 // 实例化
+
 const breadcrumbStore = useBreadcrumbStore();
+const UserStore = useUserStore();
 // 执行方法
 breadcrumbStore.getBreadcrumbList(route);
+breadcrumbStore.updateBreadcrumb();
 // 响应式 数据
 const { list }: any = storeToRefs(breadcrumbStore);
-
 // 返回上一级路由
 const onBack = () => {
   // notify("点击了Back");
@@ -84,12 +82,19 @@ const BreadcrumbListReset = () => {
 };
 // 登出
 const logout = async (): Promise<void> => {
-  const response = await apiClient.post("/logout");
-  localStorage.removeItem("token");
-  notify("登出成功");
-  router.push({
-    name: "login",
-  });
+  try {
+    const response: apiResponseData = await apiClient.post<apiResponseData>(
+      "/logout"
+    );
+    localStorage.removeItem("token");
+    UserStore.clearUserInfo();
+    notify(response!.data);
+    router.push({
+      name: "login",
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 </script>
 <style scoped lang="scss">
