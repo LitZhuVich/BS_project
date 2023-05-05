@@ -1,40 +1,17 @@
 <template>
   <div id="loginBody">
-    <el-form
-      ref="ruleFormRef"
-      :model="ruleForm"
-      :rules="rules"
-      label-width="90px"
-      label-suffix="："
-      class="demo-ruleForm"
-    >
+    <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="90px" label-suffix="：" class="demo-ruleForm">
       <h2 class="title">登录</h2>
       <el-form-item label="账号" prop="username">
-        <el-input
-          v-model="ruleForm.username"
-          type="text"
-          autocomplete="off"
-          :prefix-icon="User"
-          maxlength="20"
-        />
+        <el-input v-model="ruleForm.username" type="text" autocomplete="off" :prefix-icon="User" maxlength="20" />
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input
-          v-model="ruleForm.password"
-          type="password"
-          autocomplete="off"
-          show-password
-          :prefix-icon="Lock"
-          maxlength="20"
-        />
+        <el-input v-model="ruleForm.password" type="password" autocomplete="off" show-password :prefix-icon="Lock"
+          maxlength="20" />
       </el-form-item>
       <el-form-item>
-        <el-button
-          type="primary"
-          @click="submitForm(ruleFormRef)"
-          @keyup.enter="submitForm(ruleFormRef)"
-          :loading="loading"
-        >
+        <el-button type="primary" @click="submitForm(ruleFormRef)" @keyup.enter="submitForm(ruleFormRef)"
+          :loading="loading">
           登录
         </el-button>
         <el-button @click="resetForm(ruleFormRef)"> 重置 </el-button>
@@ -47,12 +24,7 @@
       <hr />
       <el-form-item>
         <el-text> 没有账号？前往 </el-text>
-        <el-link
-          href="register"
-          type="primary"
-          :underline="false"
-          style="margin-left: 5px"
-        >
+        <el-link href="register" type="primary" :underline="false" style="margin-left: 5px">
           注册
         </el-link>
       </el-form-item>
@@ -175,6 +147,7 @@ const resetForm = (formEl: FormInstance | undefined): void => {
   justify-content: center;
   align-items: center;
   overflow: hidden;
+
   .demo-ruleForm {
     width: 350px;
     padding: 15px;
@@ -183,6 +156,7 @@ const resetForm = (formEl: FormInstance | undefined): void => {
     box-shadow: 5px 5px 20px 5px #444;
     border: 1px solid var(--el-border-color);
     border-radius: 10px;
+
     .title {
       text-align: center;
       margin-bottom: 20px;

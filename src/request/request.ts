@@ -50,41 +50,7 @@ export default class ApiClient {
         if (error.response && error.response.status === 401) {
           // 处理未授权错误
           console.log(error.response);
-          // start 刷新token
-          // TODO:token过期刷新.PS:别删这段注释的代码！后端还未完成
-          // const refreshToken = async (): Promise<AxiosResponse> => {
-          //   const token = localStorage.getItem("token");
-          //   const refreshToken = localStorage.getItem("refreshToken");
-          //   // 如果本地没有 Token 或 RefreshToken，则跳转到登录页
-          //   if (!token || !refreshToken) {
-          //     router.push({ name: "login" });
-          //     return Promise.reject("未登录或登录信息已过期");
-          //   }
-          //   return await axios.post(`${BASE_URL}/refresh`, {
-          //     token,
-          //     refresh_token: refreshToken,
-          //   });
-          // };
-          // try {
-          //   // 发送刷新 Token 的请求
-          //   const response = await this.axiosInstance.get("/refresh");
-          //   // 将新的 Token 存储到本地存储中
-          //   localStorage.setItem("token", response.data.token);
-          //   // 获取原始请求的配置信息
-          //   const originalRequest = error.config;
-          //   // 设置新的 Token 到头部信息中
-          //   originalRequest.headers.Authorization = `Bearer ${response.data.token}`;
-          //   // 重新发送原始请求
-          //   return this.axiosInstance(originalRequest);
-          // } catch(error) {
-          //   // 如果刷新 Token 失败，则跳转到登录页
-          //   router.push({
-          //     name: "login",
-          //   });
-          //  return Promise.reject(error);
-          // }
-          // // end
-
+          
           router.push({
             name: "login",
           });
