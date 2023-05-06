@@ -6,7 +6,7 @@
       <el-form :label-position="attachmentsPosition" label-width="75px" :model="orderData" style="max-width: 800px">
         <!-- 标题输入框 -->
         <el-form-item label="工单标题:">
-          <el-input v-model="orderData.name" />
+          <el-input v-model="orderData.title" />
         </el-form-item>
         <!-- 描述输入框 -->
         <el-form-item label="工单描述:">
@@ -17,11 +17,11 @@
       <div class="attachments_upload">
         <!-- TODO: 需要做添加附件功能 -->
         <el-upload v-model:file-list="fileList" class="upload-demo"
-          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" multiple :limit="3">
+          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" multiple :limit="1">
           <el-button type="primary">添加附件</el-button>
           <template #tip>
             <div class="el-upload__tip">
-              最多只能上传3个附件
+              最多只能上传1个附件
             </div>
           </template>
         </el-upload>
@@ -39,18 +39,13 @@
       </div>
       <div class="template_center" style="margin-top: 20px">
         <!-- 客户信息表单 -->
-        <el-form :label-position="templatePosition" :model="customerData">
-          <el-select class="data-box" v-model="customerData.customerName" multiple filterable allow-create
-            default-first-option :reserve-keyword="false" placeholder="请输入客户名称">
-            <el-option v-for="item in customerData.customerNameList" :label="item" :value="item" />
-          </el-select>
-          <el-select class="data-box" v-model="customerData.contacter" multiple filterable allow-create
-            default-first-option :reserve-keyword="false" placeholder="请输入联系人">
-            <el-option v-for="item in customerData.contacterList" :label="item" :value="item" />
-          </el-select>
-          <el-input class="data-box" v-model="customerData.phone" placeholder="请输入联系电话" />
-          <el-input class="data-box" v-model="customerData.servicePlace" placeholder="请输入服务地区" />
-          <el-input class="data-box" v-model="customerData.address" placeholder="请输入详细地址" />
+        <el-form :label-position="templatePosition" :model="orderData">
+          <el-input class="data-box" v-model="orderData.phone" placeholder="请输入联系电话" />
+          <el-input class="data-box" v-model="orderData.address" placeholder="请输入详细地址" />
+          <!-- <el-select class="data-box" v-model="orderData.contacter" multiple allow-create default-first-option
+            :reserve-keyword="false" placeholder="可指定工程师（非必填）">
+            <el-option v-for="item in contacterList" :label="item" :value="item" />
+          </el-select> -->
         </el-form>
       </div>
     </div>
@@ -66,30 +61,20 @@
       </div>
       <!-- 内容 -->
       <div class="attribute_center">
-        <el-form :model="otherData">
+        <el-form :model="orderData">
           <!-- 图标 -->
           <div class="attribute_box">
             <div class="attribute_center">
-              <el-text>到达时间</el-text>
+              <el-text>希望完成时间</el-text>
             </div>
-            <el-date-picker v-model="otherData.time" type="datetime" placeholder="请选择到达时间" />
-          </div>
-          <div class="attribute_box">
-            <div class="attribute_center">
-              <el-text>优先级</el-text>
-            </div>
-            <el-select v-model="customerData.contacter" placeholder="请选择工单优先级" style="width: 400px">
-              <el-option label="cly" value="cly" />
-              <el-option label="litZhu" value="litZhu" />
-              <el-option label="申月初五" value="申月初五" />
-            </el-select>
+            <el-date-picker v-model="orderData.time" type="datetime" placeholder="请选择希望完成时间" />
           </div>
         </el-form>
       </div>
     </div>
     <!-- 按钮 -->
     <div class="add_btn" style="display: flex; justify-content: end">
-      <el-button type="primary" size="large">发布工单</el-button>
+      <el-button @click="publishOrder" type="primary" size="large">发布工单</el-button>
     </div>
   </div>
 </template>
@@ -97,6 +82,9 @@
 import { reactive, ref } from "vue";
 import { Setting, Link } from "@element-plus/icons-vue";
 import type { UploadProps, UploadUserFile } from 'element-plus'
+import ApiClient from "../../../request/request";
+
+const apiClient = ApiClient.getInstance();
 //表单排序方向
 const attachmentsPosition = ref("right");
 const templatePosition = ref("top");
@@ -106,26 +94,31 @@ const templatePosition = ref("top");
 */
 // 工单基本信息
 const orderData = reactive({
-  name: "",
+  title: "",
   descript: "",
+  fileList: null,
+  // contacter: "",
+  phone: "",
+  address: "",
+  time: '',
 });
+// 常用客户名称
+const customerNameList = ref([])
+// 常用联系人
+const contacterList = ref([])
 // 附件
 const fileList = ref<UploadUserFile[]>([])
-// 客户信息
-const customerData = reactive({
-  customerName: "",
-  customerNameList: [],
-  contacter: "",
-  contacterList: [],
-  phone: "",
-  servicePlace: "",
-  address: "",
-});
-// 其他
-const otherData = reactive({
-  time: '',
-  priority: '',
-})
+/*
+--------------事件--------------
+*/
+// 发布工单
+const publishOrder = () => {
+  const res = apiClient.post(
+    '/order',
+    orderData
+  )
+  console.log(res)
+}
 </script>
 <style scoped lang="scss">
 .box {
