@@ -10,12 +10,25 @@
         </el-form-item>
         <!-- 描述输入框 -->
         <el-form-item label="工单描述:">
-          <el-input type="textarea" :rows="5" v-model="orderData.descript" />
+          <el-input type="textarea" :rows="5" v-model="orderData.description" />
+        </el-form-item>
+        <!-- 工单类型 -->
+        <el-form-item label="工单类型">
+          <el-select v-model="orderData.orderType" class="m-2" placeholder="请选择工单类型">
+            <el-option v-for="item in orderTypeList" :key="item.id" :label="item.type_name" :value="item.id" />
+          </el-select>
+        </el-form-item>
+        <!-- 是否线上 -->
+        <el-form-item label="线上/线下">
+          <el-select v-model="orderData.isOnLine" class="m-2" placeholder="请选择线上/线下">
+            <el-option label="线上" :value='1' />
+            <el-option label="线下" :value='0' />
+          </el-select>
         </el-form-item>
       </el-form>
       <!-- 添加附件按钮 -->
       <div class="attachments_upload">
-        <!-- TODO: 需要做添加附件功能 -->
+        <!-- TODO: 完善附件功能 -->
         <el-upload v-model:file-list="fileList" class="upload-demo"
           action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" multiple :limit="1">
           <el-button type="primary">添加附件</el-button>
@@ -67,7 +80,13 @@
             <div class="attribute_center">
               <el-text>希望完成时间</el-text>
             </div>
-            <el-date-picker v-model="orderData.time" type="datetime" placeholder="请选择希望完成时间" />
+            <el-date-picker v-model="orderData.appointment" type="datetime" placeholder="请选择希望完成时间" />
+          </div>
+          <div class="attribute_box">
+            <div class="attribute_center">
+              <el-text>工单期限（单位：天）</el-text>
+            </div>
+            <el-input-number v-model="orderData.timeLimit" :min="1" />
           </div>
         </el-form>
       </div>
@@ -79,10 +98,20 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, onMounted } from "vue";
 import { Setting, Link } from "@element-plus/icons-vue";
 import type { UploadProps, UploadUserFile } from 'element-plus'
 import ApiClient from "../../../request/request";
+import { useUserStore } from "../../../store/store";
+import { storeToRefs } from "pinia";
+
+const userStore = useUserStore();
+const getUsername = () => {
+  setTimeout(() => {
+    const { userInfo }: any = storeToRefs(userStore);
+    orderData.user = userInfo.value.id
+  }, 2000)
+}
 
 const apiClient = ApiClient.getInstance();
 //表单排序方向
@@ -90,34 +119,70 @@ const attachmentsPosition = ref("right");
 const templatePosition = ref("top");
 
 /*
+--------------方法--------------
+*/
+// 获取工单类型
+const getAllOrderType = async () => {
+  try {
+    const res: any = await apiClient.get<any>('/orderType')
+    orderTypeList.value = res.data
+  } catch (err) {
+    console.log(err)
+  }
+}
+// 判断工单优先级
+const decidePriority = async () => {
+  if (orderData.timeLimit <= 5) {
+    orderData.priority = 1
+  } else {
+    orderData.priority = 2
+  }
+}
+/*
+--------------初始化选择框数据--------------
+*/
+// 工单类型列表
+let orderTypeList = ref<any>([])
+onMounted(() => {
+  getAllOrderType()
+})
+/*
 --------------表单数据绑定--------------
 */
 // 工单基本信息
 const orderData = reactive({
+  priority: 0,
+  status: 1,  // 工单状态默认为1（待处理）
+  orderType: '',
+  user: getUsername(),
+  phone: null,
   title: "",
-  descript: "",
+  timeLimit: 0,
+  description: "",
   fileList: null,
-  // contacter: "",
-  phone: "",
-  address: "",
-  time: '',
+  isOnLine: null,
+  address: '',
+  appointment: '',
 });
-// 常用客户名称
-const customerNameList = ref([])
-// 常用联系人
-const contacterList = ref([])
+
 // 附件
 const fileList = ref<UploadUserFile[]>([])
 /*
 --------------事件--------------
 */
 // 发布工单
-const publishOrder = () => {
-  const res = apiClient.post(
-    '/order',
-    orderData
-  )
-  console.log(res)
+const publishOrder = async () => {
+  try {
+    decidePriority()
+    // const res: any = await apiClient.post<any>(
+    //   '/order',
+    //   orderData
+    // )
+    // console.log(res.data)
+    console.log(fileList.value)
+  } catch (err) {
+    console.log(err)
+  }
 }
 </script>
 <style scoped lang="scss">
@@ -180,7 +245,6 @@ const publishOrder = () => {
           display: flex;
         }
       }
-
     }
 
     .data-box {
@@ -188,6 +252,7 @@ const publishOrder = () => {
       line-height: 40px;
       margin: 20px;
     }
+
   }
 }
 </style>
