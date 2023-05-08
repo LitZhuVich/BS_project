@@ -14,24 +14,66 @@
           </el-button>
         </el-button-group>
       </template>
-      <template #date-cell="{ data }">
-        <p :class="data.isSelected ? 'is-selected' : ''" style="display: flex;flex-direction: column;">
+      <template #date-cell="{ day }">
+        {{ checkOrder(day) }}
+        <!-- <p :class="day.isSelected ? 'is-selected' : ''" style="display: flex;flex-direction: column;">
           <span>
-            {{ data.day.split('-').slice(1).join('-') }}
-            {{ data.isSelected ? '✔️' : '' }}
+            {{ day.day.split('-').slice(0, 2).join('-') }}
+            {{ day.isSelected ? '✔️' : '' }}
           </span>
           <span>
-            <span class="dot"></span>
+            <span :style="{ backgroundColor: 'green' }" class="dot">
+             
+            </span>
           </span>
-        </p>
+        </p> -->
       </template>
     </el-calendar>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import ApiClient from '../../request/request'
 
+const apiClient = ApiClient.getInstance();
+const userColor = ref(['red', 'orange', 'yellow', 'green', 'aqua', 'blue', 'purple'])
+// let orders: any = null
+
+// onMounted(() => {
+//   getOrders()
+// })
+
+// 获取全部工单
+const getOrders = async () => {
+  try {
+    const res: any = await apiClient.get<any>('/order')
+    let orders = res.data
+    return orders;
+    let request: any = [];
+    orders.forEach((item: any) => {
+      // request.push(item.appointment.split('-').substring(2, 4))
+    });
+    console.log(request);
+
+    console.log('orders', orders)
+
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+// 判断订单时间
+const checkOrder = async (data: any) => {
+  let orders = [...await getOrders()]
+  // console.log('orders', orders)
+  console.log('data', data)
+  // console.log(data.date.getDate());
+  // console.log(new Date(orders[0].appointment).getDate())
+  // orders.forEach((item: any) => {
+  //   console.log(new Date(item.appointment).getDate())
+  // });
+}
 const calendar = ref()
 const selectDate = (val: string) => {
   calendar.value.selectDate(val)
@@ -47,7 +89,6 @@ const selectDate = (val: string) => {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background-color: red;
     display: inline-block;
   }
 
