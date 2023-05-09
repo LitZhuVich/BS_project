@@ -5,75 +5,74 @@
         <span>工程师日历</span>
         <span>{{ date }}</span>
         <el-button-group>
-          <el-button size="small" @click="selectDate('prev-month')">
+          <el-button @click="selectDate('prev-month')">
             上个月
           </el-button>
-          <el-button size="small" @click="selectDate('today')">今天</el-button>
-          <el-button size="small" @click="selectDate('next-month')">
+          <el-button @click="selectDate('today')">今天</el-button>
+          <el-button @click="selectDate('next-month')">
             下个月
           </el-button>
         </el-button-group>
       </template>
-      <template #date-cell="{ day }">
-        {{ checkOrder(day) }}
-        <!-- <p :class="day.isSelected ? 'is-selected' : ''" style="display: flex;flex-direction: column;">
+      <template #date-cell="{ data }">
+        <p :class="data.isSelected ? 'is-selected' : ''" style="display: flex;flex-direction: column;">
           <span>
-            {{ day.day.split('-').slice(0, 2).join('-') }}
-            {{ day.isSelected ? '✔️' : '' }}
+            {{ data.day.split('-').slice(2, 3).join('-') }}
+            {{ data.isSelected ? '✔️' : '' }}
           </span>
           <span>
-            <span :style="{ backgroundColor: 'green' }" class="dot">
-             
-            </span>
+            <span v-if="checkOrder(data.date)" :style="{ backgroundColor: 'green' }" class="dot"></span>
           </span>
-        </p> -->
+        </p>
       </template>
     </el-calendar>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import ApiClient from '../../request/request'
 
 const apiClient = ApiClient.getInstance();
 const userColor = ref(['red', 'orange', 'yellow', 'green', 'aqua', 'blue', 'purple'])
-// let orders: any = null
+let orders: any = ref([])
 
-// onMounted(() => {
-//   getOrders()
-// })
+onMounted(() => {
+  getOrders()
+})
 
 // 获取全部工单
 const getOrders = async () => {
   try {
     const res: any = await apiClient.get<any>('/order')
-    let orders = res.data
-    return orders;
-    let request: any = [];
-    orders.forEach((item: any) => {
-      // request.push(item.appointment.split('-').substring(2, 4))
+    res.data.forEach((item: any) => {
+      let orderDate = new Date(item.appointment)
+      // 找出预约时间的月份等于日历显示的月份的订单
+      if (orderDate.getMonth() + 1 == 4) {
+        if (orderDate.getDate() == 30) {
+          orders.value.push(orderDate)
+        }
+      }
     });
-    console.log(request);
-
-    console.log('orders', orders)
-
   } catch (e) {
     console.log(e)
   }
 }
 
 // 判断订单时间
-const checkOrder = async (data: any) => {
-  let orders = [...await getOrders()]
-  // console.log('orders', orders)
-  console.log('data', data)
-  // console.log(data.date.getDate());
-  // console.log(new Date(orders[0].appointment).getDate())
-  // orders.forEach((item: any) => {
-  //   console.log(new Date(item.appointment).getDate())
-  // });
+const checkOrder = (data: any) => {
+  console.log(data.getMonth() + 1)
+  if (data.getMonth() + 1 == 5) {
+    orders.value.forEach((item: any) => {
+      if (item.getDate() == data.getDate()) {
+        console.log(true)
+        return true
+      }
+    });
+  }
+  return false
 }
+
 const calendar = ref()
 const selectDate = (val: string) => {
   calendar.value.selectDate(val)
