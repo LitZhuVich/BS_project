@@ -2,6 +2,7 @@
   <div class="table">
     <el-calendar ref="calendar">
       <template #header="{ date }">
+        <span v-show="false">{{ getOrders(date) }}</span>
         <span>工程师日历</span>
         <span>{{ date }}</span>
         <el-button-group>
@@ -18,10 +19,10 @@
         <p :class="data.isSelected ? 'is-selected' : ''" style="display: flex;flex-direction: column;">
           <span>
             {{ data.day.split('-').slice(2, 3).join('-') }}
-            {{ data.isSelected ? '✔️' : '' }}
+            <!-- {{ checkOrder(data.date) }} -->
           </span>
-          <span>
-            <span v-if="checkOrder(data.date)" :style="{ backgroundColor: 'green' }" class="dot"></span>
+          <span v-show="checkOrder(data.date)">
+            <span :style="{ backgroundColor: 'green' }" class="dot"></span>
           </span>
         </p>
       </template>
@@ -30,28 +31,29 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import ApiClient from '../../request/request'
 
 const apiClient = ApiClient.getInstance();
 const userColor = ref(['red', 'orange', 'yellow', 'green', 'aqua', 'blue', 'purple'])
 let orders: any = ref([])
-
-onMounted(() => {
-  getOrders()
-})
+let calendarMonth: any = ref()
 
 // 获取全部工单
-const getOrders = async () => {
+const getOrders = async (date: any) => {
   try {
+    // 初始化工单
+    orders = ref([])
+    // 获取日历当前月份
+    calendarMonth = new Date(date).getMonth() + 1
+    // 获取所有工单
     const res: any = await apiClient.get<any>('/order')
     res.data.forEach((item: any) => {
+      // 将工单预约时间转为时间格式
       let orderDate = new Date(item.appointment)
       // 找出预约时间的月份等于日历显示的月份的订单
-      if (orderDate.getMonth() + 1 == 4) {
-        if (orderDate.getDate() == 30) {
-          orders.value.push(orderDate)
-        }
+      if (orderDate.getMonth() + 1 == calendarMonth) {
+        orders.value.push(item)
       }
     });
   } catch (e) {
@@ -59,18 +61,23 @@ const getOrders = async () => {
   }
 }
 
+// 单个工单信息
+let order: any = ref([])
 // 判断订单时间
 const checkOrder = (data: any) => {
-  console.log(data.getMonth() + 1)
-  if (data.getMonth() + 1 == 5) {
+  if (data.getMonth() + 1 == calendarMonth) {
+    // 圆点是否出现
+    let showDot = ref(false)
     orders.value.forEach((item: any) => {
-      if (item.getDate() == data.getDate()) {
-        console.log(true)
-        return true
+      let appointment = new Date(item.appointment)
+      if (appointment.getDate() == data.getDate()) {
+        showDot.value = true
       }
     });
+    return showDot.value
+  } else {
+    return false
   }
-  return false
 }
 
 const calendar = ref()
