@@ -22,7 +22,7 @@
             <!-- {{ checkOrder(data.date) }} -->
           </span>
           <span v-show="checkOrder(data.date)">
-            <span :style="{ backgroundColor: 'green' }" class="dot"></span>
+            <span v-for="item in 3" :style="{ backgroundColor: userColor[item - 1] }" class="dot"></span>
           </span>
         </p>
       </template>
@@ -31,13 +31,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, toRaw } from 'vue'
 import ApiClient from '../../request/request'
 
 const apiClient = ApiClient.getInstance();
 const userColor = ref(['red', 'orange', 'yellow', 'green', 'aqua', 'blue', 'purple'])
 let orders: any = ref([])
-let calendarMonth: any = ref()
+let calendarMonth: any = ref(0)
 
 // 获取全部工单
 const getOrders = async (date: any) => {
@@ -63,15 +63,29 @@ const getOrders = async (date: any) => {
 
 // 单个工单信息
 let order: any = ref([])
+let lastOrderDate: any = 2// 默认工单预约时间？？？
+
 // 判断订单时间
 const checkOrder = (data: any) => {
+  // 上个订单日期
   if (data.getMonth() + 1 == calendarMonth) {
     // 圆点是否出现
     let showDot = ref(false)
     orders.value.forEach((item: any) => {
       let appointment = new Date(item.appointment)
+      // 如果订单日期=即将渲染的日期
       if (appointment.getDate() == data.getDate()) {
+        console.log('lastOrderDate=' + lastOrderDate, 'data.getDate()' + data.getDate())
         showDot.value = true
+        if (lastOrderDate != data.getDate()) {
+          console.log('order', toRaw(order.value))
+          //   console.log('清空order数组!')
+          order = ref([])
+        }
+        order.value.push(toRaw(item))
+
+        // 判断完时间后将这次订单的日期赋值给lastOrderDate
+        lastOrderDate = appointment.getDate()
       }
     });
     return showDot.value
