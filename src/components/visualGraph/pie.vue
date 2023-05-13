@@ -57,19 +57,23 @@ const option: any = {
 // 初始化 ECharts 实例
 const chartRef: Ref<any> = ref(null);
 onMounted(() => {
+  // chartRef.value.
   const chart = echarts.init(chartRef.value);
-
-  //  选择渲染数据
+  // 选择渲染数据
   chart.setOption(option);
   // 当窗口大小变化时重新绘制图表
-  window.addEventListener("resize", () => {
-    chartStyle.chartWidth = chartRef.value.clientWidth + "px";
-    chartStyle.chartHeight = chartRef.value.clientHeight + "px";
-    chart.resize();
+  const resizeHandler = () => {
+    if (chartRef.value && chartRef.value.clientWidth !== 0) {
+      chartStyle.chartWidth = chartRef.value.clientWidth + "px";
+      chartStyle.chartHeight = chartRef.value.clientHeight + "px";
+      chart.resize();
+    }
+  };
+  window.addEventListener("resize", resizeHandler);
+
+  onUnmounted(() => {
+    window.removeEventListener("resize", resizeHandler);
   });
-});
-onUnmounted(() => {
-  window.removeEventListener("resize", () => {});
 });
 </script>
 

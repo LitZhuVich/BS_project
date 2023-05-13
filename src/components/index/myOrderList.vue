@@ -117,7 +117,6 @@ const tableData = [
     content: "No. 189, Grove St, Los Angeles",
   },
 ];
-
 // 接收输入框的值
 const search = ref("");
 // 过滤显示

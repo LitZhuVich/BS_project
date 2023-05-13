@@ -70,7 +70,7 @@ import { reactive, ref } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
 import { ElNotification } from "element-plus";
 import { User, Lock } from "@element-plus/icons-vue";
-import type { apiResponseToken } from "../../model/interface";
+import type { apiResponseTokenType } from "../../model/interface";
 import ApiClient from "../../request/request";
 import { useRouter } from "vue-router";
 
@@ -131,7 +131,7 @@ const submitForm = (formEl: FormInstance | undefined): void => {
   formEl.validate(async (valid) => {
     if (valid) {
       // 提交成功
-      const response: apiResponseToken = await apiClient.post(
+      const response = await apiClient.post<apiResponseTokenType>(
         "/register",
         ruleForm
       );

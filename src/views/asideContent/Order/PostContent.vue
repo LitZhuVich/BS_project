@@ -47,12 +47,7 @@
         <el-form :label-position="templatePosition">
           <el-form-item label="公司名称">
             <!-- 下拉搜索框 -->
-            <el-select
-              v-model="template_value"
-              filterable
-              style="width: 400px"
-              allow-create
-            >
+            <el-select v-model="template_value" style="width: 400px">
               <el-option
                 v-for="item in template_option"
                 :key="item.value"
@@ -68,17 +63,12 @@
           <!-- 第二个框架的姓名表单 -->
           <el-form-item label="姓名">
             <!-- 下拉搜索框 -->
-            <el-select
-              v-model="template_value2"
-              filterable
-              style="width: 400px"
-              allow-create
-            >
+            <el-select v-model="template_value2" style="width: 400px">
               <el-option
                 v-for="item in template_option2"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                :key="item.id"
+                :label="item.type_name"
+                :value="item.type_name"
               />
             </el-select>
             <!-- 按钮 -->
@@ -169,14 +159,44 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, onMounted } from "vue";
 import { Setting, Link, SuitcaseLine } from "@element-plus/icons-vue";
+import ApiClient from "../../../request/request";
+// 使用UserStore方法
+import { useUserStore } from "../../../store/store";
+// 引入响应式方法
+import { storeToRefs } from "pinia";
+// 实例化
+const UserStore = useUserStore();
+const getUserInfo = () => {
+  setTimeout(() => {
+    // 使用ES6的构造解析获取userInfo
+    const { userInfo }: any = storeToRefs(UserStore);
+    console.log(userInfo.value);
+  }, 2000);
+};
+//姓名下拉框 TODO:这是测试代码
+const template_value2 = ref("-");
+// TODO:any需要优化
+const template_option2 = ref<any>([]);
+// TODO:这是测试代码，可以删除
+const apiClient = ApiClient.getInstance();
+const getOrderInfo = async () => {
+  const orderRes = await apiClient.get<any>("/orderType");
+  template_option2.value = orderRes.data;
+
+  console.log(template_option2.value);
+};
+
+onMounted(() => {
+  getOrderInfo();
+  getUserInfo();
+});
 //表单排序方向
 //第一个框架
 const attachmentsPosition = ref("right");
 //第二个框架
 const templatePosition = ref("top");
-
 //表单数据绑定
 //第一个框架
 const attachments_input = reactive({
@@ -197,30 +217,6 @@ const formInline = reactive({
 //公司名称下拉框
 const template_value = ref("-");
 const template_option = [
-  {
-    value: "Option1",
-    label: "Option1",
-  },
-  {
-    value: "Option2",
-    label: "Option2",
-  },
-  {
-    value: "Option3",
-    label: "Option3",
-  },
-  {
-    value: "Option4",
-    label: "Option4",
-  },
-  {
-    value: "Option5",
-    label: "Option5",
-  },
-];
-//姓名下拉框
-const template_value2 = ref("-");
-const template_option2 = [
   {
     value: "Option1",
     label: "Option1",

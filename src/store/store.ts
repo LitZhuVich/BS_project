@@ -1,10 +1,15 @@
 // 存储 breadcrumb 的数据
 import { defineStore } from "pinia";
-import type { apiResponseUser } from "../model/interface";
+import type {
+  apiResponseUser,
+  apiResponseCustomerRepresentative,
+  apiResponseData,
+} from "../model/interface";
+import type { CustomerRepresentative } from "../model/users";
 import { useRoute, useRouter, onBeforeRouteUpdate } from "vue-router";
-
+const router = useRouter();
 import ApiClient from "../request/request";
-const apiClient = new ApiClient();
+const apiClient = ApiClient.getInstance();
 // 保存用户数据
 
 // 第一个参数是应用程序中 store 的唯一 id
@@ -17,19 +22,34 @@ export const useUserStore = defineStore("user", {
     // 获取用户信息
     async fetchUserInfo() {
       try {
-        const userInfo: apiResponseUser = await apiClient.get("/user");
+        const userInfo = await apiClient.get<apiResponseUser>("/user");
         this.userInfo = userInfo!.data;
         sessionStorage.setItem("role", this.userInfo.role_name);
         console.log(this.userInfo);
+        // TODO:现在采用登录过期之后直接让用户重新登录
+        if (this.userInfo.message == "Unauthenticated.") {
+          this.clearUserInfo();
+          router.push({
+            name: "login",
+          });
+        }
       } catch (error) {
         console.log(error);
+        // TODO:现在采用登录过期之后直接让用户重新登录
+        router.push({
+          name: "login",
+        });
       }
     },
     // 清空用户信息
     clearUserInfo() {
+      localStorage.removeItem("token");
+      localStorage.removeItem("expires_in");
+      sessionStorage.removeItem("role");
       this.userInfo = {};
     },
   },
+  getters: {},
 });
 // 保存面包屑数据
 export const useBreadcrumbStore = defineStore("breadcrumb", {
@@ -43,7 +63,7 @@ export const useBreadcrumbStore = defineStore("breadcrumb", {
     // 获取面包屑数据
     getBreadcrumbList(route: any) {
       const { matched } = route;
-      // 将没有 meta.breadcrumb和meta 的路由数据过滤掉，再生成相应的面包屑列表，
+      // 将没有 meta.breadcrumb和meta 的路由数据过滤掉，再生成相应的面包屑列表
       this.list = matched
         .filter((item: any) => item.meta && item.meta.breadcrumb)
         .map((item: any) => ({
@@ -73,4 +93,52 @@ export const useIndexStore = defineStore("index", {
       TableHeight: 300,
     };
   },
+});
+// 保存弹窗数据
+export const useDialogStore = defineStore("dialog", {
+  state: () => {
+    return {
+      // 弹窗信息
+      dialogInfo: {
+        // 弹窗是否显示
+        isShow: false,
+        // 弹窗标题
+        title: "",
+        // 弹窗数据
+        data: {
+          companyname: "",
+          username: "",
+          address: "",
+          phone: "",
+          remark: "",
+          group_name: "",
+        },
+        // 弹窗ID,
+        id: 0,
+      },
+      // 确认删除是否显示弹窗
+      confirmDelete: false,
+      // 确定删除地址
+      delUrl: "",
+    };
+  },
+  actions: {
+    // 还原数据
+    clearInfo() {
+      this.dialogInfo = {
+        isShow: false,
+        title: "",
+        data: {
+          companyname: "",
+          username: "",
+          address: "",
+          phone: "",
+          remark: "",
+          group_name: "",
+        },
+        id: 0,
+      };
+    },
+  },
+  getters: {},
 });

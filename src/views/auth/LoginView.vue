@@ -67,7 +67,7 @@ import { ElNotification } from "element-plus";
 import { User, Lock } from "@element-plus/icons-vue";
 import ApiClient from "../../request/request";
 import { useRouter } from "vue-router";
-import type { apiResponseToken } from "../../model/interface";
+import type { apiResponseTokenType } from "../../model/interface";
 const apiClient = ApiClient.getInstance();
 const router = useRouter();
 const ruleFormRef = ref<FormInstance>();
@@ -119,7 +119,7 @@ const submitForm = (formEl: FormInstance | undefined): void => {
   loading.value = true;
   formEl.validate(async (valid) => {
     if (valid) {
-      const response: apiResponseToken = await apiClient.post(
+      const response = await apiClient.post<apiResponseTokenType>(
         "/login",
         ruleForm
       );
@@ -133,7 +133,7 @@ const submitForm = (formEl: FormInstance | undefined): void => {
         );
         // 登录弹窗
         ElNotification({
-          title: "Success",
+          title: "成功",
           message: "登录成功",
           type: "success",
         });
@@ -145,8 +145,8 @@ const submitForm = (formEl: FormInstance | undefined): void => {
       } else {
         // 提交失败
         ElNotification({
-          title: "Error",
-          message: "登录失败",
+          title: "失败",
+          message: "用户名或密码错误",
           type: "error",
         });
         loading.value = false;

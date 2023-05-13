@@ -10,8 +10,9 @@ import { order_replies } from "./order_replies";
 import { order_status } from "./order_status";
 import { order_type } from "./order_type";
 import { role } from "./roles";
-import { user } from "./users";
+import { user, CustomerRepresentative } from "./users";
 import { order } from "./orders";
+import { tokenType, token, message } from "./tokens";
 
 // 保存接口定义的类型
 export interface apiResponse<T> {
@@ -20,19 +21,14 @@ export interface apiResponse<T> {
   data: T;
   message: string;
 }
-
-// 令牌类型
-interface tokenType {
-  access_token: string;
-  token_type: string;
-  expires_in: number;
-}
-
 // 使用泛型创建具体的接口类型
 export type apiResponseData = apiResponse<string> | undefined;
 export type apiResponseUser = apiResponse<user> | undefined;
-export type apiResponseOrder = apiResponse<order> | undefined;
+export type apiResponseCustomerRepresentative =
+  | apiResponse<CustomerRepresentative>
+  | undefined;
 export type apiResponseRole = apiResponse<role> | undefined;
+export type apiResponseOrder = apiResponse<order> | undefined;
 export type apiResponseOrderType = apiResponse<order_type> | undefined;
 export type apiResponseOrderStatus = apiResponse<order_status> | undefined;
 export type apiResponseOrderReplies = apiResponse<order_replies> | undefined;
@@ -48,4 +44,6 @@ export type apiResponseAsset = apiResponse<asset> | undefined;
 export type apiResponseAssetCategories =
   | apiResponse<asset_categories>
   | undefined;
-export type apiResponseToken = apiResponse<tokenType> | undefined;
+export type apiResponseToken = apiResponse<token> | undefined;
+export type apiResponseTokenType = apiResponse<tokenType> | undefined;
+export type apiResponseMessage = apiResponse<message> | undefined;
