@@ -6,5 +6,9 @@ export interface order {
   user_id: number;
   title: string;
   description: string;
-  image: string;
+  time_limit: number;
+  appointment: string;
+  attachment: string;
+  created_at: string;
+  updated_at: string;
 }

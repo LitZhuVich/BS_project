@@ -1,68 +1,103 @@
 <template>
+  <!-- TODO:2023-5-9 这一天请你个给前端github远程分支添加dev -->
   <div id="Order">
     <div class="OrderList">
       <div class="top-operation">
         <div style="display: flex">
           <el-select v-model="searchOptionChoosed">
             <el-option
-              v-for="item in searchOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
+              v-for="(option, index) in searchOptions"
+              :key="index"
+              :label="option.label"
+              :value="option.value"
+            ></el-option>
           </el-select>
           <el-input
             v-model="searchValue"
             class="search-box"
             size="small"
-            placeholder="请输入公司名称"
+            placeholder="输入关键字搜索"
             :suffix-icon="Search"
           />
         </div>
         <div>
-          <!-- 按钮 -->
+          <!-- 按钮组 -->
           <div class="function_button">
-            <el-button type="success" plain :icon="Plus">新增客户</el-button>
-            <el-button type="info" plain :icon="EditPen">编辑</el-button>
-            <el-button type="danger" plain :icon="CloseBold"
-              >批量删除</el-button
+            <el-button
+              type="info"
+              plain
+              :icon="Refresh"
+              @click="getTableData()"
             >
-            <el-button type="success" plain :icon="Plus"
-              >添加客户到分组</el-button
+              刷新
+            </el-button>
+            <el-button type="success" plain :icon="Plus" @click="add()">
+              新增客户
+            </el-button>
+            <el-button
+              type="danger"
+              plain
+              :icon="CloseBold"
+              @click="deleteMany()"
             >
+              批量删除
+            </el-button>
           </div>
         </div>
       </div>
       <div class="table">
-        <el-table :data="tableData" stripe style="width: 100%" border>
-          <el-table-column type="selection" width="60" align="center" />
-          <el-table-column prop="companyName" label="公司名称" />
-          <el-table-column prop="createTime" label="创建时间" />
+        <!-- TODO:高度需改成动态，以便响应式 -->
+        <el-table
+          ref="multipleTableRef"
+          :data="
+            filterData.slice(
+              (currentPage - 1) * pageSize,
+              currentPage * pageSize
+            )
+          "
+          stripe
+          style="width: 100%"
+          border
+          height="545px"
+          v-loading="loading"
+          @selection-change="handleSelectionChange"
+        >
+          <el-table-column type="selection" width="55" align="center" />
+          <el-table-column prop="companyname" label="公司名称" />
           <el-table-column prop="lastUpdater" label="最后更新人" />
-          <el-table-column prop="lastUpdateTime" label="最后更新时间" />
-          <el-table-column prop="serviceBalance" label="服务余额" />
-          <el-table-column prop="customerSource" label="客户来源" />
           <el-table-column prop="companyAddress" label="公司地址" />
           <el-table-column prop="phone" label="手机号" />
           <el-table-column prop="remark" label="备注" />
-          <el-table-column prop="classification" label="产品分类" />
-          <el-table-column prop="createTime" label="操作" width="160">
+          <el-table-column prop="classification" label="分类" />
+          <el-table-column prop="createTime" label="创建时间" />
+          <el-table-column prop="lastUpdateTime" label="最后更新时间" />
+          <el-table-column prop="operation" label="操作" width="200">
             <template #default="scope">
-              <el-button type="primary">修改</el-button>
-              <el-button type="danger">删除</el-button>
+              <el-button
+                type="primary"
+                @click="handleEdit(scope.$index, scope.row)"
+                :icon="EditPen"
+                :loading="btnLoading"
+                >修改
+              </el-button>
+              <el-button
+                type="danger"
+                @click="handleDelete(scope.$index, scope.row)"
+                :icon="CloseBold"
+                >删除
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
-
       <div class="demo-pagination-block">
         <el-config-provider :locale="zhCn">
           <el-pagination
             v-model:current-page="currentPage"
             v-model:page-size="pageSize"
-            :page-sizes="[10, 20, 30, 40]"
+            :page-sizes="[5, 10, 20, 50]"
             layout="sizes, prev, pager, next, jumper"
-            :total="40"
+            :total="tableData.length"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
           />
@@ -70,159 +105,215 @@
       </div>
     </div>
   </div>
+
+  <el-dialog v-model="dialogInfo.isShow" :title="dialogInfo.title">
+    <CustomerManagementDialog :updateData="getTableData" />
+  </el-dialog>
+
+  <deleteDialog :updateData="getTableData" />
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { Refresh } from "@element-plus/icons-vue";
-// 引入组件
-// TODO: 工单和新建工单页写完后，替换下面的TEST.vue
-// import Order from "../../../components/orderlist/Order";
-// ElConfigProvider 组件
-import { ElConfigProvider } from "element-plus";
-// 引入中文包
-import zhCn from "element-plus/lib/locale/lang/zh-cn";
-// 引入图标
+import { ref, onMounted, watchEffect, reactive, defineEmits } from "vue";
+import { debounce } from "lodash"; // 引入防抖方法
+import { Refresh, User } from "@element-plus/icons-vue";
+import { ElConfigProvider, ElTable, ElNotification } from "element-plus";
+import { useDialogStore } from "../../../store/store";
+import { storeToRefs } from "pinia";
+import zhCn from "element-plus/lib/locale/lang/zh-cn"; // 引入中文包
 import { Search, Plus, EditPen, CloseBold } from "@element-plus/icons-vue";
 import ApiClient from "../../../request/request";
-import type { apiResponseUser } from "../../../model/interface";
+import CustomerManagementDialog from "../../../components/formContent/CustomerManagement.vue";
+import deleteDialog from "../../../components/confirmDelete.vue";
+import type {
+  apiResponseCustomerRepresentative,
+  apiResponseData,
+  apiResponseUser,
+} from "../../../model/interface";
+import type { CustomerRepresentative } from "../../../model/users";
+const emit = defineEmits(["updateData"]);
 const apiClient = ApiClient.getInstance();
-
+const dialogStore = useDialogStore();
+const { dialogInfo, confirmDelete, delUrl }: any = storeToRefs(dialogStore);
+// 搜索方式接口
+interface options {
+  value: string;
+  label: string;
+}
 // 选择的搜索方式
-const searchOptionChoosed = ref("按公司名称搜");
+const searchOptionChoosed = ref<string>("companyname");
 // 搜索方式
-const searchOptions = [
+const searchOptions = ref<options[]>([
   {
-    value: "按公司名称搜",
+    value: "companyname",
     label: "按公司名称搜",
   },
   {
-    value: "按联系人搜",
+    value: "username",
     label: "按联系人搜",
   },
   {
-    value: "按9位ID搜",
-    label: "按9位ID搜",
+    value: "phone",
+    label: "按手机号搜",
   },
-];
-// 搜索框
-const searchValue = ref("");
-
-// 表单数据
-// const tableData = [
-//   {
-//     companyName: "A客户",
-//     createTime: "2023-02-27 15:29:55",
-//     lastUpdater: "盛军测试",
-//     lastUpdateTime: "2023-02-27 15:30:56",
-//     serviceBalance: "0.00",
-//     customerSource: "客户管理单独",
-//     companyAddress: "历下区盛福花园",
-//     phone: "15272235226",
-//     remark: "1212",
-//     classification: "票据",
-//   },
-//   {
-//     companyName: "A客户",
-//     createTime: "2023-02-27 15:29:55",
-//     lastUpdater: "盛军测试",
-//     lastUpdateTime: "2023-02-27 15:30:56",
-//     serviceBalance: "0.00",
-//     customerSource: "客户管理单独",
-//     companyAddress: "历下区盛福花园",
-//     phone: "15272235226",
-//     remark: "1212",
-//     classification: "票据",
-//   },
-//   {
-//     companyName: "A客户",
-//     createTime: "2023-02-27 15:29:55",
-//     lastUpdater: "盛军测试",
-//     lastUpdateTime: "2023-02-27 15:30:56",
-//     serviceBalance: "0.00",
-//     customerSource: "客户管理单独",
-//     companyAddress: "历下区盛福花园",
-//     phone: "15272235226",
-//     remark: "1212",
-//     classification: "票据",
-//   },
-//   {
-//     companyName: "A客户",
-//     createTime: "2023-02-27 15:29:55",
-//     lastUpdater: "盛军测试",
-//     lastUpdateTime: "2023-02-27 15:30:56",
-//     serviceBalance: "0.00",
-//     customerSource: "客户管理单独",
-//     companyAddress: "历下区盛福花园",
-//     phone: "15272235226",
-//     remark: "1212",
-//     classification: "票据",
-//   },
-//   {
-//     companyName: "A客户",
-//     createTime: "2023-02-27 15:29:55",
-//     lastUpdater: "盛军测试",
-//     lastUpdateTime: "2023-02-27 15:30:56",
-//     serviceBalance: "0.00",
-//     customerSource: "客户管理单独",
-//     companyAddress: "历下区盛福花园",
-//     phone: "15272235226",
-//     remark: "1212",
-//     classification: "票据",
-//   },
-//   {
-//     companyName: "A客户",
-//     createTime: "2023-02-27 15:29:55",
-//     lastUpdater: "盛军测试",
-//     lastUpdateTime: "2023-02-27 15:30:56",
-//     serviceBalance: "0.00",
-//     customerSource: "客户管理单独",
-//     companyAddress: "历下区盛福花园",
-//     phone: "15272235226",
-//     remark: "1212",
-//     classification: "票据",
-//   },
-// ];
-const tableData = ref([]);
-
+]);
+// 表单渲染时的加载动画
+const loading = ref<boolean>(true);
+// 存储搜索框内容
+const searchValue = ref<string>("");
+// 存储表单数据
+const tableData = ref<CustomerRepresentative[]>([]);
+// 存储搜索关键字过滤后的数据
+const filterData = ref<CustomerRepresentative[]>([]);
+// 获取表单数据
 const getTableData = async (): Promise<void> => {
   try {
-    const response = await apiClient.get<apiResponseUser>(
-      "/getAllCustomerRepresentative"
+    loading.value = true;
+    const response = await apiClient.get<apiResponseCustomerRepresentative>(
+      "/CustomerRepresentative"
     );
-    // console.log(response!.data);
-    // tableData.value = response!.data.map((user: any) => ({
-    //   name: user.username,
-    //   age: user.age,
-    //   address: user.address,
-    // }));
+    const responseData: any = response!.data;
+    tableData.value = responseData.map((user: CustomerRepresentative) => ({
+      id: user.id,
+      companyname: user.companyname,
+      lastUpdater: user.username,
+      companyAddress: user.address,
+      createTime: user.created_at,
+      phone: user.phone,
+      remark: user.remark,
+      lastUpdateTime: user.updated_at,
+      address: user.address,
+      classification: user.groups.map((group) => group.group_name),
+    }));
+    // 初始情况下，搜索结果和全局数据相同
+    filterData.value = [...tableData.value];
+    // 渲染成功，加载动画消失
+    loading.value = false;
+  } catch (error) {
+    console.log(error);
+    loading.value = false;
+  }
+};
+// 获取过滤之后的数据
+const filterTableData = async (
+  searchValue: string,
+  searchType: string
+): Promise<void> => {
+  // 如果没有输入如何关键字，则显示所有数据
+  if (!searchValue) {
+    filterData.value = [...tableData.value];
+    return;
+  }
+  try {
+    const response = await apiClient.post<apiResponseCustomerRepresentative>(
+      "/CustomerRepresentative/filter",
+      {
+        searchValue,
+        searchType,
+      }
+    );
+    const responseData: any = response!.data;
+    filterData.value = responseData.map((user: CustomerRepresentative) => ({
+      id: user.id,
+      companyName: user.companyname,
+      lastUpdater: user.username,
+      companyAddress: user.address,
+      createTime: user.created_at,
+      phone: user.phone,
+      remark: user.remark,
+      lastUpdateTime: user.updated_at,
+      address: user.address,
+      classification: user.groups.map((group) => group.group_name),
+    }));
   } catch (error) {
     console.log(error);
   }
 };
-getTableData();
+// 创建一个防抖函数 在输入框输入最后一个字 500毫秒之后执行 filterTableData函数
+const debouncedFunc = debounce(filterTableData, 500);
 //分页框
-const currentPage = ref(1);
-const pageSize = ref(10);
+const currentPage = ref<number>(1);
+// 显示表单数据行数
+const pageSize = ref<number>(10);
+// 定义当分页大小变化时
 const handleSizeChange = (val: number) => {
   console.log(`每页${val}条数据`);
 };
+// 定义当页码变化时
 const handleCurrentChange = (val: number) => {
   console.log(`当前在第${val}页`);
 };
-interface TabType {
-  title: string; // 标签页显示名称
-  componentName: string; // 动态组件名
-  data: any; // 动态组件传参
-}
-interface TabListType extends TabType {
-  name: string; //标签页唯一标识，添加标签页时根据componentName自动生成
-}
+const btnLoading = ref<boolean>(false);
+// 定义编辑操作
+const handleEdit = async (index: number, row: CustomerRepresentative) => {
+  btnLoading.value = true;
+  const userRes = await apiClient.get<apiResponseUser & apiResponseData>(
+    "/CustomerRepresentative/" + row.id
+  );
+  const customerInfo = userRes!.data;
+  // 获取组信息
+  const groupRes = await apiClient.get<apiResponseData>(
+    "/group/name/" + row.id
+  );
+  // 设置弹窗数据
+  dialogInfo.value.title = "修改客户信息";
+  dialogInfo.value.isShow = true;
+  dialogInfo.value.id = row.id;
+  dialogInfo.value.data = {
+    companyname: customerInfo.companyname,
+    username: customerInfo.username,
+    address: customerInfo.address,
+    phone: customerInfo.phone,
+    remark: customerInfo.remark,
+    group_name: groupRes!.data,
+  };
+  btnLoading.value = false;
+};
 
-// 存放标签页数组
-const tabList = ref<TabListType[]>([]);
-// 默认显示工单页面
-const tabValue = ref("1");
+// 定义删除操作
+const handleDelete = async (index: number, row: CustomerRepresentative) => {
+  // 传入需要删除的数据
+  dialogInfo.value.data.companyname = row.companyname;
+  delUrl.value = "CustomerRepresentative";
+  dialogInfo.value.id = row.id;
+  confirmDelete.value = true;
+};
+
+const multipleTableRef = ref<InstanceType<typeof ElTable>>();
+const multipleSelection = ref<any>([]);
+// 点击了批量删除
+const deleteMany = async () => {
+  const ids = multipleSelection.value.map((val: any) => val.id);
+  const promises = ids.map((id: any) =>
+    apiClient.delete<apiResponseUser & apiResponseData>(
+      "/CustomerRepresentative/" + id
+    )
+  );
+  const res = apiClient.all(promises);
+  console.log(res);
+  getTableData();
+};
+// 获取已点击的按钮数据
+const handleSelectionChange = (val: any) => {
+  multipleSelection.value = val;
+};
+
+// 新增客户
+const add = () => {
+  dialogStore.clearInfo();
+  dialogInfo.value.title = "新增客户信息";
+  dialogInfo.value.isShow = true;
+  dialogInfo.value.id = 0;
+};
+
+onMounted(() => {
+  getTableData();
+});
+
+watchEffect(() => {
+  // 使用 watchEffect 监听搜索字段（关键字和搜索类型）变化并过滤表格数据
+  debouncedFunc(searchValue.value, searchOptionChoosed.value);
+});
 </script>
 
 <style scoped lang="scss">

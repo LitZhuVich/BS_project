@@ -249,8 +249,7 @@ const router = createRouter({
   history: createWebHistory(),
   routes, // 路由配置
 });
-//TODO:这个是路由守卫。启用的时候可以强制网站必须登录才能访问
-
+//路由守卫。启用的时候可以强制网站必须登录才能访问
 //创建路由守卫
 router.beforeEach((to, from, next) => {
   // 获取 token 值

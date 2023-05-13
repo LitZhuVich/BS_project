@@ -49,7 +49,6 @@ const router = useRouter();
 // 接收父元素的数据
 const props = defineProps(["userInfo"]);
 // 实例化
-
 const breadcrumbStore = useBreadcrumbStore();
 const UserStore = useUserStore();
 // 执行方法
@@ -86,7 +85,6 @@ const logout = async (): Promise<void> => {
     const response: apiResponseData = await apiClient.post<apiResponseData>(
       "/logout"
     );
-    localStorage.removeItem("token");
     UserStore.clearUserInfo();
     notify(response!.data);
     router.push({

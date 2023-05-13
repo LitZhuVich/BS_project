@@ -11,7 +11,9 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     Aside: typeof import('./src/components/Aside.vue')['default']
     Bar: typeof import('./src/components/visualGraph/bar.vue')['default']
+    ConfirmDelete: typeof import('./src/components/confirmDelete.vue')['default']
     Customer: typeof import('./src/components/customer/customer.vue')['default']
+    CustomerManagement: typeof import('./src/components/formContent/CustomerManagement.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAutoResizer: typeof import('element-plus/es')['ElAutoResizer']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
@@ -42,6 +44,10 @@ declare module '@vue/runtime-core' {
     ElPagination: typeof import('element-plus/es')['ElPagination']
     ElRow: typeof import('element-plus/es')['ElRow']
     ElSelect: typeof import('element-plus/es')['ElSelect']
+    ElSelect2: typeof import('element-plus/es')['ElSelect2']
+    ElSelectv: typeof import('element-plus/es')['ElSelectv']
+    ElSelectv2: typeof import('element-plus/es')['ElSelectv2']
+    ElSelectV2: typeof import('element-plus/es')['ElSelectV2']
     ElSubmenu: typeof import('element-plus/es')['ElSubmenu']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
@@ -60,5 +66,8 @@ declare module '@vue/runtime-core' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ToBeDoneOrder: typeof import('./src/components/orderList/ToBeDoneOrder.vue')['default']
+  }
+  export interface ComponentCustomProperties {
+    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }

@@ -107,13 +107,18 @@ import pieGrape from "../../components/visualGraph/pie.vue";
 import myOrderList from "../../components/index/myOrderList.vue";
 import notice from "../../components/index/notice.vue";
 
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import ApiClient from "../../request/request";
 const apiClient = ApiClient.getInstance();
-
+// TODO:测试代码
 const getOrderInfo = async () => {
-  const orderRes = await apiClient.get("/");
+  const orderRes: any = await apiClient.get<any>("/orderType");
+  console.log(orderRes.data);
 };
+
+onMounted(() => {
+  getOrderInfo();
+});
 </script>
 
 <style lang="scss" scoped>
