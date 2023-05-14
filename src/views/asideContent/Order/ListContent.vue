@@ -13,14 +13,12 @@
       </div>
       <div class="mid">
         <el-text tag="b">工单视图</el-text>
-        <el-icon
-          style="
+        <el-icon style="
             position: absolute;
             right: 0;
             top: 50%;
             transform: translate(0, -50%);
-          "
-        >
+          ">
           <Refresh />
         </el-icon>
       </div>
@@ -45,13 +43,10 @@ import { ref } from "vue";
 import { Refresh } from "@element-plus/icons-vue";
 import { useUserStore } from "../../../store/store";
 import { storeToRefs } from "pinia";
+import Order from "../../../components/orderList/Order.vue"
 // 实例化
 const userStore = useUserStore();
 const { userInfo }: any = storeToRefs(userStore);
-
-// 引入组件
-// TODO: 工单和新建工单页写完后，替换下面的TEST.vue
-// import Order from "../../../components/orderlist/Order";
 
 interface TabType {
   title: string; // 标签页显示名称
@@ -77,6 +72,7 @@ $views-li: 40px;
   column-gap: 10px;
   height: calc(100% - 120px);
   margin: 10px;
+
   .OrderView {
     background-color: white;
     padding: 20px;

@@ -12,10 +12,10 @@
   <el-table :data="tableData" stripe style="width: 100%" size="small">
     <el-table-column type="selection" />
     <el-table-column prop="id" label="工单ID" />
-    <el-table-column prop="status_id" label="工单状态" />
+    <el-table-column prop="status" label="工单状态" />
     <el-table-column prop="title" label="标题" />
-    <el-table-column prop="user_id" label="用户" />
-    <el-table-column prop="priority_id" label="优先级" />
+    <el-table-column prop="username" label="用户" />
+    <el-table-column prop="priority" label="优先级" />
     <el-table-column prop="created_at" label="提交时间" />
     <el-table-column prop="time_limit" label="期限时间" />
     <el-table-column prop="isOnLine" label="线上/下" />
@@ -39,100 +39,13 @@ onMounted(() => {
 })
 
 // 表单数据
-let tableData: any = ref([
-  {
-    id: "25972567",
-    status_id: "已关闭",
-    title: "服务器故障",
-    user_id: "张晶晶",
-    priority_id: "高",
-    created_at: "2022-12-06 14:58:14",
-    time_limit: "管理组|盛军测试",
-    isOnLine: "",
-    type: "工单工作台",
-    address: "按时解决",
-    appointment: "2022-12-06 15:01:57",
-    updated_at: "2022-12-06 15:01:57",
-    description: "测试",
-  },
-  {
-    id: "25972567",
-    status_id: "已关闭",
-    title: "服务器故障",
-    user_id: "张晶晶",
-    priority_id: "高",
-    created_at: "2022-12-06 14:58:14",
-    time_limit: "管理组|盛军测试",
-    isOnLine: "",
-    type: "工单工作台",
-    address: "按时解决",
-    appointment: "2022-12-06 15:01:57",
-    updated_at: "2022-12-06 15:01:57",
-    description: "测试",
-  }, {
-    id: "25972567",
-    status_id: "已关闭",
-    title: "服务器故障",
-    user_id: "张晶晶",
-    priority_id: "高",
-    created_at: "2022-12-06 14:58:14",
-    time_limit: "管理组|盛军测试",
-    isOnLine: "",
-    type: "工单工作台",
-    address: "按时解决",
-    appointment: "2022-12-06 15:01:57",
-    updated_at: "2022-12-06 15:01:57",
-    description: "测试",
-  }, {
-    id: "25972567",
-    status_id: "已关闭",
-    title: "服务器故障",
-    user_id: "张晶晶",
-    priority_id: "高",
-    created_at: "2022-12-06 14:58:14",
-    time_limit: "管理组|盛军测试",
-    isOnLine: "",
-    type: "工单工作台",
-    address: "按时解决",
-    appointment: "2022-12-06 15:01:57",
-    updated_at: "2022-12-06 15:01:57",
-    description: "测试",
-  }, {
-    id: "25972567",
-    status_id: "已关闭",
-    title: "服务器故障",
-    user_id: "张晶晶",
-    priority_id: "高",
-    created_at: "2022-12-06 14:58:14",
-    time_limit: "管理组|盛军测试",
-    isOnLine: "",
-    type: "工单工作台",
-    address: "按时解决",
-    appointment: "2022-12-06 15:01:57",
-    updated_at: "2022-12-06 15:01:57",
-    description: "测试",
-  }, {
-    id: "25972567",
-    status_id: "已关闭",
-    title: "服务器故障",
-    user_id: "张晶晶",
-    priority_id: "高",
-    created_at: "2022-12-06 14:58:14",
-    time_limit: "管理组|盛军测试",
-    isOnLine: "",
-    type: "工单工作台",
-    address: "按时解决",
-    appointment: "2022-12-06 15:01:57",
-    updated_at: "2022-12-06 15:01:57",
-    description: "测试",
-  },
-]);
+let tableData: any = ref([]);
 
 const getOrders = async () => {
-  console.log('tableData', tableData)
-  const res: any = await apiClient.get<any>('/order')
+  console.log('tableData', tableData.value)
+  const res: any = await apiClient.get<any>('/getOrderDetail')
   tableData.value = res.data
-  console.log('tableData', tableData)
+  console.log('tableData', tableData.value)
 }
 
 // 选择的搜索方式
