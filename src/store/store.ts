@@ -111,7 +111,7 @@ export const useDialogStore = defineStore("dialog", {
           address: "",
           phone: "",
           remark: "",
-          group_name: "",
+          group_name: [],
         },
         // 弹窗ID,
         id: 0,
@@ -134,7 +134,7 @@ export const useDialogStore = defineStore("dialog", {
           address: "",
           phone: "",
           remark: "",
-          group_name: "",
+          group_name: [],
         },
         id: 0,
       };

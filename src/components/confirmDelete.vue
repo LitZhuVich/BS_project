@@ -13,7 +13,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from "vue";
 import type { apiResponseData } from "../model/interface";
 import { ElNotification } from "element-plus";
 import { useDialogStore } from "../store/store";

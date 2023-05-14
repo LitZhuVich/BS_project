@@ -49,12 +49,7 @@
         <!-- TODO:高度需改成动态，以便响应式 -->
         <el-table
           ref="multipleTableRef"
-          :data="
-            filterData.slice(
-              (currentPage - 1) * pageSize,
-              currentPage * pageSize
-            )
-          "
+          :data="filterData"
           stripe
           style="width: 100%"
           border
@@ -97,7 +92,7 @@
             v-model:page-size="pageSize"
             :page-sizes="[5, 10, 20, 50]"
             layout="sizes, prev, pager, next, jumper"
-            :total="tableData.length"
+            :total="pageTotal"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
           />
@@ -114,7 +109,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, watchEffect, reactive, defineEmits } from "vue";
+import { ref, onMounted, watchEffect, reactive } from "vue";
 import { debounce } from "lodash"; // 引入防抖方法
 import { Refresh, User } from "@element-plus/icons-vue";
 import { ElConfigProvider, ElTable, ElNotification } from "element-plus";
@@ -130,7 +125,7 @@ import type {
   apiResponseData,
   apiResponseUser,
 } from "../../../model/interface";
-import type { CustomerRepresentative } from "../../../model/users";
+import type { CustomerRepresentativeInfo } from "../../../model/users";
 const emit = defineEmits(["updateData"]);
 const apiClient = ApiClient.getInstance();
 const dialogStore = useDialogStore();
@@ -162,18 +157,28 @@ const loading = ref<boolean>(true);
 // 存储搜索框内容
 const searchValue = ref<string>("");
 // 存储表单数据
-const tableData = ref<CustomerRepresentative[]>([]);
+const tableData = ref<CustomerRepresentativeInfo[]>([]);
 // 存储搜索关键字过滤后的数据
-const filterData = ref<CustomerRepresentative[]>([]);
+const filterData = ref<CustomerRepresentativeInfo[]>([]);
+// 分页框 页数
+const currentPage = ref<number>(1);
+// 显示表单数据行数
+const pageSize = ref<number>(10);
+// 表单总数
+const pageTotal = ref<number>(0);
 // 获取表单数据
 const getTableData = async (): Promise<void> => {
   try {
+    searchValue.value = "";
     loading.value = true;
+    // /CustomerRepresentative?pageSize=${数据大小}&page=${页数}
     const response = await apiClient.get<apiResponseCustomerRepresentative>(
-      "/CustomerRepresentative"
+      `/CustomerRepresentative?pageSize=${pageSize.value}&page=${currentPage.value}`
     );
-    const responseData: any = response!.data;
-    tableData.value = responseData.map((user: CustomerRepresentative) => ({
+    const responseData: any = response!.data.data;
+    // 页面数据长度
+    pageTotal.value = response!.data.total;
+    tableData.value = responseData.map((user: CustomerRepresentativeInfo) => ({
       id: user.id,
       companyname: user.companyname,
       lastUpdater: user.username,
@@ -184,6 +189,7 @@ const getTableData = async (): Promise<void> => {
       lastUpdateTime: user.updated_at,
       address: user.address,
       classification: user.groups.map((group) => group.group_name),
+      is_locked: user.is_locked,
     }));
     // 初始情况下，搜索结果和全局数据相同
     filterData.value = [...tableData.value];
@@ -205,17 +211,20 @@ const filterTableData = async (
     return;
   }
   try {
+    // /CustomerRepresentative?pageSize=${数据大小}&page=${页数}
     const response = await apiClient.post<apiResponseCustomerRepresentative>(
-      "/CustomerRepresentative/filter",
+      `/CustomerRepresentative/filter?pageSize=${pageSize.value}&page=${currentPage.value}`,
       {
         searchValue,
         searchType,
       }
     );
-    const responseData: any = response!.data;
-    filterData.value = responseData.map((user: CustomerRepresentative) => ({
+    const responseData: any = response!.data.data;
+    // 页面数据长度
+    pageTotal.value = response!.data.total;
+    filterData.value = responseData.map((user: CustomerRepresentativeInfo) => ({
       id: user.id,
-      companyName: user.companyname,
+      companyname: user.companyname,
       lastUpdater: user.username,
       companyAddress: user.address,
       createTime: user.created_at,
@@ -224,33 +233,42 @@ const filterTableData = async (
       lastUpdateTime: user.updated_at,
       address: user.address,
       classification: user.groups.map((group) => group.group_name),
+      is_locked: user.is_locked,
     }));
+    console.log(filterData);
   } catch (error) {
     console.log(error);
   }
 };
 // 创建一个防抖函数 在输入框输入最后一个字 500毫秒之后执行 filterTableData函数
 const debouncedFunc = debounce(filterTableData, 500);
-//分页框
-const currentPage = ref<number>(1);
-// 显示表单数据行数
-const pageSize = ref<number>(10);
 // 定义当分页大小变化时
 const handleSizeChange = (val: number) => {
-  console.log(`每页${val}条数据`);
+  // 如果有查询数据则修改查询数据的表单数据
+  if (searchValue.value == "") {
+    getTableData();
+  } else {
+    filterTableData(searchValue.value, searchOptionChoosed.value);
+  }
 };
 // 定义当页码变化时
 const handleCurrentChange = (val: number) => {
-  console.log(`当前在第${val}页`);
+  // 如果有查询数据则修改查询数据的表单数据
+  if (searchValue.value == "") {
+    getTableData();
+  } else {
+    filterTableData(searchValue.value, searchOptionChoosed.value);
+  }
 };
 const btnLoading = ref<boolean>(false);
 // 定义编辑操作
-const handleEdit = async (index: number, row: CustomerRepresentative) => {
+const handleEdit = async (index: number, row: CustomerRepresentativeInfo) => {
   btnLoading.value = true;
   const userRes = await apiClient.get<apiResponseUser & apiResponseData>(
     "/CustomerRepresentative/" + row.id
   );
   const customerInfo = userRes!.data;
+  console.log(customerInfo);
   // 获取组信息
   const groupRes = await apiClient.get<apiResponseData>(
     "/group/name/" + row.id
@@ -271,7 +289,7 @@ const handleEdit = async (index: number, row: CustomerRepresentative) => {
 };
 
 // 定义删除操作
-const handleDelete = async (index: number, row: CustomerRepresentative) => {
+const handleDelete = async (index: number, row: CustomerRepresentativeInfo) => {
   // 传入需要删除的数据
   dialogInfo.value.data.companyname = row.companyname;
   delUrl.value = "CustomerRepresentative";
@@ -290,7 +308,6 @@ const deleteMany = async () => {
     )
   );
   const res = apiClient.all(promises);
-  console.log(res);
   getTableData();
 };
 // 获取已点击的按钮数据

@@ -81,7 +81,7 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from "element-plus";
 import { ElNotification } from "element-plus";
-import { ref, onMounted, reactive, computed, defineProps } from "vue";
+import { ref, onMounted, reactive, computed } from "vue";
 import type {
   apiResponseData,
   apiResponseCustomerRepresentative,
@@ -90,7 +90,6 @@ import type {
 import { useDialogStore } from "../../store/store";
 import { storeToRefs } from "pinia";
 import ApiClient from "../../request/request";
-import { fa } from "element-plus/es/locale";
 const apiClient = ApiClient.getInstance();
 const dialogStore = useDialogStore();
 const { dialogInfo }: any = storeToRefs(dialogStore);
@@ -205,6 +204,7 @@ const submit = async (formEl: FormInstance | undefined): Promise<void> => {
           "/CustomerRepresentative/" + dialogInfo.value.id,
           dialogInfo.value.data
         );
+        // 提交
         if (res!.code == 200) {
           ElNotification({
             title: "成功",
