@@ -4,26 +4,16 @@
       <h5>待办工单</h5>
       <div style="display: flex">
         <el-select v-model="searchOptionChoosed">
-          <el-option
-            v-for="item in searchOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
+          <el-option v-for="item in searchOptions" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
-        <el-input
-          v-model="search"
-          class="search-box"
-          placeholder="请输入编号"
-          :suffix-icon="Search"
-        />
+        <el-input v-model="search" class="search-box" placeholder="请输入编号" :suffix-icon="Search" />
       </div>
     </div>
     <el-table :data="filterTableData" stripe style="width: 100%" border>
       <el-table-column type="selection" align="center" fixed />
       <el-table-column prop="code" label="编码" />
       <el-table-column prop="orderStatus" label="工单状态">
-        <template #default="scope: any">
+        <template #default="scope">
           <div style="display: flex; align-items: center">
             <el-tag :type="tagStatusType(scope.row.orderStatus)">
               {{ scope.row.orderStatus }}
@@ -34,12 +24,9 @@
       <el-table-column prop="title" label="标题" />
       <el-table-column prop="customerService" label="客服姓名" />
       <el-table-column prop="priority" label="工单优先级">
-        <template #default="scope: any">
+        <template #default="scope: any ">
           <div style="display: flex; align-items: center">
-            <el-tag
-              :type="tagSituationsType(scope.row.priority)"
-              effect="plain"
-            >
+            <el-tag :type=" tagSituationsType(scope.row.priority) " effect="plain">
               {{ scope.row.priority }}
             </el-tag>
           </div>
@@ -55,16 +42,10 @@
       <el-table-column prop="description" label="工单描述" />
     </el-table>
     <div class="demo-pagination-block">
-      <el-config-provider :locale="zhCn">
-        <el-pagination
-          v-model:current-page="currentPage"
-          v-model:page-size="pageSize"
-          :page-sizes="[10, 20, 30, 40]"
-          layout="sizes, prev, pager, next, jumper"
-          :total="40"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-      /></el-config-provider>
+      <el-config-provider :locale=" zhCn ">
+        <el-pagination v-model:current-page=" currentPage " v-model:page-size=" pageSize "
+          :page-sizes=" [10, 20, 30, 40] " layout="sizes, prev, pager, next, jumper" :total=" 40 "
+          @size-change=" handleSizeChange " @current-change=" handleCurrentChange " /></el-config-provider>
     </div>
   </div>
 </template>

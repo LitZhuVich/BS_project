@@ -174,12 +174,11 @@ const fileList = ref<UploadUserFile[]>([])
 const publishOrder = async () => {
   try {
     decidePriority()
-    // const res: any = await apiClient.post<any>(
-    //   '/order',
-    //   orderData
-    // )
-    // console.log(res.data)
-    console.log(fileList.value)
+    const res: any = await apiClient.post<any>(
+      '/order',
+      orderData
+    )
+    console.log(res.data)
   } catch (err) {
     console.log(err)
   }
