@@ -8,7 +8,7 @@
       <el-input v-model="searchValue" class="search-box" size="small" placeholder="请输入编号" :suffix-icon="Search" />
     </div>
   </div>
-  <el-table :data="filterTableData" stripe border>
+  <el-table v-loading="loading" :data="filterTableData" stripe border>
     <el-table-column type="expand">
       <template #default="scope">
         <div class="column-expand">
@@ -68,8 +68,8 @@
   </el-table>
   <div class="demo-pagination-block">
     <el-config-provider :locale="zhCn">
-      <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize" :page-sizes="[10, 20, 30, 40]"
-        layout="sizes, prev, pager, next, jumper" :total="40" @size-change="handleSizeChange"
+      <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize" :page-sizes="[5, 10, 20, 40]"
+        layout="sizes, prev, pager, next, jumper" :total="pageTotal" @size-change="handleSizeChange"
         @current-change="handleCurrentChange" /></el-config-provider>
   </div>
 </template>
@@ -86,12 +86,22 @@ onMounted(() => {
   getOrders()
 })
 
+// 表单总数
+const pageTotal = ref<number>(0);
+
 // 表单数据
 let tableData: any = ref([]);
 // 获取工单数据
 const getOrders = async () => {
-  const res: any = await apiClient.get<any>('/order')
-  tableData.value = res.data
+  loading.value = true;
+  const res: any = await apiClient.get<any>(
+    `/orderPage?pageSize=${pageSize.value}&page=${currentPage.value}`
+  )
+  tableData.value = res.data.data
+  // 页面数据长度
+  pageTotal.value = res!.data.total;
+  // 渲染成功，加载动画消失
+  loading.value = false;
 }
 
 // 选择的搜索方式
@@ -124,8 +134,6 @@ const searchValue = ref("");
 
 // 过滤显示
 const filterTableData = computed(() =>
-  // console.log(tableData.value)
-  // tableData.filter((data: any) => searchOption(data))
   tableData.value.filter((data: any) => searchOption(data))
 );
 // 判断搜索条件
@@ -199,14 +207,16 @@ const tagSituationsType = (value: string): string => {
   }
 };
 
+// 表单渲染时的加载动画
+const loading = ref<boolean>(true);
 //分页框
 const currentPage = ref(1); // 当前页面
 const pageSize = ref(10); // 一页多少数据
 const handleSizeChange = (val: number) => {
-  console.log(`每页${val}个数据`);
+  getOrders();
 };
 const handleCurrentChange = (val: number) => {
-  console.log(`当前在第${val}页`);
+  getOrders();
 };
 </script>
 
@@ -248,5 +258,7 @@ const handleCurrentChange = (val: number) => {
 .demo-pagination-block {
   height: 50px;
   line-height: 50px;
+  display: flex;
+  justify-content: center;
 }
 </style>
