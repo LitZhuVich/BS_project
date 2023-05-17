@@ -1,374 +1,258 @@
 <template>
   <!-- 新建工单背景 -->
   <div class="box">
-    <!-- 第一个框架 -->
-    <!-- 文件 -->
-    <div class="attachments">
-      <!-- 第一个框架的表单 -->
-      <el-form
-        :label-position="attachmentsPosition"
-        label-width="50px"
-        :model="attachments_input"
-        style="max-width: 800px"
-      >
+    <!-- 标题、描述、添加附件 -->
+    <div class="box-item attachments">
+      <el-form :label-position="attachmentsPosition" label-width="75px" :model="orderData" style="max-width: 800px">
         <!-- 标题输入框 -->
-        <el-form-item label="标题:">
-          <el-input v-model="attachments_input.name" />
+        <el-form-item label="工单标题:">
+          <el-input v-model="orderData.title" />
         </el-form-item>
         <!-- 描述输入框 -->
-        <el-form-item label="描述:">
-          <el-input
-            type="textarea"
-            :rows="5"
-            v-model="attachments_input.region"
-          />
+        <el-form-item label="工单描述:">
+          <el-input type="textarea" :rows="5" v-model="orderData.description" />
         </el-form-item>
-        <!-- 按钮 -->
-        <div class="attachments_upload">
-          <el-button type="primary" :icon="Link">添加附件</el-button>
-        </div>
+        <!-- 工单类型 -->
+        <el-form-item label="工单类型">
+          <el-select v-model="orderData.orderType" class="m-2" placeholder="请选择工单类型">
+            <el-option v-for="item in orderTypeList" :key="item.id" :label="item.type_name" :value="item.id" />
+          </el-select>
+        </el-form-item>
+        <!-- 是否线上 -->
+        <el-form-item label="线上/线下">
+          <el-select v-model="orderData.isOnLine" class="m-2" placeholder="请选择线上/线下">
+            <el-option label="线上" :value='1' />
+            <el-option label="线下" :value='0' />
+          </el-select>
+        </el-form-item>
       </el-form>
+      <!-- 添加附件按钮 -->
+      <div class="attachments_upload">
+        <!-- TODO: 完善附件功能 -->
+        <el-upload v-model:file-list="fileList" class="upload-demo"
+          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" multiple :limit="1">
+          <el-button type="primary">添加附件</el-button>
+          <template #tip>
+            <div class="el-upload__tip">
+              最多只能上传1个附件
+            </div>
+          </template>
+        </el-upload>
+      </div>
     </div>
-    <!-- 第二个框架 -->
-    <!-- 客户模板 -->
-    <div class="template">
-      <!-- 第二个框架的背景 -->
+    <!-- 客户信息 -->
+    <div class="box-item template">
       <div class="template_box">
         <!-- 标题 -->
-        <el-text class="template_title">客户模板切换</el-text>
+        <el-text class="title">客户信息</el-text>
         <!-- 图标 -->
         <el-icon color="lightblue" :size="20" class="template_icon">
           <Setting />
         </el-icon>
       </div>
-      <!-- 第二个框架的内容 -->
       <div class="template_center" style="margin-top: 20px">
-        <!-- 第二个框架的公司名称表单 -->
-        <el-form :label-position="templatePosition">
-          <el-form-item label="公司名称">
-            <!-- 下拉搜索框 -->
-            <el-select v-model="template_value" style="width: 400px">
-              <el-option
-                v-for="item in template_option"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-            <!-- 按钮 -->
-            <el-button type="primary" style="margin-left: 10px"
-              >添加公司</el-button
-            >
-          </el-form-item>
-          <!-- 第二个框架的姓名表单 -->
-          <el-form-item label="姓名">
-            <!-- 下拉搜索框 -->
-            <el-select v-model="template_value2" style="width: 400px">
-              <el-option
-                v-for="item in template_option2"
-                :key="item.id"
-                :label="item.type_name"
-                :value="item.type_name"
-              />
-            </el-select>
-            <!-- 按钮 -->
-            <el-button type="primary" style="margin-left: 10px"
-              >新增联系人</el-button
-            >
-          </el-form-item>
+        <!-- 客户信息表单 -->
+        <el-form :label-position="templatePosition" :model="orderData">
+          <el-input class="data-box" v-model="orderData.phone" placeholder="请输入联系电话" />
+          <el-input class="data-box" v-model="orderData.address" placeholder="请输入详细地址" />
+          <!-- <el-select class="data-box" v-model="orderData.contacter" multiple allow-create default-first-option
+            :reserve-keyword="false" placeholder="可指定工程师（非必填）">
+            <el-option v-for="item in contacterList" :label="item" :value="item" />
+          </el-select> -->
         </el-form>
       </div>
     </div>
-    <!-- 第三个框架 -->
-    <!-- 属性 -->
-    <div class="attribute">
-      <!-- 第三个框架的背景 -->
-      <div class="attribute_box">
+    <!-- 到达时间、优先级 -->
+    <div class="box-item attribute">
+      <div class="template_box">
         <!-- 标题 -->
-        <el-text class="attribute_title">属性</el-text>
+        <el-text class="title">其他</el-text>
+        <!-- 图标 -->
+        <el-icon color="lightblue" :size="20" class="template_icon">
+          <Link />
+        </el-icon>
       </div>
       <!-- 内容 -->
       <div class="attribute_center">
-        <el-form :model="attribute_input">
+        <el-form :model="orderData">
           <!-- 图标 -->
-          <div class="attribute_box_one">
-            <div class="attribute_center_one">
-              <el-text>客服姓名</el-text>
-              <el-text type="primary">我自己</el-text>
+          <div class="attribute_box">
+            <div class="attribute_center">
+              <el-text>希望完成时间</el-text>
             </div>
-            <el-input
-              v-model="attribute_input.value1"
-              style="max-width: 400px"
-            />
+            <el-date-picker v-model="orderData.appointment" type="datetime" placeholder="请选择希望完成时间" />
           </div>
-          <div class="attribute_box_two">
-            <div class="attribute_center_two">
-              <el-text>抄送人</el-text>
-              <el-text type="primary">我自己</el-text>
+          <div class="attribute_box">
+            <div class="attribute_center">
+              <el-text>工单期限（单位：天）</el-text>
             </div>
-            <el-input
-              v-model="attribute_input.value2"
-              style="max-width: 800px"
-            />
+            <el-input-number v-model="orderData.timeLimit" :min="1" />
           </div>
-        </el-form>
-      </div>
-    </div>
-    <!-- 第四个框架 -->
-    <!-- 售后 -->
-    <div class="sales">
-      <div class="sales_box">
-        <el-text class="sales_title">工单模板：售后设备维修模板</el-text>
-      </div>
-      <div class="sales_box2">
-        <div>
-          <!-- 图标 -->
-          <el-icon
-            color="lightblue"
-            :size="20"
-            style="position: relative; left: 15px"
-          >
-            <SuitcaseLine />
-          </el-icon>
-          <el-text class="sales_title2">执行人选择</el-text>
-        </div>
-        <el-text type="primary"> 收起 </el-text>
-      </div>
-      <!-- 内容 -->
-      <div class="sales_center">
-        <el-form :inline="true" :model="formInline" class="demo-form-inline">
-          <el-form-item label="工单类型">
-            <el-select v-model="formInline.region" placeholder="-">
-              <el-option label="Zone one" value="shanghai" />
-              <el-option label="Zone two" value="beijing" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="工单优先级">
-            <el-select v-model="formInline.region" placeholder="-">
-              <el-option label="Zone one" value="shanghai" />
-              <el-option label="Zone two" value="beijing" />
-            </el-select>
-          </el-form-item>
         </el-form>
       </div>
     </div>
     <!-- 按钮 -->
     <div class="add_btn" style="display: flex; justify-content: end">
-      <el-button type="primary" size="large">添加</el-button>
+      <el-button @click="publishOrder" type="primary" size="large">发布工单</el-button>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
 import { reactive, ref, onMounted } from "vue";
-import { Setting, Link, SuitcaseLine } from "@element-plus/icons-vue";
+import { Setting, Link } from "@element-plus/icons-vue";
+import type { UploadProps, UploadUserFile } from 'element-plus'
 import ApiClient from "../../../request/request";
-// 使用UserStore方法
 import { useUserStore } from "../../../store/store";
-// 引入响应式方法
 import { storeToRefs } from "pinia";
-// 实例化
-const UserStore = useUserStore();
-const getUserInfo = () => {
+
+const userStore = useUserStore();
+const getUsername = () => {
   setTimeout(() => {
-    // 使用ES6的构造解析获取userInfo
-    const { userInfo }: any = storeToRefs(UserStore);
-    console.log(userInfo.value);
-  }, 2000);
-};
-//姓名下拉框 TODO:这是测试代码
-const template_value2 = ref("-");
-// TODO:any需要优化
-const template_option2 = ref<any>([]);
-// TODO:这是测试代码，可以删除
+    const { userInfo }: any = storeToRefs(userStore);
+    orderData.user = userInfo.value.id
+  }, 2000)
+}
+
 const apiClient = ApiClient.getInstance();
-const getOrderInfo = async () => {
-  const orderRes = await apiClient.get<any>("/orderType");
-  template_option2.value = orderRes.data;
-
-  console.log(template_option2.value);
-};
-
-onMounted(() => {
-  getOrderInfo();
-  getUserInfo();
-});
 //表单排序方向
-//第一个框架
 const attachmentsPosition = ref("right");
-//第二个框架
 const templatePosition = ref("top");
-//表单数据绑定
-//第一个框架
-const attachments_input = reactive({
-  name: "",
-  region: "",
+
+/*
+--------------方法--------------
+*/
+// 获取工单类型
+const getAllOrderType = async () => {
+  try {
+    const res: any = await apiClient.get<any>('/orderType')
+    orderTypeList.value = res.data
+    console.log('orderTypeList.value', orderTypeList.value)
+  } catch (err) {
+    console.log(err)
+  }
+}
+// 判断工单优先级
+const decidePriority = async () => {
+  if (orderData.timeLimit <= 5) {
+    orderData.priority = 1
+  } else {
+    orderData.priority = 2
+  }
+}
+/*
+--------------初始化选择框数据--------------
+*/
+// 工单类型列表
+let orderTypeList = ref<any>([])
+onMounted(() => {
+  getAllOrderType()
+})
+/*
+--------------表单数据绑定--------------
+*/
+// 工单基本信息
+const orderData = reactive({
+  priority: 0,
+  status: 1,  // 工单状态默认为1（待处理）
+  orderType: '',
+  user: getUsername(),
+  phone: null,
+  title: "",
+  timeLimit: 0,
+  description: "",
+  fileList: null,
+  isOnLine: null,
+  address: '',
+  appointment: '',
 });
-//第三个框架
-const attribute_input = reactive({
-  value1: "",
-  value2: "",
-});
-// 第四个框架
-const formInline = reactive({
-  user: "",
-  region: "",
-});
-//第二个框架的下拉框
-//公司名称下拉框
-const template_value = ref("-");
-const template_option = [
-  {
-    value: "Option1",
-    label: "Option1",
-  },
-  {
-    value: "Option2",
-    label: "Option2",
-  },
-  {
-    value: "Option3",
-    label: "Option3",
-  },
-  {
-    value: "Option4",
-    label: "Option4",
-  },
-  {
-    value: "Option5",
-    label: "Option5",
-  },
-];
-//第三个框架的下拉框
-//工单类型的下拉框
-const sales_value1 = ref("-");
-const sales_option = [
-  {
-    value: "-",
-    label: "-",
-  },
-  {
-    value: "问题",
-    label: "问题",
-  },
-  {
-    value: "事物",
-    label: "事物",
-  },
-  {
-    value: "故障",
-    label: "故障",
-  },
-  {
-    value: "任务",
-    label: "任务",
-  },
-];
-//工单优先级的下拉框
-const sales_value2 = ref("-");
-const sales_option2 = [
-  {
-    value: "-",
-    label: "-",
-  },
-  {
-    value: "低",
-    label: "低",
-  },
-  {
-    value: "正常",
-    label: "正常",
-  },
-  {
-    value: "高",
-    label: "高",
-  },
-  {
-    value: "紧急",
-    label: "紧急",
-  },
-];
+
+// 附件
+const fileList = ref<UploadUserFile[]>([])
+/*
+--------------事件--------------
+*/
+// 发布工单
+const publishOrder = async () => {
+  try {
+    decidePriority()
+    const res: any = await apiClient.post<any>(
+      '/order',
+      orderData
+    )
+    console.log(res.data)
+  } catch (err) {
+    console.log('错误：' + err)
+  }
+}
 </script>
 <style scoped lang="scss">
 .box {
   padding: 10px;
   box-sizing: border-box;
-}
 
-// 模板
-.attachments,
-.template,
-.attribute,
-.sales {
-  background-color: white;
-  width: 100%;
-  margin-bottom: 20px;
-  padding: 20px;
-  box-sizing: border-box;
-}
+  .attachments {
+    display: flex;
+    justify-content: space-between;
 
-.attachments_upload {
-  position: relative;
-  margin-left: 50px;
-  margin-bottom: 0;
-}
+    .el-form,
+    .attachments_upload {
+      flex-grow: 1;
+    }
+  }
 
-.template_icon {
-  padding-left: 5px;
-}
+  // 模板
+  .box-item {
+    background-color: white;
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 20px;
+    box-sizing: border-box;
 
-.template_box,
-.attribute_box,
-.sales_box {
-  border-bottom: 2px solid #f3f1f6;
-}
 
-.template_title,
-.attribute_title,
-.sales_title {
-  font-weight: bold;
-  font-size: 15px;
-  position: relative;
-  bottom: 5px;
-}
+    // 添加附件
+    .attachments_upload {
+      position: relative;
+      margin-left: 50px;
+      margin-bottom: 0;
+    }
 
-.attribute_box_one {
-  width: 400px;
-  margin-top: 20px;
-}
+    // 标题栏
+    .template_box {
+      border-bottom: 2px solid #f3f1f6;
 
-.attribute_box_two {
-  width: 800px;
-  margin-top: 20px;
-}
+      // 标题
+      .title {
+        font-weight: bold;
+        font-size: 15px;
+        position: relative;
+        bottom: 5px;
+      }
 
-.attribute_center_one,
-.attribute_center_two {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
+      // 标题右侧图标
+      .template_icon {
+        padding-left: 5px;
+      }
+    }
 
-.sales_title2 {
-  font-weight: bold;
-  font-size: 15px;
-  padding-left: 20px;
-}
+    .attribute_box {
+      width: 400px;
+      margin-top: 20px;
 
-.sales_box2 {
-  height: 30px;
-  border-bottom: 2px solid #f3f1f6;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+      .attribute_center {
+        margin-bottom: 10px;
 
-.sales_center {
-  min-height: 100px;
-  display: flex;
-  align-items: center;
-}
+        .el-form {
+          display: flex;
+        }
+      }
+    }
 
-.add_btn {
-  margin-bottom: 20px;
+    .data-box {
+      width: 400px !important;
+      line-height: 40px;
+      margin: 20px;
+    }
+
+  }
 }
 </style>

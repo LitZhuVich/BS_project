@@ -2,17 +2,10 @@
   <el-page-header @back="onBack" class="header">
     <template #breadcrumb>
       <el-breadcrumb :separator-icon="ArrowRight" class="breadcrumb">
-        <el-breadcrumb-item
-          :to="{ name: 'index' }"
-          @click="BreadcrumbListReset"
-        >
+        <el-breadcrumb-item :to="{ name: 'index' }" @click="BreadcrumbListReset">
           微工单管理系统
         </el-breadcrumb-item>
-        <el-breadcrumb-item
-          v-for="(item, index) of list"
-          :to="(item as any).url"
-          :key="index"
-        >
+        <el-breadcrumb-item v-for="(item, index) of list" :to="(item as any).url" :key="index">
           {{ (item as any).title }}
         </el-breadcrumb-item>
       </el-breadcrumb>
@@ -48,6 +41,7 @@ const route = useRoute();
 const router = useRouter();
 // 接收父元素的数据
 const props = defineProps(["userInfo"]);
+
 // 实例化
 const breadcrumbStore = useBreadcrumbStore();
 const UserStore = useUserStore();
