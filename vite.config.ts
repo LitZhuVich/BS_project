@@ -16,4 +16,11 @@ export default defineConfig({
     }),
     UnpluginElementPlus(),
   ],
+  resolve: {
+    alias: {
+      "@": "../",
+      "@@": "../../",
+      "@@@": "../../../",
+    },
+  },
 });

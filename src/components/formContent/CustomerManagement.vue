@@ -104,18 +104,25 @@ interface options {
 }
 // 公司名验证
 const validateCompanyname = (rule: any, value: any, callback: any) => {
-  if (value === "") {
-    callback(new Error("请输入公司名"));
-  } else {
-    callback();
-  }
+  // if (value === "") {
+  //   callback(new Error("请输入公司名"));
+  // } else {
+  //   callback();
+  // }
+
+  callback();
 };
 // 用户名验证
 const validateUsername = (rule: any, value: any, callback: any) => {
   if (value === "") {
     callback(new Error("请输入更新人"));
   } else {
-    if (value == "admin" || value == "cly" || value == "litzhu") {
+    if (
+      value == "admin" ||
+      value == "litzhu" ||
+      value == "piqiu" ||
+      value == "cly"
+    ) {
       callback(new Error("请重新输入名称"));
     }
     callback();
@@ -123,12 +130,9 @@ const validateUsername = (rule: any, value: any, callback: any) => {
 };
 // 手机号验证
 const validatePhone = (rule: any, value: any, callback: any) => {
-  if (value === "") {
-    callback(new Error("请输入手机号"));
+  if (value.length != 11 && value !== "") {
+    callback(new Error("手机号需要11位"));
   } else {
-    if (value.length != 11) {
-      callback(new Error("手机号需要11位"));
-    }
     callback();
   }
 };
@@ -204,6 +208,9 @@ const submit = async (formEl: FormInstance | undefined): Promise<void> => {
           "/CustomerRepresentative/" + dialogInfo.value.id,
           dialogInfo.value.data
         );
+
+        console.log(res);
+
         // 提交
         if (res!.code == 200) {
           ElNotification({
@@ -211,6 +218,7 @@ const submit = async (formEl: FormInstance | undefined): Promise<void> => {
             message: "修改成功",
             type: "success",
           });
+          loading.value = false;
           cancel();
         } else {
           ElNotification({
@@ -218,9 +226,9 @@ const submit = async (formEl: FormInstance | undefined): Promise<void> => {
             message: res!.message,
             type: "error",
           });
+          loading.value = false;
         }
       }
-      loading.value = false;
       (props as any).updateData();
     } else {
       return false;

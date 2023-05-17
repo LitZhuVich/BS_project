@@ -172,7 +172,6 @@ const getUserInfo = () => {
   setTimeout(() => {
     // 使用ES6的构造解析获取userInfo
     const { userInfo }: any = storeToRefs(UserStore);
-    console.log(userInfo.value);
   }, 2000);
 };
 //姓名下拉框 TODO:这是测试代码
@@ -184,8 +183,6 @@ const apiClient = ApiClient.getInstance();
 const getOrderInfo = async () => {
   const orderRes = await apiClient.get<any>("/orderType");
   template_option2.value = orderRes.data;
-
-  console.log(template_option2.value);
 };
 
 onMounted(() => {

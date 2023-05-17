@@ -10,9 +10,11 @@
         </div>
         <div class="scp_avatar">
           <el-avatar
-            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-          >
-          </el-avatar>
+            :src="
+              userInfo.avator ??
+              'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+            "
+          ></el-avatar>
         </div>
         <el-button color="#626aef" type="text" class="scp_btn">修改</el-button>
       </div>
@@ -20,7 +22,7 @@
         <div class="div_box">
           <span>昵称</span>
         </div>
-        <el-text class="scp_text">litzhu</el-text>
+        <el-text class="scp_text">{{ userInfo.username }}</el-text>
         <el-button color="#626aef" type="text" class="scp_btn">修改</el-button>
       </div>
     </div>
@@ -30,7 +32,7 @@
         <div class="div_box">
           <span>手机号</span>
         </div>
-        <el-text class="scp_text">15164443169</el-text>
+        <el-text class="scp_text">{{ userInfo.phone }}</el-text>
         <el-button color="#626aef" type="text" class="scp_btn">修改</el-button>
         <el-button color="#626aef" type="text" class="scp_btn">解绑</el-button>
       </div>
@@ -39,7 +41,7 @@
         <div class="div_box">
           <span>邮箱</span>
         </div>
-        <el-text class="scp_text">15164443169@163.com</el-text>
+        <el-text class="scp_text">{{ userInfo.email }}</el-text>
         <el-button color="#626aef" type="text" class="scp_btn">修改</el-button>
         <el-button color="#626aef" type="text" class="scp_btn">解绑</el-button>
       </div>
@@ -52,7 +54,7 @@
         <el-button color="#626aef" type="text" class="scp_btn">修改</el-button>
       </div>
       <!-- 语言 -->
-      <div class="SettingTitle_conter_span">
+      <!-- <div class="SettingTitle_conter_span">
         <div class="div_box">
           <span>语言</span>
         </div>
@@ -66,9 +68,9 @@
             />
           </el-select>
         </div>
-      </div>
+      </div> -->
       <!-- 账号绑定 -->
-      <div class="SettingTitle_conter_span">
+      <!-- <div class="SettingTitle_conter_span">
         <div class="div_box">
           <span>账号绑定</span>
         </div>
@@ -77,20 +79,34 @@
           <el-text class="scp_wx">微信</el-text>
         </div>
         <el-button color="#626aef" type="text">解绑</el-button>
-      </div>
+      </div> -->
       <!-- 联系 -->
       <div class="SettingTitle_conter_span">
         <div class="div_box">
           <span>联系我们</span>
         </div>
-        <el-text class="scp_text">1552553595</el-text>
+        <el-text class="scp_text">
+          <el-text style="color: #31c3f6">zhuzhonghao666@163.com</el-text>
+          or
+          <el-text style="color: #31c3f6">huachenchen88@gmail</el-text>
+          or
+          <el-text style="color: #31c3f6">1464243458@qq.com</el-text>
+        </el-text>
         <el-button color="#626aef" type="text" class="scp_btn">联系</el-button>
       </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive, toRefs } from "vue";
+import { ref, reactive, toRefs, onMounted } from "vue";
+import { useUserStore } from "../../store/store";
+import { storeToRefs } from "pinia";
+import ApiClient from "../../request/request";
+const apiClient = ApiClient.getInstance();
+const userStore = useUserStore();
+const { userInfo } = storeToRefs(userStore);
+// const
+
 const state = reactive({
   circleUrl:
     "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
@@ -98,7 +114,6 @@ const state = reactive({
     "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
   sizeList: ["small", "", "large"] as const,
 });
-
 const { circleUrl, squareUrl, sizeList } = toRefs(state);
 const value = ref("");
 const options = [
@@ -119,6 +134,7 @@ const options = [
     label: "日語",
   },
 ];
+onMounted(() => {});
 </script>
 <style lang="scss" scoped>
 .Settingbox {

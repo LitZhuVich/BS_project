@@ -27,18 +27,18 @@ export const useUserStore = defineStore("user", {
         sessionStorage.setItem("role", this.userInfo.role_name);
         console.log(this.userInfo);
         // TODO:现在采用登录过期之后直接让用户重新登录
-        if (this.userInfo.message == "Unauthenticated.") {
-          this.clearUserInfo();
-          router.push({
-            name: "login",
-          });
-        }
+        // if (this.userInfo.message == "Unauthenticated.") {
+        //   // this.clearUserInfo();
+        //   router.push({
+        //     name: "login",
+        //   });
+        // }
       } catch (error) {
         console.log(error);
         // TODO:现在采用登录过期之后直接让用户重新登录
-        router.push({
-          name: "login",
-        });
+        // router.push({
+        //   name: "login",
+        // });
       }
     },
     // 清空用户信息
@@ -116,10 +116,6 @@ export const useDialogStore = defineStore("dialog", {
         // 弹窗ID,
         id: 0,
       },
-      // 确认删除是否显示弹窗
-      confirmDelete: false,
-      // 确定删除地址
-      delUrl: "",
     };
   },
   actions: {

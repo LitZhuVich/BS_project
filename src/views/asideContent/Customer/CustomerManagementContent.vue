@@ -104,22 +104,26 @@
   <el-dialog v-model="dialogInfo.isShow" :title="dialogInfo.title">
     <CustomerManagementDialog :updateData="getTableData" />
   </el-dialog>
-
-  <deleteDialog :updateData="getTableData" />
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted, watchEffect, reactive } from "vue";
 import { debounce } from "lodash"; // 引入防抖方法
+import type { Action } from "element-plus";
 import { Refresh, User } from "@element-plus/icons-vue";
-import { ElConfigProvider, ElTable, ElNotification } from "element-plus";
+import {
+  ElConfigProvider,
+  ElTable,
+  ElNotification,
+  ElMessage,
+  ElMessageBox,
+} from "element-plus";
 import { useDialogStore } from "../../../store/store";
 import { storeToRefs } from "pinia";
 import zhCn from "element-plus/lib/locale/lang/zh-cn"; // 引入中文包
 import { Search, Plus, EditPen, CloseBold } from "@element-plus/icons-vue";
 import ApiClient from "../../../request/request";
 import CustomerManagementDialog from "../../../components/formContent/CustomerManagement.vue";
-import deleteDialog from "../../../components/confirmDelete.vue";
 import type {
   apiResponseCustomerRepresentative,
   apiResponseData,
@@ -129,7 +133,7 @@ import type { CustomerRepresentativeInfo } from "../../../model/users";
 const emit = defineEmits(["updateData"]);
 const apiClient = ApiClient.getInstance();
 const dialogStore = useDialogStore();
-const { dialogInfo, confirmDelete, delUrl }: any = storeToRefs(dialogStore);
+const { dialogInfo }: any = storeToRefs(dialogStore);
 // 搜索方式接口
 interface options {
   value: string;
@@ -240,6 +244,8 @@ const filterTableData = async (
     console.log(error);
   }
 };
+
+const refreshDat = () => {};
 // 创建一个防抖函数 在输入框输入最后一个字 500毫秒之后执行 filterTableData函数
 const debouncedFunc = debounce(filterTableData, 500);
 // 定义当分页大小变化时
@@ -290,25 +296,71 @@ const handleEdit = async (index: number, row: CustomerRepresentativeInfo) => {
 
 // 定义删除操作
 const handleDelete = async (index: number, row: CustomerRepresentativeInfo) => {
-  // 传入需要删除的数据
-  dialogInfo.value.data.companyname = row.companyname;
-  delUrl.value = "CustomerRepresentative";
-  dialogInfo.value.id = row.id;
-  confirmDelete.value = true;
+  ElMessageBox.confirm(
+    `是否要删除公司名为${row.companyname}?用户为${row.username}的用户？`,
+    "是否确认删除",
+    {
+      distinguishCancelAndClose: true,
+      confirmButtonText: "删除",
+      cancelButtonText: "取消",
+      type: "warning",
+    }
+  )
+    .then(async () => {
+      const response = await apiClient.delete<apiResponseData>(
+        "/CustomerRepresentative/" + row.id
+      );
+      // 在页面上展示删除成功的提示消息
+      ElMessage({
+        type: "success",
+        message: `删除了公司：${dialogInfo.value.data.companyname}`,
+      });
+      if (searchValue.value == "") {
+        getTableData();
+      } else {
+        filterTableData(searchValue.value, searchOptionChoosed.value);
+      }
+    })
+    .catch((action: Action) => {
+      console.log(action);
+      ElMessage({
+        type: "info",
+        message: action === "cancel" ? "取消删除" : "删除失败",
+      });
+    });
 };
 
 const multipleTableRef = ref<InstanceType<typeof ElTable>>();
 const multipleSelection = ref<any>([]);
 // 点击了批量删除
 const deleteMany = async () => {
-  const ids = multipleSelection.value.map((val: any) => val.id);
-  const promises = ids.map((id: any) =>
-    apiClient.delete<apiResponseUser & apiResponseData>(
-      "/CustomerRepresentative/" + id
-    )
-  );
-  const res = apiClient.all(promises);
-  getTableData();
+  ElMessageBox.confirm(`是否要执行批量删除的操作`, "是否确认删除", {
+    distinguishCancelAndClose: true,
+    confirmButtonText: "删除",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+    .then(async () => {
+      const ids = multipleSelection.value.map((val: any) => val.id);
+      const promises = ids.map((id: any) =>
+        apiClient.delete<apiResponseUser & apiResponseData>(
+          "/CustomerRepresentative/" + id
+        )
+      );
+      const res = apiClient.all(promises);
+      if (searchValue.value == "") {
+        getTableData();
+      } else {
+        filterTableData(searchValue.value, searchOptionChoosed.value);
+      }
+    })
+    .catch((action: Action) => {
+      console.log(action);
+      ElMessage({
+        type: "info",
+        message: action === "cancel" ? "取消删除" : "删除失败",
+      });
+    });
 };
 // 获取已点击的按钮数据
 const handleSelectionChange = (val: any) => {
@@ -327,8 +379,8 @@ onMounted(() => {
   getTableData();
 });
 
+// 使用 watchEffect 监听搜索字段（关键字和搜索类型）变化并过滤表格数据
 watchEffect(() => {
-  // 使用 watchEffect 监听搜索字段（关键字和搜索类型）变化并过滤表格数据
   debouncedFunc(searchValue.value, searchOptionChoosed.value);
 });
 </script>

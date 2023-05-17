@@ -110,6 +110,7 @@ import notice from "../../components/index/notice.vue";
 import { ref, onMounted } from "vue";
 import ApiClient from "../../request/request";
 const apiClient = ApiClient.getInstance();
+
 // TODO:测试代码
 const getOrderInfo = async () => {
   const orderRes: any = await apiClient.get<any>("/orderType");
