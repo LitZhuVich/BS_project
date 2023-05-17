@@ -20,7 +20,6 @@ import { onMounted } from "vue";
 import AsideBar from "../components/Aside.vue"; // 侧边栏
 import HeaderBar from "../components/Header.vue";
 import Loading from "../views/Loading.vue";
-import type { apiResponseUser } from "../model/interface";
 import { useUserStore } from "../store/store";
 import { storeToRefs } from "pinia";
 const userStore = useUserStore();
