@@ -25,6 +25,8 @@ export const useUserStore = defineStore("user", {
         const userInfo = await apiClient.get<apiResponseUser>("/user");
         this.userInfo = userInfo!.data;
         sessionStorage.setItem("role", this.userInfo.role_name);
+        sessionStorage.setItem("name", this.userInfo.username);
+        sessionStorage.setItem("UID", this.userInfo.id);
         console.log(this.userInfo);
         // TODO:现在采用登录过期之后直接让用户重新登录
         // if (this.userInfo.message == "Unauthenticated.") {

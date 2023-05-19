@@ -242,6 +242,11 @@ const handleCurrentChange = (val: number) => {
 }
 
 .el-table {
+  .el-tag {
+    margin: 3px;
+    cursor: pointer;
+  }
+
   .column-expand {
     padding: 10px 20px;
     font-size: 18px;

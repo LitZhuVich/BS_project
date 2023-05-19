@@ -76,7 +76,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { reactive, ref, computed, onMounted } from "vue";
 import { Search } from "@element-plus/icons-vue";
 // ElConfigProvider 组件
 import { ElConfigProvider } from "element-plus";
@@ -84,21 +84,13 @@ import { ElConfigProvider } from "element-plus";
 import zhCn from "element-plus/lib/locale/lang/zh-cn";
 import ApiClient from "../../../request/request";
 import { useUserStore } from "../../../store/store";
-import { storeToRefs } from "pinia";
 const apiClient = ApiClient.getInstance();
-
-const userStore = useUserStore();
-const getUsername = () => {
-  setTimeout(() => {
-    const { userInfo }: any = storeToRefs(userStore);
-    console.log(userInfo.value.username)
-  }, 2000)
-}
-
-
+let user = reactive({
+  user_id: Number(sessionStorage.getItem("UID"))
+})
+// console.log(user.user_id)
 onMounted(() => {
-  getOrders(),
-    getUsername()
+  getOrders()
 })
 // 表单总数
 const pageTotal = ref<number>(0);
@@ -134,9 +126,11 @@ let tableData: any = ref([]);
 // 获取工单数据
 const getOrders = async () => {
   loading.value = true;
-  const res: any = await apiClient.get<any>(
-    `/orderPage?pageSize=${pageSize.value}&page=${currentPage.value}`
+  const res: any = await apiClient.post<any>(
+    `/getOrderByUsername?pageSize=${pageSize.value}&page=${currentPage.value}`,
+    user
   )
+  console.log(res.data)
   tableData.value = res.data.data
   // 页面数据长度
   pageTotal.value = res!.data.total;
@@ -257,9 +251,30 @@ const handleCurrentChange = (val: number) => {
     }
   }
 
-  .el-tag {
-    margin: 3px;
-    cursor: pointer;
+  .el-table {
+    .el-tag {
+      margin: 3px;
+      cursor: pointer;
+    }
+
+    .column-expand {
+      padding: 10px 20px;
+      font-size: 18px;
+
+      .top {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+    }
+  }
+
+  .demo-pagination-block {
+    height: 50px;
+    line-height: 50px;
+    display: flex;
+    justify-content: center;
   }
 }
 </style>
