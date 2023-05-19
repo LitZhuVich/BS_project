@@ -26,23 +26,13 @@ export const useUserStore = defineStore("user", {
         this.userInfo = userInfo!.data;
         sessionStorage.setItem("role", this.userInfo.role_name);
         console.log(this.userInfo);
-        // TODO:现在采用登录过期之后直接让用户重新登录
-        // if (this.userInfo.message == "Unauthenticated.") {
-        //   // this.clearUserInfo();
-        //   router.push({
-        //     name: "login",
-        //   });
-        // }
       } catch (error) {
         console.log(error);
-        // TODO:现在采用登录过期之后直接让用户重新登录
-        // router.push({
-        //   name: "login",
-        // });
       }
     },
     // 清空用户信息
     clearUserInfo() {
+      localStorage.removeItem("Rtoken");
       localStorage.removeItem("token");
       localStorage.removeItem("expires_in");
       sessionStorage.removeItem("role");

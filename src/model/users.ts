@@ -40,7 +40,7 @@ export interface CustomerRepresentativeInfo extends user {
   }>;
 }
 // 该类型用于表示当有多页结果时，链接到其他页面的信息
-interface Link {
+export interface Link {
   url: string | null;
   label: string;
   active: boolean;

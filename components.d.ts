@@ -58,6 +58,7 @@ declare module '@vue/runtime-core' {
     ElTableV2: typeof import('element-plus/es')['ElTableV2']
     ElTag: typeof import('element-plus/es')['ElTag']
     ElText: typeof import('element-plus/es')['ElText']
+    ElUpload: typeof import('element-plus/es')['ElUpload']
     Header: typeof import('./src/components/Header.vue')['default']
     Line: typeof import('./src/components/visualGraph/line.vue')['default']
     MyOrderList: typeof import('./src/components/index/myOrderList.vue')['default']

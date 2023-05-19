@@ -245,7 +245,6 @@ const filterTableData = async (
   }
 };
 
-const refreshDat = () => {};
 // 创建一个防抖函数 在输入框输入最后一个字 500毫秒之后执行 filterTableData函数
 const debouncedFunc = debounce(filterTableData, 500);
 // 定义当分页大小变化时
@@ -297,7 +296,7 @@ const handleEdit = async (index: number, row: CustomerRepresentativeInfo) => {
 // 定义删除操作
 const handleDelete = async (index: number, row: CustomerRepresentativeInfo) => {
   ElMessageBox.confirm(
-    `是否要删除公司名为${row.companyname}?用户为${row.username}的用户？`,
+    `是否要删除第${index + 1}行、公司名为${row.companyname}?`,
     "是否确认删除",
     {
       distinguishCancelAndClose: true,

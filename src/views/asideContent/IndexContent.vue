@@ -111,10 +111,10 @@ import { ref, onMounted } from "vue";
 import ApiClient from "../../request/request";
 const apiClient = ApiClient.getInstance();
 
-// TODO:测试代码
+// TODO:测试代码可以删除
 const getOrderInfo = async () => {
   const orderRes: any = await apiClient.get<any>("/orderType");
-  console.log(orderRes.data);
+  // console.log(orderRes);
 };
 
 onMounted(() => {

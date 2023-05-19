@@ -126,14 +126,14 @@ const engineerOrders = [
 ];
 
 const Row = ({ rowData, rowIndex, cells, columns }: any) => {
-  console.log(rowIndex);
-  let width = Number.parseInt(cells[colSpanIndex].props.style.width) * 2;
+  // console.log(rowIndex);
+  // let width = Number.parseInt(cells[colSpanIndex].props.style.width) * 2;
 
-  engineerOrders.forEach((engineers) => {
-    engineers.orders.forEach((order) => {
-      console.log(order);
-    });
-  });
+  // engineerOrders.forEach((engineers) => {
+  //   engineers.orders.forEach((order) => {
+  //     console.log(order);
+  //   });
+  // });
 
   return cells;
 };

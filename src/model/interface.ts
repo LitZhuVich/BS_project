@@ -21,6 +21,7 @@ export interface apiResponse<T> {
   data: T;
   message: string;
 }
+
 // 使用泛型创建具体的接口类型
 export type apiResponseData = apiResponse<string> | undefined;
 export type apiResponseUser = apiResponse<user> | undefined;
