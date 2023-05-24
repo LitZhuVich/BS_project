@@ -21,81 +21,30 @@
             <!--日历表内容 -->
             <div class="cal_m_days">
                 <!-- 第几行 -->
-                <div v-for="(ds, index) in monthData" :key="index" class="cal_m_day_line">
+                <div v-for="(ds, index) in  monthData " :key="index" class="cal_m_day_line">
                     <!-- 每行内容 -->
-                    <div v-for="d in ds" :key="d.day" class="cal_m_day_cell" :style="{ color: getCellColor(d) }"
+                    <div v-for="d in ds " :key="d.day" class="cal_m_day_cell" :style="{ color: getCellColor(d) }"
                         @mouseenter="mouseenter(d, $event)" @mouseleave="mouseleave(d, $event)">
                         <div class="itemDay">{{ d.day }}</div>
-                        <!-- {{ ds[index].date.Format("yyyy-MM-dd") }} -->
-                        <!-- {{ d.date.Format("yyyy-MM-dd") }} -->
                         <slot :name="d.fullYear + '-' + d.month + '-' + d.day"></slot>
-                        <!-- 正常卡 -->
-                        <div v-if="d.type == 0 &&
-                            setDataList(d.date).typeName == '正常卡'
-                            " class="ZhengChang">
-                            <div class="ZhengChangTitle">正常卡:{{ setDataList(d.date).jobTime }}次</div>
-                            <div class="ZhengChangDian">
-                                <div></div>
-                                <div></div>
-                                <div></div>
+                        <!-- 卡片 -->
+                        <template v-for="user in users">
+                            <div v-if="d.type == 0 &&
+                                setDataList(d.date).user_id == user.id
+                                " :style="{
+        background: cardColor[setDataList(d.date).user_id - 1].backgroundColor,
+        color: cardColor[setDataList(d.date).user_id - 1].color
+    }" class="Card">
+                                <div class="CardTitle">{{ setDataList(d.date).username }} : 期限{{
+                                    setDataList(d.date).time_limit }}天
+                                </div>
+                                <div class="CardDot">
+                                    <div v-for="i in 3"
+                                        :style="{ background: cardColor[setDataList(d.date).user_id - 1].color }">
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <!-- 请假 -->
-                        <div v-if="d.type == 0 &&
-                            setDataList(d.date).typeName == '请假'
-                            " class="Qingjia">
-                            <div class="QingjiaTitle">请假:事假{{ setDataList(d.date).jobTime }}</div>
-                            <div class="QingjiaDian">
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                            </div>
-                        </div>
-                        <!-- 加班 -->
-                        <div v-if="d.type == 0 &&
-                            setDataList(d.date).typeName == '加班'
-                            " class="JiaBan">
-                            <div class="JiaBanTitle">加班:{{ setDataList(d.date).jobTime }}h</div>
-                            <div class="JiaBanDian">
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                            </div>
-                        </div>
-                        <!-- 出差 -->
-                        <div v-if="d.type == 0 &&
-                            setDataList(d.date).typeName == '出差'
-                            " class="ChuChai" @click="ss(index)">
-                            <div class="ChuChaiTitle">出差{{ setDataList(d.date).jobTime }}</div>
-                            <div class="ChuChaiDian">
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                            </div>
-                        </div>
-                        <!-- 异常卡 -->
-                        <div v-if="d.type == 0 &&
-                            setDataList(d.date).typeName == '异常卡'
-                            " class="YiChang" @click="ss(index)">
-                            <div class="YiChangTitle">异常卡{{ setDataList(d.date).jobTime }}</div>
-                            <div class="YiChangDian">
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                            </div>
-                        </div>
-
-                        <!-- 假期 -->
-                        <div v-if="d.type == 0 &&
-                            setDataList(d.date).typeName == '假期'
-                            " class="JiaQi">
-                            <div class="JiaQiTitle">假期{{ setDataList(d.date).jobTime }}</div>
-                            <div class="JiaQiDian">
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                            </div>
-                        </div>
+                        </template>
                     </div>
                 </div>
             </div>
@@ -104,48 +53,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, toRefs, onMounted, defineEmits } from "vue";
+import { ref, reactive, onMounted, defineEmits } from "vue";
+import ApiClient from "../../request/request";
+const apiClient = ApiClient.getInstance();
 
 const $emit = defineEmits(["enter", "leave", "changeMonth"])
-const dataList = reactive({
-    datas: [
-        {
-            time: "2023-01-29",
-            typeName: "正常卡",
-            jobTime: 8
-        },
-        {
-            time: "2023-01-29",
-            typeName: "请假",
-            jobTime: 8
-        },
-        {
-            time: "2023-01-10",
-            typeName: "请假",
-            jobTime: 8
-        },
-        {
-            time: "2023-01-22",
-            typeName: "加班",
-            jobTime: 4
-        },
-        {
-            time: "2023-01-11",
-            typeName: "出差",
-            jobTime: 14
-        },
-        {
-            time: "2023-01-14",
-            typeName: "异常卡",
-            jobTime: 8
-        },
-        {
-            time: "2023-01-02",
-            typeName: "假期",
-            jobTime: 11
-        },
-    ],
-})
+let orderList = reactive({ datas: [] })
 
 let now = ref(new Date()) //当前时间：Fri Jul 29 2022 09:57:33 GMT+0800 (中国标准时间)
 let year = ref(0)
@@ -156,27 +69,45 @@ let monthData = ref([]) //月数据容器
 let currentYear = ref(new Date().getFullYear()) //当前年：2022
 let currentMonth = ref(new Date().getMonth() + 1) //当前月：7
 let currentDay = ref(new Date().getDate()) //当前天：29
+let users = ref([])
+const cardColor = [{
+    backgroundColor: 'rgba(16, 154, 249, 0.2)',
+    color: 'rgba(16, 154, 249, 1)'
+}, {
+    backgroundColor: 'rgba(255, 199, 0, 0.2)',
+    color: 'rgba(255, 199, 0, 1)'
+}, {
+    backgroundColor: 'rgba(36, 0, 255, 0.2)',
+    color: 'rgba(36, 0, 255, 1)'
+}, {
+    backgroundColor: 'rgba(240, 92, 39, 0.2)',
+    color: 'rgba(240, 92, 39, 1)'
+}, {
+    backgroundColor: 'rgba(29, 209, 155, 0.2)',
+    color: 'rgba(29, 209, 155, 1)'
+}, {
+    backgroundColor: 'rgba(255, 167, 40, 0.2)',
+    color: '#ffa728'
+}]
 onMounted(() => {
+    getOrders();
     setYearMonth(now.value);
     generateMonth(now.value);
-    getJobTime()
+    getAllUsers();
 })
+// 获取所有用户
+async function getAllUsers() {
+    const res: any = await apiClient.get<any>(
+        '/CustomerRepresentative/getAllUsers'
+    )
+    users.value = res.data
+}
 
-function getJobTime() {
-    dataList.datas.forEach((item) => {
-        console.log("223", jobTime)
-
-        // check if animal type has already been added to newObj
-        if (!jobTime.value[item.typeName]) {
-            // If it is the first time seeing this animal type
-            // we need to add title and points to prevent errors
-            jobTime.value[item.typeName] = {};
-            jobTime.value[item.typeName] = 0;
-        }
-        // add animal points to newObj for that animal type.
-        jobTime.value[item.typeName] += item.jobTime
-    })
-    console.log("22", JSON.stringify(jobTime.value["请假"]))
+async function getOrders() {
+    const res: any = await apiClient.get<any>(
+        '/order'
+    )
+    orderList.datas = res.data
 }
 
 // 通过输入日期，匹配当天的所有数据
@@ -184,8 +115,10 @@ function getJobTime() {
 function setDataList(value) {
     let object = {};
     const date = dateFormat("YYYY-mm-dd", value)
-    dataList.datas.forEach((element) => {
-        if (element.time == date) {
+    orderList.datas.forEach((element) => {
+        // 将工单里的预约时间（string类型）转为Date类型
+        let appointment = new Date(element.appointment)
+        if (dateFormat("YYYY-mm-dd", appointment) == date) {
             object = element;
         }
     });
@@ -196,7 +129,7 @@ function setYearMonth(now) {
     year.value = now.getFullYear();
     month.value = now.getMonth() + 1;
 }
-
+// 上一年
 function preYear() {
     let n = now.value;
     let date = new Date(
@@ -211,7 +144,7 @@ function preYear() {
 
     setYearMonthInfos(date);
 }
-
+// 上一月
 function preMonth() {
     let n = now.value;
     let date = new Date(
@@ -226,7 +159,7 @@ function preMonth() {
 
     setYearMonthInfos(date);
 }
-
+// 下一年
 function nextYear() {
     let n = now.value;
     let date = new Date(
@@ -241,7 +174,7 @@ function nextYear() {
 
     setYearMonthInfos(date);
 }
-
+// 下个月
 function nextMonth() {
     let n = now.value;
     let date = new Date(
@@ -257,7 +190,7 @@ function nextMonth() {
     setYearMonthInfos(date);
 }
 
-function setYearMonthInfos(date) {
+function setYearMonthInfos(date: any) {
 
     setYearMonth(date);
     generateMonth(date);
@@ -497,183 +430,28 @@ function dateFormat(fmt, date) {
     }
 }
 
-// 正常卡
-.ZhengChang {
+// 卡片
+.Card {
     margin: 0px 0px 0px 8px;
-    width: 120px;
-    height: 35px;
+    width: 80%;
+    height: 25px;
     border-radius: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0px 10px;
-    background: rgba(16, 154, 249, 0.2);
-    color: rgba(16, 154, 249, 1);
 
-    .ZhengChangTitle {}
-
-    .ZhengChangDian {
+    .CardDot {
         div {
             width: 4px;
             height: 4px;
             margin-bottom: 2px;
             border-radius: 4px;
-            background: rgba(16, 154, 249, 1);
         }
     }
 }
 
-.ZhengChang:hover {
-    transform: scale(1.1);
-}
-
-// 请假
-.Qingjia {
-    margin: 0px 0px 0px 8px;
-    width: 120px;
-    height: 35px;
-    border-radius: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0px 10px;
-    background: rgba(255, 199, 0, 0.2);
-    color: rgba(255, 199, 0, 1);
-
-    .QingjiaTitle {}
-
-    .QingjiaDian {
-        div {
-            width: 4px;
-            height: 4px;
-            margin-bottom: 2px;
-            border-radius: 4px;
-            background: rgba(255, 199, 0, 1);
-        }
-    }
-}
-
-.Qingjia:hover {
-    transform: scale(1.1);
-}
-
-// 加班
-.JiaBan {
-    margin: 0px 0px 0px 8px;
-    width: 120px;
-    height: 35px;
-    border-radius: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0px 10px;
-    background: rgba(36, 0, 255, 0.2);
-    color: rgba(36, 0, 255, 1);
-
-    .JiaBanTitle {}
-
-    .JiaBanDian {
-        div {
-            width: 4px;
-            height: 4px;
-            margin-bottom: 2px;
-            border-radius: 4px;
-            background: rgba(36, 0, 255, 1);
-        }
-    }
-}
-
-.JiaBan:hover {
-    transform: scale(1.1);
-}
-
-// 出差
-.ChuChai {
-    margin: 0px 0px 0px 8px;
-    width: 120px;
-    height: 35px;
-    border-radius: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0px 10px;
-    background: rgba(255, 167, 40, 0.2);
-    color: #ffa728;
-
-    .ChuChaiTitle {}
-
-    .ChuChaiDian {
-        div {
-            width: 4px;
-            height: 4px;
-            margin-bottom: 2px;
-            border-radius: 4px;
-            background: #ffa728;
-        }
-    }
-}
-
-.ChuChai:hover {
-    transform: scale(1.1);
-}
-
-// 异常卡
-.YiChang {
-    margin: 0px 0px 0px 8px;
-    width: 120px;
-    height: 35px;
-    border-radius: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0px 10px;
-    background: rgba(240, 92, 39, 0.2);
-    color: rgba(240, 92, 39, 1);
-
-    .YiChangTitle {}
-
-    .YiChangDian {
-        div {
-            width: 4px;
-            height: 4px;
-            margin-bottom: 2px;
-            border-radius: 4px;
-            background: rgba(240, 92, 39, 1);
-        }
-    }
-}
-
-.YiChang:hover {
-    transform: scale(1.1);
-}
-
-// 假期
-.JiaQi {
-    margin: 0px 0px 0px 8px;
-    width: 120px;
-    height: 35px;
-    border-radius: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0px 10px;
-    background: rgba(29, 209, 155, 0.2);
-    color: rgba(29, 209, 155, 1);
-
-    .JiaQiTitle {}
-
-    .JiaQiDian {
-        div {
-            width: 4px;
-            height: 4px;
-            margin-bottom: 2px;
-            border-radius: 4px;
-            background: rgba(29, 209, 155, 1);
-        }
-    }
-}
-
-.JiaQi:hover {
+.Card:hover {
     transform: scale(1.1);
 }
 </style>
