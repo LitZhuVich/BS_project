@@ -2,7 +2,7 @@ export interface user {
   id: number;
   username: string;
   companyname: string;
-  avator: string | null;
+  avatar: string | null;
   phone: string | null;
   address: string | null;
   email: string | null;

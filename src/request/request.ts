@@ -51,7 +51,6 @@ export default class ApiClient {
             isRefreshing = true;
             return this.get("/refresh")
               .then((res: any) => {
-                console.log(res.data);
                 if (res.data == "无法刷新令牌") {
                   window.location.href = "/login";
                   this.clearStorage();
@@ -83,37 +82,6 @@ export default class ApiClient {
       }
     );
   }
-  // 刷新token
-  /* public async refreshToken(error: AxiosError) {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        router.push({ name: "login" });
-        return Promise.reject("未登录或登录信息已过期");
-      }
-      // 发送刷新 Token 的请求
-      const response: apiResponseTokenType = await this.axiosInstance.get(
-        "/refresh"
-      );
-      // 将新的 Token 存储到本地存储中
-      localStorage.setItem("token", response!.data.access_token);
-      localStorage.setItem("refreshToken", response!.data.access_token);
-      // 获取原始请求的配置信息
-      const originalRequest: any = error.config;
-      // 设置新的 Token 到头部信息中
-      originalRequest.headers.Authorization = `Bearer ${
-        response!.data.access_token
-      }`;
-      // 重新发送原始请求
-      return this.axiosInstance(originalRequest);
-    } catch (error) {
-      // 如果刷新 Token 失败，则跳转到登录页
-      router.push({
-        name: "login",
-      });
-      return Promise.reject(error);
-    }
-  } */
 
   // 清除缓存;
   public clearStorage() {
@@ -122,6 +90,7 @@ export default class ApiClient {
     localStorage.removeItem("expires_in");
     sessionStorage.removeItem("role");
   }
+
   // 引入该文件之后调用此方法
   public static getInstance(): ApiClient {
     // 防止多次实例化

@@ -175,6 +175,7 @@ const resetForm = (formEl: FormInstance | undefined): void => {
   justify-content: center;
   align-items: center;
   overflow: hidden;
+
   .demo-ruleForm {
     width: 350px;
     padding: 15px;
@@ -183,6 +184,7 @@ const resetForm = (formEl: FormInstance | undefined): void => {
     box-shadow: 5px 5px 20px 5px #444;
     border: 1px solid var(--el-border-color);
     border-radius: 10px;
+
     .title {
       text-align: center;
       margin-bottom: 20px;

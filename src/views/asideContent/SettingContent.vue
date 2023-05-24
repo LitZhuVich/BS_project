@@ -124,24 +124,27 @@
       </div>
     </div>
   </div>
-
   <el-dialog v-model="dialogFormVisible" title="添加头像">
     <el-upload
+      ref="uploadRef"
       class="avatar-uploader"
-      action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+      :action="patchAvatarApi"
       :show-file-list="false"
       :on-success="handleAvatarSuccess"
       :before-upload="beforeAvatarUpload"
     >
-      <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+      <img
+        v-if="userInfo.avator"
+        :src="imageUrl || userInfo.avator"
+        class="avatar"
+      />
       <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
     </el-upload>
+    <el-text>点击修改图片</el-text>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">
-          确认
-        </el-button>
+        <el-button type="primary" @click="submitAvatar()"> 确认 </el-button>
       </span>
     </template>
   </el-dialog>
@@ -151,22 +154,19 @@
 import { ref, reactive, toRefs, onMounted } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
-import type { UploadProps } from "element-plus";
+import type { UploadProps, UploadInstance } from "element-plus";
 import { useUserStore } from "../../store/store";
 import { storeToRefs } from "pinia";
-import { apiResponseUser } from "../../model/interface";
+import type {
+  apiResponseUser,
+  apiResponseUserAvatar,
+} from "../../model/interface";
 import ApiClient from "../../request/request";
 const apiClient = ApiClient.getInstance();
 const userStore = useUserStore();
 const { userInfo } = storeToRefs(userStore);
 const dialogFormVisible = ref(false);
-const state = reactive({
-  circleUrl:
-    "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
-  squareUrl:
-    "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
-  sizeList: ["small", "", "large"] as const,
-});
+
 /* const { circleUrl, squareUrl, sizeList } = toRefs(state);
 const value = ref("");
 const options = [
@@ -187,20 +187,26 @@ const options = [
     label: "日語",
   },
 ]; */
+// 修改头像名称
+const patchAvatarApi = `http://www.bstestserver.com/api/v1/CustomerRepresentative/${userInfo.value.id}/avatar`;
 
 // 图片路径
 const imageUrl = ref("");
 
+const uploadRef = ref<UploadInstance>();
+
+const formData = new FormData();
 const handleAvatarSuccess: UploadProps["onSuccess"] = (
   response,
   uploadFile
 ) => {
   imageUrl.value = URL.createObjectURL(uploadFile.raw!);
+  formData.append("avatar", uploadFile.raw!);
 };
 
 const beforeAvatarUpload: UploadProps["beforeUpload"] = (rawFile) => {
-  if (rawFile.size / 1024 / 1024 > 2) {
-    ElMessage.error("头像大小不能超过2MB");
+  if (rawFile.size / 1024 / 1024 > 5) {
+    ElMessage.error("头像大小不能超过5MB");
     return false;
   }
   return true;
@@ -208,7 +214,33 @@ const beforeAvatarUpload: UploadProps["beforeUpload"] = (rawFile) => {
 
 // 修改头像
 const updateAvatar = (): void => {
+  // 显示修改头像
   dialogFormVisible.value = true;
+};
+
+const submitAvatar = async (): Promise<void> => {
+  const res = await apiClient.post<apiResponseUserAvatar>(
+    `/CustomerRepresentative/${userInfo.value.id}/avatar`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+  if (typeof res!.data.avatar_url == "string") {
+    userInfo.value.avator = res!.data.avatar_url;
+    ElMessage({
+      type: "success",
+      message: `头像修改成功`,
+    });
+    dialogFormVisible.value = false;
+  } else {
+    ElMessage({
+      type: "error",
+      message: `头像修改失败`,
+    });
+  }
 };
 // 修改名称
 const updateUsername = (): void => {
@@ -224,6 +256,7 @@ const updateUsername = (): void => {
             username: value,
           }
         );
+
         if (typeof res!.data.username == "string") {
           userInfo.value.username = res!.data.username;
           ElMessage({
@@ -283,13 +316,14 @@ const updatePhone = (): void => {
       });
     });
 };
+
 // 修改邮箱
 const updateEmail = (): void => {
   ElMessageBox.prompt("输入邮箱：", "输入框", {
     confirmButtonText: "确认",
     cancelButtonText: "关闭",
     inputPattern:
-      /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+      /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/, // 邮箱的正则表达式
     inputErrorMessage: "无效的邮箱",
   })
     .then(async ({ value }) => {
@@ -300,12 +334,14 @@ const updateEmail = (): void => {
             email: value,
           }
         );
+        console.log(res!.data.email);
         if (typeof res!.data.email == "string") {
+          userInfo.value.email = res!.data.email;
           ElMessage({
             type: "success",
             message: `你的邮箱:${value}`,
           });
-          userInfo.value.email = res!.data.email;
+          console.log(userInfo.value);
         } else {
           ElMessage({
             type: "error",

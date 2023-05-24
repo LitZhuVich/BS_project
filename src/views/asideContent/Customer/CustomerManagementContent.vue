@@ -46,7 +46,6 @@
         </div>
       </div>
       <div class="table">
-        <!-- TODO:高度需改成动态，以便响应式 -->
         <el-table
           ref="multipleTableRef"
           :data="filterData"
@@ -193,7 +192,6 @@ const getTableData = async (): Promise<void> => {
       lastUpdateTime: user.updated_at,
       address: user.address,
       classification: user.groups.map((group) => group.group_name),
-      is_locked: user.is_locked,
     }));
     // 初始情况下，搜索结果和全局数据相同
     filterData.value = [...tableData.value];
@@ -237,7 +235,6 @@ const filterTableData = async (
       lastUpdateTime: user.updated_at,
       address: user.address,
       classification: user.groups.map((group) => group.group_name),
-      is_locked: user.is_locked,
     }));
     console.log(filterData);
   } catch (error) {
@@ -245,6 +242,7 @@ const filterTableData = async (
   }
 };
 
+const refreshDat = () => {};
 // 创建一个防抖函数 在输入框输入最后一个字 500毫秒之后执行 filterTableData函数
 const debouncedFunc = debounce(filterTableData, 500);
 // 定义当分页大小变化时
@@ -391,6 +389,7 @@ $views-li: 40px;
   column-gap: 10px;
   height: calc(100% - 120px);
   margin: 10px;
+
   .OrderList {
     width: 100%;
     height: 100%;
@@ -416,9 +415,11 @@ $views-li: 40px;
         margin-right: 10px;
       }
     }
+
     .table {
       height: 600px;
     }
+
     .demo-pagination-block {
       display: flex;
       align-items: center;

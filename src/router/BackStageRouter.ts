@@ -251,27 +251,27 @@ const router = createRouter({
 });
 //路由守卫。启用的时候可以强制网站必须登录才能访问
 //创建路由守卫
-router.beforeEach((to, from, next) => {
-  // 获取 token 值
-  const isAuthToken = localStorage.getItem("token");
-  // 检查是否需要登录验证，如果需要但用户没有登录，则跳转到登录页
-  if (to.meta.requiresAuth && !isAuthToken) {
-    next("/login");
-    return;
-  }
-  const permissions: any = to.meta.permissions;
-  // 检查用户权限，如果没有权限则跳转到无权限访问提示页面
-  if (permissions && sessionStorage.getItem("role")) {
-    const userRole: string = sessionStorage.getItem("role")!;
-    if (!permissions.includes(userRole)) {
-      next("/index");
-      return;
-    }
-  }
+// router.beforeEach((to, from, next) => {
+//   // 获取 token 值
+//   const isAuthToken = localStorage.getItem("token");
+//   // 检查是否需要登录验证，如果需要但用户没有登录，则跳转到登录页
+//   if (to.meta.requiresAuth && !isAuthToken) {
+//     next("/login");
+//     return;
+//   }
+//   const permissions: any = to.meta.permissions;
+//   // 检查用户权限，如果没有权限则跳转到无权限访问提示页面
+//   if (permissions && sessionStorage.getItem("role")) {
+//     const userRole: string = sessionStorage.getItem("role")!;
+//     if (!permissions.includes(userRole)) {
+//       next("/index");
+//       return;
+//     }
+//   }
 
-  // 如果通过验证，则进行页面跳转
-  next();
-});
+//   // 如果通过验证，则进行页面跳转
+//   next();
+// });
 
 // 封装初始化后台路由
 export const initBackStageRouter = (app: App<Element>) => {
