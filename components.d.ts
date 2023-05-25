@@ -50,6 +50,7 @@ declare module '@vue/runtime-core' {
     MyOrderList: typeof import('./src/components/index/myOrderList.vue')['default']
     Notice: typeof import('./src/components/index/notice.vue')['default']
     Order: typeof import('./src/components/orderList/Order.vue')['default']
+    OrderList: typeof import('./src/components/orderList/OrderList.vue')['default']
     Pie: typeof import('./src/components/visualGraph/pie.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
