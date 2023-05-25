@@ -3,7 +3,12 @@
   <div class="box">
     <!-- 标题、描述、添加附件 -->
     <div class="box-item attachments">
-      <el-form :label-position="attachmentsPosition" label-width="75px" :model="orderData" style="max-width: 800px">
+      <el-form
+        :label-position="attachmentsPosition"
+        label-width="75px"
+        :model="orderData"
+        style="max-width: 800px"
+      >
         <!-- 标题输入框 -->
         <el-form-item label="工单标题:">
           <el-input v-model="orderData.title" />
@@ -14,28 +19,56 @@
         </el-form-item>
         <!-- 工单类型 -->
         <el-form-item label="工单类型">
-          <el-select v-model="orderData.orderType" class="m-2" placeholder="请选择工单类型">
-            <el-option v-for="item in orderTypeList" :key="item.id" :label="item.type_name" :value="item.id" />
+          <el-select
+            v-model="orderData.orderType"
+            class="m-2"
+            placeholder="请选择工单类型"
+          >
+            <el-option
+              v-for="item in orderTypeList"
+              :key="item.id"
+              :label="item.type_name"
+              :value="item.id"
+            />
           </el-select>
         </el-form-item>
         <!-- 是否线上 -->
         <el-form-item label="线上/线下">
-          <el-select v-model="orderData.isOnLine" class="m-2" placeholder="请选择线上/线下">
-            <el-option label="线上" :value='1' />
-            <el-option label="线下" :value='0' />
+          <el-select
+            v-model="orderData.isOnLine"
+            class="m-2"
+            placeholder="请选择线上/线下"
+          >
+            <el-option label="线上" :value="1" />
+            <el-option label="线下" :value="0" />
           </el-select>
         </el-form-item>
       </el-form>
       <!-- 添加附件按钮 -->
       <div class="attachments_upload">
         <!-- TODO: 完善附件功能 -->
-        <el-upload v-model:file-list="fileList" class="upload-demo"
-          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" multiple :limit="1">
+        <!-- <el-upload
+          v-model:file-list="fileList"
+          class="upload-demo"
+          action=""
+          :http-request="handleUpload"
+          multiple
+          :limit="1"
+        > -->
+        <el-upload
+          v-model:file-list="fileList"
+          class="upload-demo"
+          action="http://www.bstestserver.com/api/v1/upload"
+          multiple
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :before-remove="beforeRemove"
+          :limit="3"
+          :on-exceed="handleExceed"
+        >
           <el-button type="primary">添加附件</el-button>
           <template #tip>
-            <div class="el-upload__tip">
-              最多只能上传1个附件
-            </div>
+            <div class="el-upload__tip">最大5MB</div>
           </template>
         </el-upload>
       </div>
@@ -53,8 +86,16 @@
       <div class="template_center" style="margin-top: 20px">
         <!-- 客户信息表单 -->
         <el-form :label-position="templatePosition" :model="orderData">
-          <el-input class="data-box" v-model="orderData.phone" placeholder="请输入联系电话" />
-          <el-input class="data-box" v-model="orderData.address" placeholder="请输入详细地址" />
+          <el-input
+            class="data-box"
+            v-model="orderData.phone"
+            placeholder="请输入联系电话"
+          />
+          <el-input
+            class="data-box"
+            v-model="orderData.address"
+            placeholder="请输入详细地址"
+          />
           <!-- <el-select class="data-box" v-model="orderData.contacter" multiple allow-create default-first-option
             :reserve-keyword="false" placeholder="可指定工程师（非必填）">
             <el-option v-for="item in contacterList" :label="item" :value="item" />
@@ -80,7 +121,11 @@
             <div class="attribute_center">
               <el-text>希望完成时间</el-text>
             </div>
-            <el-date-picker v-model="orderData.appointment" type="datetime" placeholder="请选择希望完成时间" />
+            <el-date-picker
+              v-model="orderData.appointment"
+              type="datetime"
+              placeholder="请选择希望完成时间"
+            />
           </div>
           <div class="attribute_box">
             <div class="attribute_center">
@@ -93,25 +138,23 @@
     </div>
     <!-- 按钮 -->
     <div class="add_btn" style="display: flex; justify-content: end">
-      <el-button @click="publishOrder" type="primary" size="large">发布工单</el-button>
+      <el-button @click="publishOrder" type="primary" size="large"
+        >发布工单</el-button
+      >
     </div>
   </div>
 </template>
 <script lang="ts" setup>
 import { reactive, ref, onMounted } from "vue";
 import { Setting, Link } from "@element-plus/icons-vue";
-import type { UploadProps, UploadUserFile } from 'element-plus'
+import type { UploadProps, UploadUserFile } from "element-plus";
+import type { apiResponseOrderFile } from "../../../model/interface";
+import { ElMessage, ElMessageBox } from "element-plus";
 import ApiClient from "../../../request/request";
 import { useUserStore } from "../../../store/store";
 import { storeToRefs } from "pinia";
-
 const userStore = useUserStore();
-const getUsername = () => {
-  setTimeout(() => {
-    const { userInfo }: any = storeToRefs(userStore);
-    orderData.user = userInfo.value.id
-  }, 2000)
-}
+const { userInfo }: any = storeToRefs(userStore);
 
 const apiClient = ApiClient.getInstance();
 //表单排序方向
@@ -124,66 +167,104 @@ const templatePosition = ref("top");
 // 获取工单类型
 const getAllOrderType = async () => {
   try {
-    const res: any = await apiClient.get<any>('/orderType')
-    orderTypeList.value = res.data
-    console.log('orderTypeList.value', orderTypeList.value)
+    const res: any = await apiClient.get<any>("/orderType");
+    orderTypeList.value = res.data;
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
-}
+};
 // 判断工单优先级
-const decidePriority = async () => {
+const decidePriority = () => {
   if (orderData.timeLimit <= 5) {
-    orderData.priority = 1
+    orderData.priority = 1;
   } else {
-    orderData.priority = 2
+    orderData.priority = 2;
   }
-}
+};
 /*
 --------------初始化选择框数据--------------
 */
 // 工单类型列表
-let orderTypeList = ref<any>([])
+let orderTypeList = ref<any>([]);
 onMounted(() => {
-  getAllOrderType()
-})
+  getAllOrderType();
+});
 /*
 --------------表单数据绑定--------------
 */
 // 工单基本信息
 const orderData = reactive({
   priority: 0,
-  status: 1,  // 工单状态默认为1（待处理）
-  orderType: '',
-  user: getUsername(),
-  phone: null,
+  status: 1, // 工单状态默认为1（待处理）
+  phone: "",
+  orderType: "",
   title: "",
   timeLimit: 0,
   description: "",
-  fileList: null,
+  // fileList: null,
   isOnLine: null,
-  address: '',
-  appointment: '',
+  address: "",
+  appointment: "",
 });
 
+// 文件路径
+// const fileUrl = ref("");
 // 附件
-const fileList = ref<UploadUserFile[]>([])
+const fileList = ref<UploadUserFile[]>([]);
+const handleRemove: UploadProps["onRemove"] = (file, uploadFiles) => {
+  // console.log(file, uploadFiles);
+};
+
+const handlePreview: UploadProps["onPreview"] = (uploadFile) => {
+  console.log(uploadFile);
+};
+
+const handleExceed: UploadProps["onExceed"] = (files, uploadFiles) => {
+  ElMessage.warning(
+    `只能上传 3 个文件，已选择 ${files.length} 个, 加起来 ${
+      files.length + uploadFiles.length
+    }`
+  );
+};
+
+const beforeRemove: UploadProps["beforeRemove"] = (uploadFile, uploadFiles) => {
+  return ElMessageBox.confirm(`确定要删除 ${uploadFile.name} ?`).then(
+    () => true,
+    () => false
+  );
+};
 /*
---------------事件--------------
+--------------事件-------------- 
 */
 // 发布工单
 const publishOrder = async () => {
+  decidePriority();
+  const formData = new FormData();
+
   try {
-    decidePriority()
-    const res: any = await apiClient.post<any>(
-      '/order',
-      orderData
-    )
-    console.log(res.data)
+    const resOrder = await apiClient.post<any>("/order", orderData);
+    // 上传文件
+    fileList.value.forEach(async (item: any) => {
+      formData.append("file", item.raw);
+      const resFile = await apiClient.post<apiResponseOrderFile>(
+        "/file/upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          params: {
+            order_id: resOrder!.data.id,
+          },
+        }
+      );
+      console.log(resFile!.data);
+    });
+    console.log(resOrder.data);
   } catch (err) {
-    console.log('错误：' + err)
+    console.log("错误：" + err);
   }
-}
+};
 </script>
 <style scoped lang="scss">
 .box {
@@ -207,7 +288,6 @@ const publishOrder = async () => {
     margin-bottom: 20px;
     padding: 20px;
     box-sizing: border-box;
-
 
     // 添加附件
     .attachments_upload {
@@ -252,7 +332,6 @@ const publishOrder = async () => {
       line-height: 40px;
       margin: 20px;
     }
-
   }
 }
 </style>

@@ -109,7 +109,6 @@ const validateCompanyname = (rule: any, value: any, callback: any) => {
   // } else {
   //   callback();
   // }
-
   callback();
 };
 // 用户名验证
@@ -130,8 +129,12 @@ const validateUsername = (rule: any, value: any, callback: any) => {
 };
 // 手机号验证
 const validatePhone = (rule: any, value: any, callback: any) => {
-  if (value.length != 11 && value !== "") {
-    callback(new Error("手机号需要11位"));
+  if (value != "") {
+    if (value.length == 11) {
+      callback();
+    } else {
+      callback(new Error("手机号需要11位"));
+    }
   } else {
     callback();
   }
@@ -175,6 +178,7 @@ const submit = async (formEl: FormInstance | undefined): Promise<void> => {
           message: "提交失败，请检查格式",
           type: "error",
         });
+        loading.value = false;
         return;
       }
 
@@ -204,13 +208,10 @@ const submit = async (formEl: FormInstance | undefined): Promise<void> => {
           });
         }
       } else if (dialogInfo.value.title == "修改客户信息") {
-        const res = await apiClient.patch<apiResponseCustomerRepresentative>(
+        const res = await apiClient.put<apiResponseCustomerRepresentative>(
           "/CustomerRepresentative/" + dialogInfo.value.id,
           dialogInfo.value.data
         );
-
-        console.log(res);
-
         // 提交
         if (res!.code == 200) {
           ElNotification({
@@ -218,7 +219,6 @@ const submit = async (formEl: FormInstance | undefined): Promise<void> => {
             message: "修改成功",
             type: "success",
           });
-          loading.value = false;
           cancel();
         } else {
           ElNotification({
@@ -226,9 +226,9 @@ const submit = async (formEl: FormInstance | undefined): Promise<void> => {
             message: res!.message,
             type: "error",
           });
-          loading.value = false;
         }
       }
+      loading.value = false;
       (props as any).updateData();
     } else {
       return false;
