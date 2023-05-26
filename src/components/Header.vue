@@ -48,6 +48,7 @@ const UserStore = useUserStore();
 // 执行方法
 breadcrumbStore.getBreadcrumbList(route);
 breadcrumbStore.updateBreadcrumb();
+
 // 响应式 数据
 const { list }: any = storeToRefs(breadcrumbStore);
 // 返回上一级路由
@@ -55,6 +56,7 @@ const onBack = () => {
   // notify("点击了Back");
   router.go(-1);
 };
+
 // 计算客户角色转换为中文
 let roleNamae = computed(() => {
   switch (props.userInfo.role_name) {
@@ -68,11 +70,13 @@ let roleNamae = computed(() => {
       return "你是？";
   }
 });
+
 // 重置 breadcrumbStore
 const BreadcrumbListReset = () => {
   breadcrumbStore.ResertBreadcrumb();
   // breadcrumbStore.$reset();
 };
+
 // 登出
 const logout = async (): Promise<void> => {
   try {

@@ -95,7 +95,6 @@ const submitForm = (formEl: FormInstance | undefined): void => {
         "/login",
         ruleForm
       );
-      console.log('response', response)
       // 提交成功
       if (response!.data.access_token != null) {
         // 将 登录的 token 保存到本地存储中

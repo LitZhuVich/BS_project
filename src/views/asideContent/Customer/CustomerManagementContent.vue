@@ -26,7 +26,6 @@
         </div>
       </div>
       <div class="table">
-        <!-- TODO:高度需改成动态，以便响应式 -->
         <el-table ref="multipleTableRef" :data="filterData" stripe style="width: 100%" border height="545px"
           v-loading="loading" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55" align="center" />
@@ -253,7 +252,7 @@ const handleEdit = async (index: number, row: CustomerRepresentativeInfo) => {
 // 定义删除操作
 const handleDelete = async (index: number, row: CustomerRepresentativeInfo) => {
   ElMessageBox.confirm(
-    `是否要删除公司名为${row.companyname}?用户为${row.username}的用户？`,
+    `是否要删除第${index + 1}行、公司名为${row.companyname}?`,
     "是否确认删除",
     {
       distinguishCancelAndClose: true,

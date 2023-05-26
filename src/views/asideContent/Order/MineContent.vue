@@ -14,12 +14,14 @@
         <template #default="scope">
           <div class="column-expand">
             <div class="top">
-              <span>提交时间: {{ timeToString(scope.row.created_at) || '空' }}</span>
-              <span>工单地址: {{ scope.row.address || '空' }}</span>
-              <span>修改时间: {{ timeToString(scope.row.updated_at) || '空' }}</span>
+              <span>提交时间:
+                {{ timeToString(scope.row.created_at) || "空" }}</span>
+              <span>工单地址: {{ scope.row.address || "空" }}</span>
+              <span>修改时间:
+                {{ timeToString(scope.row.updated_at) || "空" }}</span>
             </div>
             <div>
-              <p>详细描述: {{ scope.row.description || '空' }}</p>
+              <p>详细描述: {{ scope.row.description || "空" }}</p>
             </div>
           </div>
         </template>
@@ -136,7 +138,7 @@ const getOrders = async () => {
   pageTotal.value = res!.data.total;
   // 渲染成功，加载动画消失
   loading.value = false;
-}
+};
 // 过滤显示
 const filterTableData = computed(() =>
   tableData.value.filter((data: any) => searchOption(data))
@@ -146,8 +148,7 @@ const searchOption = (data: any) => {
   switch (searchOptionChoosed.value) {
     case "id":
       return (
-        !searchValue.value ||
-        data.id.includes(searchValue.value.toLowerCase())
+        !searchValue.value || data.id.includes(searchValue.value.toLowerCase())
       );
     case "status":
       return (
@@ -176,15 +177,19 @@ const searchOption = (data: any) => {
 const loading = ref<boolean>(true);
 // 时间转字符串
 const timeToString = (date: any): string => {
-  let d = new Date(date)
+  let d = new Date(date);
   // TODO:把转换做得更细节一点
-  let time = d.getFullYear() +
-    '-' + d.getMonth() +
-    '-' + d.getDate() +
-    ' ' + d.getHours() +
-    '点'
-  return time
-}
+  let time =
+    d.getFullYear() +
+    "-" +
+    d.getMonth() +
+    "-" +
+    d.getDate() +
+    " " +
+    d.getHours() +
+    "点";
+  return time;
+};
 // 接收接收状态标签内容
 const tagStatusType = (value: string): string => {
   switch (value) {
@@ -225,6 +230,10 @@ const handleCurrentChange = (val: number) => {
 };
 </script>
 <style lang="scss" scoped>
+.demo-pagination-block {
+  margin-top: 10px;
+}
+
 .content {
   height: calc(100% - 140px);
   background-color: white;

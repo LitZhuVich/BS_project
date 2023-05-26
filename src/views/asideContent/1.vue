@@ -21,25 +21,26 @@
             <!--日历表内容 -->
             <div class="cal_m_days">
                 <!-- 第几行 -->
-                <div v-for="(ds, index) in  monthData " :key="index" class="cal_m_day_line">
+                <div v-for="(ds, index) in    monthData   " :key="index" class="cal_m_day_line">
                     <!-- 每行内容 -->
-                    <div v-for="d in ds " :key="d.day" class="cal_m_day_cell" :style="{ color: getCellColor(d) }"
+                    <div v-for="d in   ds   " :key="d.day" class="cal_m_day_cell" :style="{ color: getCellColor(d) }"
                         @mouseenter="mouseenter(d, $event)" @mouseleave="mouseleave(d, $event)">
                         <div class="itemDay">{{ d.day }}</div>
                         <slot :name="d.fullYear + '-' + d.month + '-' + d.day"></slot>
                         <!-- 卡片 -->
-                        <template v-for="user in users">
+                        <template v-for="user in users  ">
                             <div v-if="d.type == 0 &&
                                 setDataList(d.date).user_id == user.id
                                 " :style="{
         background: cardColor[setDataList(d.date).user_id - 1].backgroundColor,
         color: cardColor[setDataList(d.date).user_id - 1].color
-    }" class="Card">
+    }
+        " class="Card">
                                 <div class="CardTitle">{{ setDataList(d.date).username }} : 期限{{
                                     setDataList(d.date).time_limit }}天
                                 </div>
                                 <div class="CardDot">
-                                    <div v-for="i in 3"
+                                    <div v-for="  i   in   3  "
                                         :style="{ background: cardColor[setDataList(d.date).user_id - 1].color }">
                                     </div>
                                 </div>
@@ -65,11 +66,11 @@ let year = ref(0)
 let month = ref(0)
 let jobTime = ref([])
 const weeks = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"]
-let monthData = ref([]) //月数据容器
+let monthData = ref<any>([]) //月数据容器
 let currentYear = ref(new Date().getFullYear()) //当前年：2022
 let currentMonth = ref(new Date().getMonth() + 1) //当前月：7
 let currentDay = ref(new Date().getDate()) //当前天：29
-let users = ref([])
+let users = ref<any>([])
 const cardColor = [{
     backgroundColor: 'rgba(16, 154, 249, 0.2)',
     color: 'rgba(16, 154, 249, 1)'
@@ -112,10 +113,10 @@ async function getOrders() {
 
 // 通过输入日期，匹配当天的所有数据
 // 入参格式 value：'2022-07-09'
-function setDataList(value) {
-    let object = {};
+function setDataList(value: any) {
+    let object: any = {};
     const date = dateFormat("YYYY-mm-dd", value)
-    orderList.datas.forEach((element) => {
+    orderList.datas.forEach((element: any) => {
         // 将工单里的预约时间（string类型）转为Date类型
         let appointment = new Date(element.appointment)
         if (dateFormat("YYYY-mm-dd", appointment) == date) {
@@ -125,7 +126,7 @@ function setDataList(value) {
     return object;
 }
 
-function setYearMonth(now) {
+function setYearMonth(now: any) {
     year.value = now.getFullYear();
     month.value = now.getMonth() + 1;
 }
@@ -198,7 +199,7 @@ function setYearMonthInfos(date: any) {
     dateChange();
 }
 
-function generateMonth(date) {
+function generateMonth(date: any) {
     date.setDate(1);
     // 星期 0 - 6， 星期天 - 星期6
     let weekStart = date.getDay();
@@ -213,7 +214,7 @@ function generateMonth(date) {
     let milsEnd = endDate.getTime() + dayMils;
 
     let monthDatas = [];
-    let current;
+    let current: any;
     // 上个月的几天
     for (let i = 1; i < weekStart; i++) {
         current = new Date(milsStart - (weekStart - i) * dayMils);
@@ -276,7 +277,7 @@ function generateMonth(date) {
     console.log("//", JSON.parse(JSON.stringify(monthData.value)))
 }
 
-function getCellColor(d) {
+function getCellColor(d: any) {
     if (
         d.fullYear == currentYear.value &&
         d.month == currentMonth.value &&
@@ -289,12 +290,12 @@ function getCellColor(d) {
     return color;
 }
 
-function mouseenter(d, event) {
+function mouseenter(d: any, event: any) {
     $emit("enter", event, d);
     // document.getElementsByClassName('cal_m_day_cell').style('background-color','#000000')
 }
 
-function mouseleave(d, event) {
+function mouseleave(d: any, event: any) {
     $emit("leave", event, d);
 }
 
@@ -307,9 +308,9 @@ function dateChange() {
     $emit("changeMonth", startDay, endDay);
 }
 
-function dateFormat(fmt, date) {
-    let ret;
-    const opt = {
+function dateFormat(fmt: any, date: any) {
+    let ret: any;
+    const opt: any = {
         "Y+": date.getFullYear().toString(),        // 年
         "m+": (date.getMonth() + 1).toString(),     // 月
         "d+": date.getDate().toString(),            // 日

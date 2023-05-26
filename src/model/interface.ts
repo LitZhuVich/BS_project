@@ -13,6 +13,8 @@ import { role } from "./roles";
 import { user, CustomerRepresentative } from "./users";
 import { order } from "./orders";
 import { tokenType, token, message } from "./tokens";
+import { order_files } from "./order_files";
+import { user_avatar } from "./user_avatar";
 
 // 保存接口定义的类型
 export interface apiResponse<T> {
@@ -21,6 +23,7 @@ export interface apiResponse<T> {
   data: T;
   message: string;
 }
+
 // 使用泛型创建具体的接口类型
 export type apiResponseData = apiResponse<string> | undefined;
 export type apiResponseUser = apiResponse<user> | undefined;
@@ -47,3 +50,5 @@ export type apiResponseAssetCategories =
 export type apiResponseToken = apiResponse<token> | undefined;
 export type apiResponseTokenType = apiResponse<tokenType> | undefined;
 export type apiResponseMessage = apiResponse<message> | undefined;
+export type apiResponseOrderFile = apiResponse<order_files> | undefined;
+export type apiResponseUserAvatar = apiResponse<user_avatar> | undefined;
