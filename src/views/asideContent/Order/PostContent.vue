@@ -161,14 +161,11 @@ const orderData = reactive({
   title: "",
   timeLimit: 0,
   description: "",
-  // fileList: null,
   isOnLine: null,
   address: "",
   appointment: "",
 });
 
-// 文件路径
-// const fileUrl = ref("");
 // 附件
 const fileList = ref<UploadUserFile[]>([]);
 const handleRemove: UploadProps["onRemove"] = (file, uploadFiles) => {

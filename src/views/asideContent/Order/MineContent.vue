@@ -6,7 +6,7 @@
         <el-select v-model="searchOptionChoosed">
           <el-option v-for="item in searchOptions" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
-        <el-input v-model="searchValue" class="search-box" placeholder="请输入编号" :suffix-icon="Search" />
+        <el-input v-model="searchValue" class="search-box" placeholder="请输入查询内容" :suffix-icon="Search" />
       </div>
     </div>
     <el-table v-loading="loading" :data="filterTableData" stripe border>
@@ -85,12 +85,11 @@ import { ElConfigProvider } from "element-plus";
 // 引入中文包
 import zhCn from "element-plus/lib/locale/lang/zh-cn";
 import ApiClient from "../../../request/request";
-import { useUserStore } from "../../../store/store";
 const apiClient = ApiClient.getInstance();
 let user = reactive({
   user_id: Number(sessionStorage.getItem("UID"))
 })
-// console.log(user.user_id)
+
 onMounted(() => {
   getOrders()
 })
@@ -100,10 +99,6 @@ const pageTotal = ref<number>(0);
 const searchOptionChoosed = ref("status");
 // 搜索方式
 const searchOptions = [
-  // {
-  //   value: "id",
-  //   label: "编号",
-  // },
   {
     value: "status",
     label: "工单状态",
@@ -116,10 +111,6 @@ const searchOptions = [
     value: "priority",
     label: "优先级",
   },
-  // {
-  //   value: "isOnLine",
-  //   label: "线上/下",
-  // }
 ];
 // 搜索框
 const searchValue = ref("");

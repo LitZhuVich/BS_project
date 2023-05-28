@@ -68,7 +68,6 @@
         layout="sizes, prev, pager, next, jumper" :total="pageTotal" @size-change="handleSizeChange"
         @current-change="handleCurrentChange" /></el-config-provider>
   </div>
-  <!-- <OrderList method="get" url="/orderPage" /> -->
 </template>
 
 <script lang="ts" setup>
