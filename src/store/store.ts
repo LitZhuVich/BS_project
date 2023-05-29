@@ -25,6 +25,8 @@ export const useUserStore = defineStore("user", {
         const userInfo = await apiClient.get<apiResponseUser>("/user");
         this.userInfo = userInfo!.data;
         sessionStorage.setItem("role", this.userInfo.role_name);
+        sessionStorage.setItem("name", this.userInfo.username);
+        sessionStorage.setItem("UID", this.userInfo.id);
         console.log(this.userInfo);
       } catch (error) {
         console.log(error);

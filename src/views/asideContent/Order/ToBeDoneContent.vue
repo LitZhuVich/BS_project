@@ -6,7 +6,7 @@
         <el-select v-model="searchOptionChoosed">
           <el-option v-for="item in searchOptions" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
-        <el-input v-model="search" class="search-box" placeholder="请输入编号" :suffix-icon="Search" />
+        <el-input v-model="searchValue" class="search-box" placeholder="请输入编号" :suffix-icon="Search" />
       </div>
     </div>
     <el-table v-loading="loading" :data="filterTableData" stripe border>
@@ -117,15 +117,15 @@ const searchOptions = [
   //   label: "线上/下",
   // }
 ];
-// 搜索框的值
-const search = ref("");
+// 搜索框
+const searchValue = ref("");
 // 表单数据
 let tableData: any = ref([]);
 // 获取工单数据
 const getOrders = async () => {
   loading.value = true;
   const res: any = await apiClient.get<any>(
-    `/orderPage?pageSize=${pageSize.value}&page=${currentPage.value}`
+    `/getToBeDoneOrder?pageSize=${pageSize.value}&page=${currentPage.value}`
   )
   tableData.value = res.data.data
   // 页面数据长度
@@ -135,53 +135,36 @@ const getOrders = async () => {
 }
 // 过滤显示
 const filterTableData = computed(() =>
-  console.log('tableData.value', tableData.value)
+  tableData.value.filter((data: any) => searchOption(data))
 );
 // 判断搜索条件
 const searchOption = (data: any) => {
   switch (searchOptionChoosed.value) {
-    case "code":
+    case "id":
       return (
-        !search.value ||
-        data.code.toLowerCase().includes(search.value.toLowerCase())
+        !searchValue.value ||
+        data.id.includes(searchValue.value.toLowerCase())
       );
-    case "customerService":
+    case "status":
       return (
-        !search.value ||
-        data.customerService.toLowerCase().includes(search.value.toLowerCase())
+        !searchValue.value ||
+        data.status.toLowerCase().includes(searchValue.value.toLowerCase())
       );
-    case "orderStatus":
+    case "username":
       return (
-        !search.value ||
-        data.orderStatus.toLowerCase().includes(search.value.toLowerCase())
+        !searchValue.value ||
+        data.username.toLowerCase().includes(searchValue.value.toLowerCase())
       );
     case "priority":
       return (
-        !search.value ||
-        data.priority.toLowerCase().includes(search.value.toLowerCase())
+        !searchValue.value ||
+        data.priority.toLowerCase().includes(searchValue.value.toLowerCase())
       );
-    case "founder":
+    case "isOnLine":
       return (
-        !search.value ||
-        data.founder.toLowerCase().includes(search.value.toLowerCase())
+        !searchValue.value ||
+        data.isOnLine.includes(searchValue.value.toLowerCase())
       );
-    case "type":
-      return (
-        !search.value ||
-        data.type.toLowerCase().includes(search.value.toLowerCase())
-      );
-    case "source":
-      return (
-        !search.value ||
-        data.source.toLowerCase().includes(search.value.toLowerCase())
-      );
-    case "target":
-      return (
-        !search.value ||
-        data.target.toLowerCase().includes(search.value.toLowerCase())
-      );
-    // default:
-    //   return !search.value || data.code.toLowerCase().includes(search.value.toLowerCase())
   }
 };
 
@@ -267,7 +250,6 @@ const handleCurrentChange = (val: number) => {
 
   .content {
     height: calc(100vh - 180px);
-
     background-color: white;
     display: flex;
     align-items: center;
@@ -275,13 +257,30 @@ const handleCurrentChange = (val: number) => {
     flex-direction: column;
 
     .el-table {
-      height: calc(100%);
+      .el-tag {
+        margin: 3px;
+        cursor: pointer;
+      }
+
+      .column-expand {
+        padding: 10px 20px;
+        font-size: 18px;
+
+        .top {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+          margin-bottom: 10px;
+        }
+      }
     }
   }
 
   .demo-pagination-block {
     height: 50px;
     line-height: 50px;
+    display: flex;
+    justify-content: center;
   }
 }
 </style>

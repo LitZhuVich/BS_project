@@ -4,19 +4,9 @@
       <h5>我的工单</h5>
       <div style="display: flex">
         <el-select v-model="searchOptionChoosed">
-          <el-option
-            v-for="item in searchOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
+          <el-option v-for="item in searchOptions" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
-        <el-input
-          v-model="searchValue"
-          class="search-box"
-          placeholder="请输入编号"
-          :suffix-icon="Search"
-        />
+        <el-input v-model="searchValue" class="search-box" placeholder="请输入编号" :suffix-icon="Search" />
       </div>
     </div>
     <el-table v-loading="loading" :data="filterTableData" stripe border>
@@ -24,15 +14,11 @@
         <template #default="scope">
           <div class="column-expand">
             <div class="top">
-              <span
-                >提交时间:
-                {{ timeToString(scope.row.created_at) || "空" }}</span
-              >
+              <span>提交时间:
+                {{ timeToString(scope.row.created_at) || "空" }}</span>
               <span>工单地址: {{ scope.row.address || "空" }}</span>
-              <span
-                >修改时间:
-                {{ timeToString(scope.row.updated_at) || "空" }}</span
-              >
+              <span>修改时间:
+                {{ timeToString(scope.row.updated_at) || "空" }}</span>
             </div>
             <div>
               <p>详细描述: {{ scope.row.description || "空" }}</p>
@@ -55,10 +41,7 @@
       <el-table-column prop="priority" label="优先级" width="70">
         <template #default="scope">
           <div style="display: flex; align-items: center">
-            <el-tag
-              :type="tagSituationsType(scope.row.priority)"
-              effect="plain"
-            >
+            <el-tag :type="tagSituationsType(scope.row.priority)" effect="plain">
               {{ scope.row.priority }}
             </el-tag>
           </div>
@@ -69,12 +52,8 @@
       <el-table-column prop="isOnLine" label="线上/下" width="75">
         <template #default="scope">
           <div style="display: flex; align-items: center">
-            <el-tag type="success" v-if="scope.row.isOnLine == 1" effect="plain"
-              >线上</el-tag
-            >
-            <el-tag v-else-if="scope.row.isOnLine == 0" effect="plain"
-              >线下</el-tag
-            >
+            <el-tag type="success" v-if="scope.row.isOnLine == 1" effect="plain">线上</el-tag>
+            <el-tag v-else-if="scope.row.isOnLine == 0" effect="plain">线下</el-tag>
           </div>
         </template>
       </el-table-column>
@@ -92,20 +71,14 @@
     </el-table>
     <div class="demo-pagination-block">
       <el-config-provider :locale="zhCn">
-        <el-pagination
-          v-model:current-page="currentPage"
-          v-model:page-size="pageSize"
-          :page-sizes="[5, 10, 20, 40]"
-          layout="sizes, prev, pager, next, jumper"
-          :total="pageTotal"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-      /></el-config-provider>
+        <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize" :page-sizes="[5, 10, 20, 40]"
+          layout="sizes, prev, pager, next, jumper" :total="pageTotal" @size-change="handleSizeChange"
+          @current-change="handleCurrentChange" /></el-config-provider>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { reactive, ref, computed, onMounted } from "vue";
 import { Search } from "@element-plus/icons-vue";
 // ElConfigProvider 组件
 import { ElConfigProvider } from "element-plus";
@@ -113,20 +86,14 @@ import { ElConfigProvider } from "element-plus";
 import zhCn from "element-plus/lib/locale/lang/zh-cn";
 import ApiClient from "../../../request/request";
 import { useUserStore } from "../../../store/store";
-import { storeToRefs } from "pinia";
 const apiClient = ApiClient.getInstance();
-
-const userStore = useUserStore();
-const getUsername = () => {
-  setTimeout(() => {
-    const { userInfo }: any = storeToRefs(userStore);
-    console.log(userInfo.value.username);
-  }, 2000);
-};
-
+let user = reactive({
+  user_id: Number(sessionStorage.getItem("UID"))
+})
+// console.log(user.user_id)
 onMounted(() => {
-  getOrders(), getUsername();
-});
+  getOrders()
+})
 // 表单总数
 const pageTotal = ref<number>(0);
 // 选择的搜索方式
@@ -161,10 +128,12 @@ let tableData: any = ref([]);
 // 获取工单数据
 const getOrders = async () => {
   loading.value = true;
-  const res: any = await apiClient.get<any>(
-    `/orderPage?pageSize=${pageSize.value}&page=${currentPage.value}`
-  );
-  tableData.value = res.data.data;
+  const res: any = await apiClient.post<any>(
+    `/getOrderByUsername?pageSize=${pageSize.value}&page=${currentPage.value}`,
+    user
+  )
+  console.log(res.data)
+  tableData.value = res.data.data
   // 页面数据长度
   pageTotal.value = res!.data.total;
   // 渲染成功，加载动画消失
@@ -264,6 +233,7 @@ const handleCurrentChange = (val: number) => {
 .demo-pagination-block {
   margin-top: 10px;
 }
+
 .content {
   height: calc(100% - 140px);
   background-color: white;
@@ -290,9 +260,30 @@ const handleCurrentChange = (val: number) => {
     }
   }
 
-  .el-tag {
-    margin: 3px;
-    cursor: pointer;
+  .el-table {
+    .el-tag {
+      margin: 3px;
+      cursor: pointer;
+    }
+
+    .column-expand {
+      padding: 10px 20px;
+      font-size: 18px;
+
+      .top {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+    }
+  }
+
+  .demo-pagination-block {
+    height: 50px;
+    line-height: 50px;
+    display: flex;
+    justify-content: center;
   }
 }
 </style>
