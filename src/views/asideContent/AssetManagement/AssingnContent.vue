@@ -59,20 +59,19 @@
       </div>
       <!-- 分派表单 -->
       <el-dialog v-model=" dialogFormVisible " title="分派资产">
-        <el-table :data=" engineerList " stripe style="width: 100%" border>
+        <el-table @click=" handleCurrentRowChange " :data=" engineerList " highlight-current-row stripe
+          style="width: 100%" border>
           <el-table-column prop="id" label="工程师编号" sortable />
           <el-table-column prop="username" label="工程师名字" />
           <el-table-column prop="priority" label="目前的状态">
             <template #default=" scope: any ">
               <div style="display: flex; align-items: center">
-                <!-- TODO: -->
-                <el-tag type="primary">{{ }}</el-tag>
+                <el-tag>{{ status[scope.$index] }}</el-tag>
               </div>
             </template>
           </el-table-column>
-          <!-- TODO: -->
-          <el-table-column prop="" label="工程师技能" />
         </el-table>
+        {{ currentRow }}
         <template #footer>
           <span class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取消</el-button>
@@ -85,7 +84,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, computed, onMounted } from "vue";
+import { reactive, ref, computed, onMounted, toRaw } from "vue";
 import { Search } from "@element-plus/icons-vue";
 // ElConfigProvider 组件
 import { ElConfigProvider } from "element-plus";
@@ -118,6 +117,7 @@ const searchOptions = [
   },
 ];
 // 搜索框
+const value = ref("");
 const searchValue = ref("");
 // 表单数据
 let tableData: any = ref([]);
@@ -141,9 +141,21 @@ const getEngineer = async () => {
   const res: any = await apiClient.get<any>(
     `/CustomerRepresentative/getAllEngineers`
   )
-  engineerList.value = res.data
-  console.log('engineerList.value', engineerList.value)
+  engineerList.value = await res.data
+  getAssetByEngId()
 }
+let status = ref<any>([]);
+// 根据工程师id获取资产
+const getAssetByEngId = async () => {
+  for (let i = 0; i < engineerList.value.length; i++) {
+    const item: any = engineerList.value[i];
+    const res = await apiClient.post<any>('/asset/queryByEngineerId', {
+      engineer_id: item.id
+    })
+    status.value.push(res.data);
+  }
+}
+
 // 过滤显示
 const filterTableData = computed(() =>
   tableData.value.filter((data: any) => searchOption(data))
@@ -206,47 +218,30 @@ const handleCurrentChange = (val: number) => {
   getAsset();
 };
 
+// 分派弹窗
+interface Engineer {
+  id: number;
+  username: string;
+  commpanyName: string;
+  password: string;
+  avator: string;
+  phone: number;
+  address: string;
+  email: string;
+  is_vertified: number;
+  email_verification_token: string;
+  role_id: number;
+  is_locked: number;
+  created_at: Date;
+  updated_at: Date
+}
+// 是否显示分派弹窗
 const dialogFormVisible = ref(false);
-const formLabelWidth = "120px";
-const tagStatusType = (value: string): string => {
-  switch (value) {
-    case "繁忙":
-      return "success";
-    case "空闲":
-      return "warning";
-    default:
-      return "未知";
-  }
-};
-const form = reactive({
-  name: "",
-  region: "",
-  date1: "",
-  date2: "",
-  delivery: false,
-  type: [],
-  resource: "",
-  desc: "",
-});
-const value = ref("");
-const options = [
-  {
-    value: "pisa01 张晶晶",
-    label: "pisa01 张晶晶",
-  },
-  {
-    value: "pisa01 张晶晶",
-    label: "pisa01 张晶晶",
-  },
-  {
-    value: "pisa01 张晶晶",
-    label: "pisa01 张晶晶",
-  },
-  {
-    value: "pisa01 张晶晶",
-    label: "pisa01 张晶晶",
-  },
-];
+const currentRow = ref<Engineer | null>(null)
+const handleCurrentRowChange = (val: Engineer | undefined) => {
+  currentRow.value = val
+  console.log('currentRow.value', currentRow.value)
+}
 </script>
 
 <style scoped lang="scss">
