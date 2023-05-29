@@ -20,9 +20,11 @@ import { onMounted } from "vue";
 import AsideBar from "../components/Aside.vue"; // 侧边栏
 import HeaderBar from "../components/Header.vue";
 import Loading from "../views/Loading.vue";
+import { useRoute } from "vue-router";
 import { useUserStore } from "../store/store";
 import { storeToRefs } from "pinia";
 const userStore = useUserStore();
+const route = useRoute();
 onMounted(() => {
   // 获取用户信息 保存到数据缓存中
   userStore.fetchUserInfo();

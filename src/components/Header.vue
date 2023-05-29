@@ -12,7 +12,14 @@
     </template>
     <template #content>
       <div class="flex items-center">
-        <el-avatar class="mr-3" :size="32" :src="userInfo.avator" />
+        <el-avatar
+          class="mr-3"
+          :size="32"
+          :src="
+            userInfo.avator ||
+            'https://cdn.staticaly.com/gh/LitZhuVich/blogcdn@master/img/user_tou.jpg'
+          "
+        />
         <span class="text-large font-600 mr-3"> {{ userInfo.username }} </span>
         <el-tag type="info" plain class="permissions">
           {{ roleNamae }}

@@ -1,6 +1,7 @@
 export interface user {
   id: number;
   username: string;
+  password: string;
   companyname: string;
   avatar: string | null;
   phone: string | null;

@@ -51,7 +51,7 @@
 </template>
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
-import type { FormInstance, FormRules, ElNotification } from "element-plus";
+import { FormInstance, FormRules, ElNotification } from "element-plus";
 import ApiClient from "../../../request/request";
 
 const apiClient = ApiClient.getInstance();
@@ -98,6 +98,7 @@ const asset_categorie = [
     label: '电脑周边',
   },
   {
+
     value: 2,
     label: '普通家电',
   },
