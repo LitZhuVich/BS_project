@@ -258,7 +258,6 @@ const updateUsername = (): void => {
             username: value,
           }
         );
-
         if (typeof res!.data.username == "string") {
           userInfo.value.username = res!.data.username;
           ElMessage({
@@ -294,7 +293,6 @@ const updatePassword = (): void => {
             password: value,
           }
         );
-        console.log(res);
         if (typeof res!.data.password == "string") {
           userInfo.value.password = res!.data.password;
           ElMessage({
@@ -366,7 +364,6 @@ const updateEmail = (): void => {
             email: value,
           }
         );
-        console.log(res!.data.email);
         if (typeof res!.data.email == "string") {
           userInfo.value.email = res!.data.email;
           ElMessage({

@@ -6,7 +6,7 @@
         <el-select v-model="searchOptionChoosed">
           <el-option v-for="item in searchOptions" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
-        <el-input v-model="searchValue" class="search-box" placeholder="请输入编号" :suffix-icon="Search" />
+        <el-input v-model="searchValue" class="search-box" placeholder="请输入搜索内容" :suffix-icon="Search" />
       </div>
     </div>
     <el-table v-loading="loading" :data="filterTableData" stripe border>
@@ -37,7 +37,8 @@
         </template>
       </el-table-column>
       <el-table-column prop="title" label="标题" />
-      <el-table-column prop="username" label="用户" />
+      <el-table-column prop="username" label="客户" />
+      <el-table-column prop="engineer" label="工程师" />
       <el-table-column prop="priority" label="优先级" width="70">
         <template #default="scope">
           <div style="display: flex; align-items: center">
@@ -85,7 +86,6 @@ import { ElConfigProvider } from "element-plus";
 // 引入中文包
 import zhCn from "element-plus/lib/locale/lang/zh-cn";
 import ApiClient from "../../../request/request";
-import { useUserStore } from "../../../store/store";
 const apiClient = ApiClient.getInstance();
 let user = reactive({
   user_id: Number(sessionStorage.getItem("UID"))
@@ -100,26 +100,18 @@ const pageTotal = ref<number>(0);
 const searchOptionChoosed = ref("status");
 // 搜索方式
 const searchOptions = [
-  // {
-  //   value: "id",
-  //   label: "编号",
-  // },
   {
     value: "status",
     label: "工单状态",
   },
   {
     value: "username",
-    label: "用户",
+    label: "客户",
   },
   {
     value: "priority",
     label: "优先级",
   },
-  // {
-  //   value: "isOnLine",
-  //   label: "线上/下",
-  // }
 ];
 // 搜索框
 const searchValue = ref("");
@@ -129,10 +121,9 @@ let tableData: any = ref([]);
 const getOrders = async () => {
   loading.value = true;
   const res: any = await apiClient.post<any>(
-    `/getOrderByUsername?pageSize=${pageSize.value}&page=${currentPage.value}`,
+    `/order/getOrderByUsername?pageSize=${pageSize.value}&page=${currentPage.value}`,
     user
   )
-  console.log(res.data)
   tableData.value = res.data.data
   // 页面数据长度
   pageTotal.value = res!.data.total;
@@ -146,10 +137,6 @@ const filterTableData = computed(() =>
 // 判断搜索条件
 const searchOption = (data: any) => {
   switch (searchOptionChoosed.value) {
-    case "id":
-      return (
-        !searchValue.value || data.id.includes(searchValue.value.toLowerCase())
-      );
     case "status":
       return (
         !searchValue.value ||
@@ -164,11 +151,6 @@ const searchOption = (data: any) => {
       return (
         !searchValue.value ||
         data.priority.toLowerCase().includes(searchValue.value.toLowerCase())
-      );
-    case "isOnLine":
-      return (
-        !searchValue.value ||
-        data.isOnLine.includes(searchValue.value.toLowerCase())
       );
   }
 };
