@@ -9,12 +9,9 @@
           <span>头像</span>
         </div>
         <div class="scp_avatar">
-          <el-avatar
-            :src="
-              userInfo.avator ||
-              'https://cdn.staticaly.com/gh/LitZhuVich/blogcdn@master/img/user_tou.jpg'
-            "
-          ></el-avatar>
+          <el-avatar :src="userInfo.avator ||
+            'https://cdn.staticaly.com/gh/LitZhuVich/blogcdn@master/img/user_tou.jpg'
+            "></el-avatar>
         </div>
         <el-button type="primary" link class="scp_btn" @click="updateAvatar()">
           修改
@@ -25,12 +22,7 @@
           <span>昵称</span>
         </div>
         <el-text class="scp_text">{{ userInfo.username }}</el-text>
-        <el-button
-          type="primary"
-          link
-          class="scp_btn"
-          @click="updateUsername()"
-        >
+        <el-button type="primary" link class="scp_btn" @click="updateUsername()">
           修改
         </el-button>
       </div>
@@ -44,16 +36,8 @@
         <el-text class="scp_text">
           {{ userInfo.phone ?? "未绑定手机号" }}
         </el-text>
-        <el-button type="primary" link class="scp_btn" @click="updatePhone()"
-          >修改</el-button
-        >
-        <el-button
-          type="primary"
-          link
-          class="scp_btn"
-          v-if="userInfo.phone != null"
-          >解绑</el-button
-        >
+        <el-button type="primary" link class="scp_btn" @click="updatePhone()">修改</el-button>
+        <el-button type="primary" link class="scp_btn" v-if="userInfo.phone != null">解绑</el-button>
       </div>
       <!-- 邮箱 -->
       <div class="SettingTitle_conter_span">
@@ -61,16 +45,8 @@
           <span>邮箱</span>
         </div>
         <el-text class="scp_text">{{ userInfo.email ?? "未绑定邮箱" }}</el-text>
-        <el-button type="primary" link class="scp_btn" @click="updateEmail()"
-          >修改</el-button
-        >
-        <el-button
-          type="primary"
-          link
-          class="scp_btn"
-          v-if="userInfo.email != null"
-          >解绑</el-button
-        >
+        <el-button type="primary" link class="scp_btn" @click="updateEmail()">修改</el-button>
+        <el-button type="primary" link class="scp_btn" v-if="userInfo.email != null">解绑</el-button>
       </div>
       <!-- 密码 -->
       <div class="SettingTitle_conter_span">
@@ -78,9 +54,7 @@
           <span>密码</span>
         </div>
         <el-text class="scp_text">********</el-text>
-        <el-button type="primary" link class="scp_btn" @click="updatePassword()"
-          >修改</el-button
-        >
+        <el-button type="primary" link class="scp_btn" @click="updatePassword()">修改</el-button>
       </div>
       <!-- 语言 -->
       <!-- <div class="SettingTitle_conter_span">
@@ -127,20 +101,12 @@
     </div>
   </div>
   <el-dialog v-model="dialogFormVisible" title="添加头像">
-    <el-upload
-      ref="uploadRef"
-      class="avatar-uploader"
-      :action="patchAvatarApi"
-      :show-file-list="false"
-      :on-success="handleAvatarSuccess"
-      :before-upload="beforeAvatarUpload"
-    >
-      <img
-        v-if="userInfo.avator"
-        :src="imageUrl || userInfo.avator"
-        class="avatar"
-      />
-      <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+    <el-upload ref="uploadRef" class="avatar-uploader" :action="patchAvatarApi" :show-file-list="false"
+      :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+      <img v-if="userInfo.avator" :src="imageUrl || userInfo.avator" class="avatar" />
+      <el-icon v-else class="avatar-uploader-icon">
+        <Plus />
+      </el-icon>
     </el-upload>
     <el-text>点击修改图片</el-text>
     <template #footer>
@@ -387,12 +353,13 @@ const updateEmail = (): void => {
     });
 };
 
-onMounted(() => {});
+onMounted(() => { });
 </script>
 <style lang="scss" scoped>
 .dialog-footer button:first-child {
   margin-right: 10px;
 }
+
 .avatar-uploader .avatar {
   width: 178px;
   height: 178px;
@@ -414,23 +381,29 @@ onMounted(() => {});
     justify-content: center;
     background-color: rgb(248, 248, 248);
   }
+
   .scp_select {
     padding: 40px;
   }
+
   .scp_text {
     padding: 40px;
   }
+
   .scp_avatar {
     padding: 40px;
     display: flex;
     align-items: center;
   }
+
   .scp_wx {
     padding: 10px;
   }
+
   .scp_btn {
     padding-left: 20px;
   }
+
   .SettingTitle_conter_span {
     height: 60px;
     display: flex;
@@ -438,12 +411,14 @@ onMounted(() => {});
     align-items: center;
     border-bottom: 1px solid gainsboro;
   }
+
   .SettingTitle_conter_span2 {
     height: 60px;
     padding-left: 10px;
     display: flex;
     align-items: center;
   }
+
   .SettingTitle {
     padding: 10px;
     box-sizing: border-box;
@@ -453,12 +428,14 @@ onMounted(() => {});
     display: flex;
     align-items: center;
     border-bottom: 1px solid gainsboro;
+
     .SettingTitle_span {
       font-size: large;
       padding-right: 20px;
       padding-left: 10px;
     }
   }
+
   .SettingTitle_conter {
     background-color: white;
     box-sizing: border-box;
@@ -466,6 +443,7 @@ onMounted(() => {});
     padding: 20px;
     color: rgb(98, 103, 107);
   }
+
   .SettingTitle_tail {
     background-color: white;
     box-sizing: border-box;

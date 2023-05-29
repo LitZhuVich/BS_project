@@ -90,7 +90,7 @@ const apiClient = ApiClient.getInstance();
 let user = reactive({
   user_id: Number(sessionStorage.getItem("UID"))
 })
-// console.log(user.user_id)
+
 onMounted(() => {
   getOrders()
 })

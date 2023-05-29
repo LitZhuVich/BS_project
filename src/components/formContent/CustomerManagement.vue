@@ -1,72 +1,28 @@
 <template>
   <!-- 弹出窗 -->
-  <el-form
-    ref="ruleFormRef"
-    :model="dialogInfo.data"
-    status-icon
-    :rules="rules"
-    label-width="120px"
-    class="demo-ruleForm"
-    label-suffix="："
-  >
+  <el-form ref="ruleFormRef" :model="dialogInfo.data" status-icon :rules="rules" label-width="120px" class="demo-ruleForm"
+    label-suffix="：">
     <el-form-item label="公司名称" prop="companyname">
-      <el-input
-        v-model="dialogInfo.data.companyname"
-        autocomplete="off"
-        type="text"
-        placeholder="公司名称"
-      />
+      <el-input v-model="dialogInfo.data.companyname" autocomplete="off" type="text" placeholder="公司名称" />
     </el-form-item>
 
     <el-form-item label="最后更新人" prop="username">
-      <el-input
-        v-model="dialogInfo.data.username"
-        autocomplete="off"
-        type="text"
-        placeholder="最后更新人"
-      />
+      <el-input v-model="dialogInfo.data.username" autocomplete="off" type="text" placeholder="最后更新人" />
     </el-form-item>
     <el-form-item label="公司地址">
-      <el-input
-        v-model="dialogInfo.data.address"
-        autocomplete="off"
-        placeholder="公司地址"
-        type="text"
-      />
+      <el-input v-model="dialogInfo.data.address" autocomplete="off" placeholder="公司地址" type="text" />
     </el-form-item>
     <el-form-item label="手机号" prop="phone">
-      <el-input
-        v-model="dialogInfo.data.phone"
-        autocomplete="off"
-        type="text"
-        placeholder="手机号"
-        maxlength="11"
-        show-word-limit
-      />
+      <el-input v-model="dialogInfo.data.phone" autocomplete="off" type="text" placeholder="手机号" maxlength="11"
+        show-word-limit />
     </el-form-item>
     <el-form-item label="备注">
-      <el-input
-        v-model="dialogInfo.data.remark"
-        type="textarea"
-        placeholder="该客户备注"
-        autocomplete="off"
-        autosize
-        maxlength="200"
-        show-word-limit
-      />
+      <el-input v-model="dialogInfo.data.remark" type="textarea" placeholder="该客户备注" autocomplete="off" autosize
+        maxlength="200" show-word-limit />
     </el-form-item>
     <el-form-item label="分组" v-if="dialogInfo.id != 0">
-      <el-select
-        v-model="dialogInfo.data.group_name"
-        placeholder="选择组"
-        multiple
-        autocomplete="off"
-      >
-        <el-option
-          v-for="item in groupFormdata"
-          :label="item.label"
-          :value="item.value"
-        />
+      <el-select v-model="dialogInfo.data.group_name" placeholder="选择组" multiple autocomplete="off">
+        <el-option v-for="item in groupFormdata" :label="item.label" :value="item.value" />
       </el-select>
     </el-form-item>
   </el-form>
