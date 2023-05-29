@@ -61,7 +61,9 @@
       <div class="grid-content notice">
         <div class="header">
           <div class="image">
-            <el-icon :size="20" color="#11c9cb"><Bell /></el-icon>
+            <el-icon :size="20" color="#11c9cb">
+              <Bell />
+            </el-icon>
           </div>
           公告
         </div>
@@ -72,7 +74,9 @@
       <div class="grid-content myOrderList">
         <div class="header">
           <div class="image">
-            <el-icon :size="20" color="#11c9cb"><Odometer /></el-icon>
+            <el-icon :size="20" color="#11c9cb">
+              <Odometer />
+            </el-icon>
           </div>
           我处理的工单
         </div>
@@ -128,6 +132,7 @@ onMounted(() => {
   box-sizing: border-box;
   display: grid;
   gap: 10px;
+
   .grid-content {
     border-radius: 4px;
     background-color: white;
@@ -139,11 +144,13 @@ onMounted(() => {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 10px;
+
     .grid-content {
       display: flex;
       justify-content: space-around;
       align-items: center;
       height: 100px;
+
       .image {
         width: 60px;
         height: 60px;
@@ -156,12 +163,15 @@ onMounted(() => {
       .SuccessFilled {
         background-color: rgba($color: #67c23a, $alpha: 0.2);
       }
+
       .Comment {
         background-color: rgba($color: #409efc, $alpha: 0.2);
       }
+
       .Promotion {
         background-color: rgba($color: #e6a23c, $alpha: 0.2);
       }
+
       .content {
         display: flex;
         flex-direction: column;
@@ -186,6 +196,7 @@ onMounted(() => {
 
     .notice {
       grid-area: notice;
+
       .notice_content {
         height: 100px;
         display: grid;
@@ -193,13 +204,16 @@ onMounted(() => {
         color: #ccc;
       }
     }
+
     .myOrderList {
       grid-area: myOrderList;
+
       .orderList_content {
         padding: 10px;
         box-sizing: border-box;
       }
     }
+
     .notice .header,
     .myOrderList .header {
       height: 50px;
@@ -208,6 +222,7 @@ onMounted(() => {
       align-items: center;
       padding-left: 10px;
       box-sizing: border-box;
+
       .image {
         width: 35px;
         height: 35px;
@@ -222,13 +237,16 @@ onMounted(() => {
     .line {
       grid-area: line;
     }
+
     .bar {
       grid-area: bar;
     }
+
     .pie {
       grid-area: pie;
     }
   }
+
   @media (max-width: 1440px) {
     .main {
       height: 1000px;
@@ -238,16 +256,20 @@ onMounted(() => {
         "bar bar bar pie pie pie"
         "bar bar bar pie pie pie";
     }
+
     .line {
       height: 300px;
     }
+
     .bar {
       height: 300px;
     }
+
     .pie {
       height: 300px;
     }
   }
+
   @media (max-width: 1050px) {
     .main {
       height: 1200px;
@@ -257,12 +279,15 @@ onMounted(() => {
         "bar bar pie pie pie pie"
         "bar bar pie pie pie pie";
     }
+
     .line {
       height: 400px;
     }
+
     .bar {
       height: 400px;
     }
+
     .pie {
       height: 400px;
     }
@@ -279,12 +304,15 @@ onMounted(() => {
         "bar bar bar bar bar bar"
         "pie pie pie pie pie pie";
     }
+
     .line {
       height: 300px;
     }
+
     .bar {
       height: 300px;
     }
+
     .pie {
       height: 300px;
     }

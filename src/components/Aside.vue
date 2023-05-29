@@ -70,7 +70,7 @@
       </template>
       <el-menu-item-group>
         <el-menu-item index="/asset/inventory">资产清单</el-menu-item>
-        <el-menu-item index="/asset/catefory">资产分类</el-menu-item>
+        <!-- <el-menu-item index="/asset/catefory">资产分类</el-menu-item> -->
         <el-menu-item index="/asset/add">添加资产</el-menu-item>
         <el-menu-item index="/asset/assingn">分派资产</el-menu-item>
       </el-menu-item-group>
