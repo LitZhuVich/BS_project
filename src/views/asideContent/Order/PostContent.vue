@@ -151,10 +151,6 @@ import type { UploadProps, UploadUserFile } from "element-plus";
 import type { apiResponseOrderFile } from "../../../model/interface";
 import { ElMessage, ElMessageBox } from "element-plus";
 import ApiClient from "../../../request/request";
-import { useUserStore } from "../../../store/store";
-import { storeToRefs } from "pinia";
-const userStore = useUserStore();
-const { userInfo }: any = storeToRefs(userStore);
 
 const apiClient = ApiClient.getInstance();
 //表单排序方向

@@ -1,7 +1,13 @@
 <template>
   <!-- #0065f8 -->
-  <el-menu active-text-color="#000000" router :default-active="$route.path" text-color="#fff" :unique-opened="true"
-    background-color="#31c3f6">
+  <el-menu
+    active-text-color="#000000"
+    router
+    :default-active="$route.path"
+    text-color="#fff"
+    :unique-opened="true"
+    background-color="#31c3f6"
+  >
     <div class="logo-bar">
       <el-icon>
         <SetUp />
@@ -23,18 +29,30 @@
         <span>工单管理</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="/order/post" v-if="userInfo.role_name != 'engineer'">
+        <el-menu-item
+          index="/order/post"
+          v-if="userInfo.role_name != 'engineer'"
+        >
           发起工单
         </el-menu-item>
         <el-menu-item index="/order/mine">我的工单</el-menu-item>
-        <el-menu-item index="/order/toBeDone" v-if="userInfo.role_name != 'customer_representative'">
+        <el-menu-item
+          index="/order/toBeDone"
+          v-if="userInfo.role_name != 'customer_representative'"
+        >
           代办工单池
         </el-menu-item>
-        <el-menu-item index="/order/list" v-if="userInfo.role_name != 'customer_representative'">
+        <el-menu-item
+          index="/order/list"
+          v-if="userInfo.role_name != 'customer_representative'"
+        >
           工单列表
         </el-menu-item>
         <!-- 工单设置：工单模板、分派路由 -->
-        <el-menu-item index="/order/setting" v-if="userInfo.role_name == 'admin'">
+        <el-menu-item
+          index="/order/setting"
+          v-if="userInfo.role_name == 'admin'"
+        >
           工单设置
         </el-menu-item>
       </el-menu-item-group>
@@ -47,14 +65,20 @@
       <span>组织架构</span>
     </el-menu-item>
     <!-- 工程师日历 -->
-    <el-menu-item index="/engineerCalendar" v-if="userInfo.role_name == 'admin'">
+    <el-menu-item
+      index="/engineerCalendar"
+      v-if="userInfo.role_name == 'admin'"
+    >
       <el-icon>
         <Calendar />
       </el-icon>
       <span>工程师日历</span>
     </el-menu-item>
     <!-- 客户管理：客户列表、添加会员 -->
-    <el-menu-item index="/customerManagement" v-if="userInfo.role_name == 'admin'">
+    <el-menu-item
+      index="/customerManagement"
+      v-if="userInfo.role_name == 'admin'"
+    >
       <el-icon>
         <User />
       </el-icon>

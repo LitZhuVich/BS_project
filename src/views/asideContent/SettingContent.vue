@@ -11,8 +11,8 @@
         <div class="scp_avatar">
           <el-avatar
             :src="
-              userInfo.avator ??
-              'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+              userInfo.avator ||
+              'https://cdn.staticaly.com/gh/LitZhuVich/blogcdn@master/img/user_tou.jpg'
             "
           ></el-avatar>
         </div>
@@ -78,7 +78,9 @@
           <span>密码</span>
         </div>
         <el-text class="scp_text">********</el-text>
-        <el-button type="primary" link class="scp_btn">修改</el-button>
+        <el-button type="primary" link class="scp_btn" @click="updatePassword()"
+          >修改</el-button
+        >
       </div>
       <!-- 语言 -->
       <!-- <div class="SettingTitle_conter_span">
@@ -278,7 +280,37 @@ const updateUsername = (): void => {
       });
     });
 };
-
+// 修改密码
+const updatePassword = (): void => {
+  ElMessageBox.prompt("输入密码：", "输入框", {
+    confirmButtonText: "确认",
+    cancelButtonText: "关闭",
+  })
+    .then(async ({ value }) => {
+      if (value != "" && value != null) {
+        const res = await apiClient.patch<apiResponseUser>(
+          `/CustomerRepresentative/${userInfo.value.id}/password`,
+          {
+            password: value,
+          }
+        );
+        console.log(res);
+        if (typeof res!.data.password == "string") {
+          userInfo.value.password = res!.data.password;
+          ElMessage({
+            type: "success",
+            message: `密码修改成功`,
+          });
+        }
+      }
+    })
+    .catch(() => {
+      ElMessage({
+        type: "info",
+        message: "取消输入",
+      });
+    });
+};
 // 修改手机号
 const updatePhone = (): void => {
   ElMessageBox.prompt("输入手机号：", "输入框", {
@@ -316,7 +348,7 @@ const updatePhone = (): void => {
       });
     });
 };
-
+// TODO:邮箱验证待写
 // 修改邮箱
 const updateEmail = (): void => {
   ElMessageBox.prompt("输入邮箱：", "输入框", {

@@ -8,8 +8,8 @@
           </el-icon>
         </div>
         <div class="content">
-          <el-text tag="b" style="font-size: 30px">10</el-text>
-          <el-text tag="b">待回复的</el-text>
+          <el-text tag="b" style="font-size: 30px">{{ replieCount }}</el-text>
+          <el-text tag="b">个人待回复的</el-text>
         </div>
       </div>
       <div class="grid-content">
@@ -19,8 +19,10 @@
           </el-icon>
         </div>
         <div class="content">
-          <el-text tag="b" style="font-size: 30px">20</el-text>
-          <el-text tag="b">总已解决的</el-text>
+          <el-text tag="b" style="font-size: 30px">
+            {{ allSolvedCount }}
+          </el-text>
+          <el-text tag="b">个人总已解决的</el-text>
         </div>
       </div>
       <div class="grid-content">
@@ -30,8 +32,10 @@
           </el-icon>
         </div>
         <div class="content">
-          <el-text tag="b" style="font-size: 30px">2</el-text>
-          <el-text tag="b">今已解决的</el-text>
+          <el-text tag="b" style="font-size: 30px">
+            {{ withinTenSolvedCount }}
+          </el-text>
+          <el-text tag="b">个人十天内已解决的</el-text>
         </div>
       </div>
       <div class="grid-content">
@@ -41,8 +45,10 @@
           </el-icon>
         </div>
         <div class="content">
-          <el-text tag="b" style="font-size: 30px">18</el-text>
-          <el-text tag="b">组已解决的</el-text>
+          <el-text tag="b" style="font-size: 30px">
+            {{ groupSolvedCount }}
+          </el-text>
+          <el-text tag="b">部门已解决的</el-text>
         </div>
       </div>
       <div class="grid-content Promotion">
@@ -52,8 +58,8 @@
           </el-icon>
         </div>
         <div class="content">
-          <el-text tag="b" style="font-size: 30px">5</el-text>
-          <el-text tag="b">超时的</el-text>
+          <el-text tag="b" style="font-size: 30px">{{ timeOutCount }}</el-text>
+          <el-text tag="b">个人总超时的</el-text>
         </div>
       </div>
     </div>
@@ -81,7 +87,6 @@
         </div>
       </div>
       <div class="grid-content line">
-        <!-- TODO:显示总体工单信息、进行中的工单、日汇总工单，有个下拉框显示时间，分别有全部、部门、自己、三个数据量 -->
         <lineGrape />
       </div>
       <div class="grid-content bar">
@@ -109,17 +114,48 @@ import notice from "../../components/index/notice.vue";
 
 import { ref, onMounted } from "vue";
 import ApiClient from "../../request/request";
+import { ElMessage } from "element-plus";
+import type {
+  apiResponseDataNumber,
+  apiResponseDataArray,
+} from "../../model/interface";
 const apiClient = ApiClient.getInstance();
-
-// TODO:测试代码可以删除
-const getOrderInfo = async () => {
-  const orderRes: any = await apiClient.get<any>("/orderType");
-  // console.log(orderRes);
+// 数组求和函数
+const sum = (arr: ReadonlyArray<number>): number => {
+  return arr.reduce((prev, curr) => prev + curr, 0);
 };
 
-onMounted(() => {
-  getOrderInfo();
-});
+const replieCount = ref(0);
+const allSolvedCount = ref(0);
+const withinTenSolvedCount = ref(0);
+const groupSolvedCount = ref(0);
+const timeOutCount = ref(0);
+
+const getCount = async () => {
+  const [
+    { data: replie },
+    { data: allSolved },
+    {
+      data: { count: withinTenSolvedCounts },
+    },
+    { data: groupSolved },
+    { data: timeOut },
+  ] = await Promise.all([
+    apiClient.get<any>("/orderReplied/myCount"),
+    apiClient.get<any>("/order/status/my/4"),
+    apiClient.get<any>("/order/showWithinTenOrder/4"),
+    apiClient.get<any>("/order/showGroupOrder"),
+    apiClient.get<any>("/order/status/my/6"),
+  ]);
+
+  replieCount.value = replie;
+  allSolvedCount.value = allSolved.length;
+  withinTenSolvedCount.value = sum(withinTenSolvedCounts);
+  groupSolvedCount.value = groupSolved.length;
+  timeOutCount.value = timeOut.length;
+};
+
+onMounted(getCount);
 </script>
 
 <style lang="scss" scoped>
