@@ -302,7 +302,6 @@ const deleteMany = async () => {
           "/CustomerRepresentative/" + id
         )
       );
-      const res = apiClient.all(promises);
       if (searchValue.value == "") {
         getTableData();
       } else {

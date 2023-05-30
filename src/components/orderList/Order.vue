@@ -5,7 +5,7 @@
       <el-select v-model="searchOptionChoosed" placeholder="搜索方式">
         <el-option v-for="item in searchOptions" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
-      <el-input v-model="searchValue" class="search-box" size="small" placeholder="请输入编号" :suffix-icon="Search" />
+      <el-input v-model="searchValue" class="search-box" size="small" placeholder="请输入搜索内容" :suffix-icon="Search" />
     </div>
   </div>
   <el-table v-loading="loading" :data="filterTableData" stripe border>
@@ -13,12 +13,14 @@
       <template #default="scope">
         <div class="column-expand">
           <div class="top">
-            <span>提交时间: {{ timeToString(scope.row.created_at) || '空' }}</span>
-            <span>工单地址: {{ scope.row.address || '空' }}</span>
-            <span>修改时间: {{ timeToString(scope.row.updated_at) || '空' }}</span>
+            <span>提交时间:
+              {{ timeToString(scope.row.created_at) || "空" }}</span>
+            <span>工单地址: {{ scope.row.address || "空" }}</span>
+            <span>修改时间:
+              {{ timeToString(scope.row.updated_at) || "空" }}</span>
           </div>
           <div>
-            <p>详细描述: {{ scope.row.description || '空' }}</p>
+            <p>详细描述: {{ scope.row.description || "空" }}</p>
           </div>
         </div>
       </template>
@@ -34,7 +36,8 @@
       </template>
     </el-table-column>
     <el-table-column prop="title" label="标题" />
-    <el-table-column prop="username" label="用户" />
+    <el-table-column prop="username" label="客户" />
+    <el-table-column prop="engineer" label="工程师" />
     <el-table-column prop="priority" label="优先级" width="70">
       <template #default="scope">
         <div style="display: flex; align-items: center">
@@ -44,6 +47,7 @@
         </div>
       </template>
     </el-table-column>
+    <!-- <el-table-column prop="created_at" label="提交时间" /> -->
     <el-table-column prop="time_limit" label="期限时间(天)" width="110" />
     <el-table-column prop="isOnLine" label="线上/下" width="75">
       <template #default="scope">
@@ -54,6 +58,7 @@
       </template>
     </el-table-column>
     <el-table-column prop="type" label="工单类型" />
+    <!-- <el-table-column prop="address" label="工单地址" /> -->
     <el-table-column prop="appointment" label="预约时间">
       <template #default="scope">
         <div>
@@ -61,6 +66,8 @@
         </div>
       </template>
     </el-table-column>
+    <!-- <el-table-column prop="updated_at" label="修改时间" /> -->
+    <!-- <el-table-column prop="description" label="详细描述" /> -->
   </el-table>
   <div class="demo-pagination-block">
     <el-config-provider :locale="zhCn">
@@ -71,9 +78,6 @@
 </template>
 
 <script lang="ts" setup>
-// TODO: 后续开始优化时使用
-// // 引入组件
-import OrderList from './OrderList.vue'
 import { ref, onMounted, computed } from "vue";
 // 引入图标
 import { Search } from "@element-plus/icons-vue";
@@ -94,7 +98,7 @@ let tableData: any = ref([]);
 const getOrders = async () => {
   loading.value = true;
   const res: any = await apiClient.get<any>(
-    `/orderPage?pageSize=${pageSize.value}&page=${currentPage.value}`
+    `/order/orderPage?pageSize=${pageSize.value}&page=${currentPage.value}`
   )
   tableData.value = res.data.data
   // 页面数据长度
@@ -107,26 +111,18 @@ const getOrders = async () => {
 const searchOptionChoosed = ref("status");
 // 搜索方式
 const searchOptions = [
-  // {
-  //   value: "id",
-  //   label: "编号",
-  // },
   {
     value: "status",
     label: "工单状态",
   },
   {
     value: "username",
-    label: "用户",
+    label: "客户",
   },
   {
     value: "priority",
     label: "优先级",
   },
-  // {
-  //   value: "isOnLine",
-  //   label: "线上/下",
-  // }
 ];
 // 搜索框
 const searchValue = ref("");

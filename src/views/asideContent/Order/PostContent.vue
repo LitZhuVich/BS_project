@@ -28,15 +28,6 @@
       </el-form>
       <!-- 添加附件按钮 -->
       <div class="attachments_upload">
-        <!-- TODO: 完善附件功能 -->
-        <!-- <el-upload
-          v-model:file-list="fileList"
-          class="upload-demo"
-          action=""
-          :http-request="handleUpload"
-          multiple
-          :limit="1"
-        > -->
         <el-upload v-model:file-list="fileList" class="upload-demo" action="http://www.bstestserver.com/api/v1/upload"
           multiple :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" :limit="3"
           :on-exceed="handleExceed">
@@ -62,10 +53,6 @@
         <el-form :label-position="templatePosition" :model="orderData">
           <el-input class="data-box" v-model="orderData.phone" placeholder="请输入联系电话" />
           <el-input class="data-box" v-model="orderData.address" placeholder="请输入详细地址" />
-          <!-- <el-select class="data-box" v-model="orderData.contacter" multiple allow-create default-first-option
-            :reserve-keyword="false" placeholder="可指定工程师（非必填）">
-            <el-option v-for="item in contacterList" :label="item" :value="item" />
-          </el-select> -->
         </el-form>
       </div>
     </div>
@@ -94,6 +81,7 @@
               <el-text>工单期限（单位：天）</el-text>
             </div>
             <el-input-number v-model="orderData.timeLimit" :min="1" />
+            <el-switch size="large" v-model="value" active-text="自动分派" inactive-text="不自动分派" />
           </div>
         </el-form>
       </div>
@@ -109,8 +97,9 @@ import { reactive, ref, onMounted } from "vue";
 import { Setting, Link } from "@element-plus/icons-vue";
 import type { UploadProps, UploadUserFile } from "element-plus";
 import type { apiResponseOrderFile } from "../../../model/interface";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { ElMessage, ElMessageBox, ElNotification } from "element-plus";
 import ApiClient from "../../../request/request";
+
 
 const apiClient = ApiClient.getInstance();
 //表单排序方向
@@ -160,7 +149,22 @@ const orderData = reactive({
   isOnLine: null,
   address: "",
   appointment: "",
+  engineer_id: 2
 });
+// 重置表单
+const resetForm = () => {
+  orderData.priority = 0;
+  orderData.status = 1; // 工单状态默认为1（待处理）
+  orderData.phone = "";
+  orderData.orderType = "";
+  orderData.title = "";
+  orderData.timeLimit = 0;
+  orderData.description = "";
+  orderData.isOnLine = null;
+  orderData.address = "";
+  orderData.appointment = "";
+  orderData.engineer_id = 0
+}
 
 // 附件
 const fileList = ref<UploadUserFile[]>([]);
@@ -191,6 +195,11 @@ const beforeRemove: UploadProps["beforeRemove"] = (uploadFile, uploadFiles) => {
 // 发布工单
 const publishOrder = async () => {
   decidePriority();
+  await getEngineers(); // 这里必须用await，等这方法拿到最少工单的工程师ID后才可以继续执行
+  if (value.value) {
+    orderData.engineer_id = minEngId.value
+    orderData.status = 3
+  }
   const formData = new FormData();
 
   try {
@@ -210,13 +219,50 @@ const publishOrder = async () => {
           },
         }
       );
-      console.log(resFile!.data);
     });
-    console.log(resOrder.data);
+    // 如果返回code不为200
+    if (resOrder.code != 200) {
+      ElNotification({
+        title: '工单操作',
+        message: '发布失败',
+        type: 'error',
+      })
+      return;
+    }
+    ElNotification({
+      title: '工单操作',
+      message: '发布成功',
+      type: "success",
+    })
+    resetForm()
   } catch (err) {
     console.log("错误：" + err);
   }
 };
+// 是否自动分派
+const value = ref<boolean>(true)
+// 最少工单工程师ID
+const minEngId = ref(0)
+// 判断工程师是否忙碌
+const EngineerStatus: any = ref([])
+const getEngineers = async () => {
+  const engineerList = await apiClient.get<any>('/CustomerRepresentative/getAllEngineers')
+  for (let i = 0; i < engineerList.data.length; i++) {
+    const res = await apiClient.get<any>('/order/countOrders/' + engineerList.data[i].id)
+    let status = { id: engineerList.data[i].id, orders: res.data }
+    EngineerStatus.value.push(status)
+  }
+  minEngId.value = getMinEngID(EngineerStatus);
+}
+// 获取工单量最少的工程师ID
+const getMinEngID = (engList: any) => {
+  const ordersArray = engList.value.map((engineer: any) => engineer.orders)
+  const minOrders = Math.min(...ordersArray)  // 获取最少的工单
+  // 找到最少工单的工程师ID
+  const minOrdersEngineer = EngineerStatus.value.find((engineer: any) => engineer.orders === minOrders)
+  const minOrdersEngineerId = minOrdersEngineer.id
+  return minOrdersEngineerId
+}
 </script>
 <style scoped lang="scss">
 .box {
@@ -276,6 +322,10 @@ const publishOrder = async () => {
         .el-form {
           display: flex;
         }
+      }
+
+      .el-switch {
+        margin-left: 20px;
       }
     }
 
