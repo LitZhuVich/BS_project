@@ -47,7 +47,6 @@
         </div>
       </template>
     </el-table-column>
-    <!-- <el-table-column prop="created_at" label="提交时间" /> -->
     <el-table-column prop="time_limit" label="期限时间(天)" width="110" />
     <el-table-column prop="isOnLine" label="线上/下" width="75">
       <template #default="scope">
@@ -58,7 +57,6 @@
       </template>
     </el-table-column>
     <el-table-column prop="type" label="工单类型" />
-    <!-- <el-table-column prop="address" label="工单地址" /> -->
     <el-table-column prop="appointment" label="预约时间">
       <template #default="scope">
         <div>
@@ -66,8 +64,6 @@
         </div>
       </template>
     </el-table-column>
-    <!-- <el-table-column prop="updated_at" label="修改时间" /> -->
-    <!-- <el-table-column prop="description" label="详细描述" /> -->
   </el-table>
   <div class="demo-pagination-block">
     <el-config-provider :locale="zhCn">
