@@ -344,7 +344,6 @@ const filterSkillEngineer = async () => {
 const gridData = ref<any>([]);
 const getGridData = async (id: number) => {
   const data = await apiClient.get<any>("/skill/" + id);
-  console.log(data);
   gridData.value = [...data.data];
   dialogTableVisible.value = true;
 };
@@ -365,7 +364,6 @@ const getengineersEngineer = async () => {
     skills: data.skills.map((skill: any) => skill.skill_name ?? ""),
     sk: data.skills,
   }));
-  console.log(engineersTableData.value);
   engineersLoading.value = false;
 };
 // 查找工程师
@@ -410,7 +408,6 @@ const handleSizeChange = (val: number) => {
   } else {
     filterGroupEngineer();
   }
-  console.log(`每页${val}个数据`);
 };
 // 定义当页码变化时
 const handleCurrentChange = (val: number) => {
@@ -426,7 +423,6 @@ const handleEdit = async (index: number, row: any) => {
   btnLoading.value = true;
   const userRes = await apiClient.get<any>("/CustomerRepresentative/" + row.id);
   const customerInfo = userRes!.data;
-  console.log(customerInfo);
   // 获取组信息
   const groupRes = await apiClient.get<any>("/group/name/" + row.id);
   // 设置弹窗数据
@@ -445,7 +441,6 @@ const handleEdit = async (index: number, row: any) => {
 
 // 删除
 const handleDelete = (index: number, row: any) => {
-  console.log(index, row);
   ElMessageBox.confirm(`是否要删除？`, "是否确认删除", {
     distinguishCancelAndClose: true,
     confirmButtonText: "删除",
@@ -480,9 +475,7 @@ const handleDelete = (index: number, row: any) => {
 import type { TabsPaneContext } from "element-plus";
 const activeName = ref("sectional");
 // 标签点击事件
-const handleClick = (tab: TabsPaneContext, event: Event) => {
-  // console.log(tab, event);
-};
+const handleClick = (tab: TabsPaneContext, event: Event) => {};
 </script>
 <style lang="scss">
 .OrganBox {

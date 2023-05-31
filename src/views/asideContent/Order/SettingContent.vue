@@ -4,9 +4,20 @@
       <h5>所有工单</h5>
       <div style="display: flex">
         <el-select v-model="searchOptionChoosed" placeholder="搜索方式">
-          <el-option v-for="item in searchOptions" :key="item.value" :label="item.label" :value="item.value" />
+          <el-option
+            v-for="item in searchOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
         </el-select>
-        <el-input v-model="searchValue" class="search-box" size="small" placeholder="请输入搜索内容" :suffix-icon="Search" />
+        <el-input
+          v-model="searchValue"
+          class="search-box"
+          size="small"
+          placeholder="请输入搜索内容"
+          :suffix-icon="Search"
+        />
       </div>
     </div>
     <el-table v-loading="loading" :data="filterTableData" stripe border>
@@ -14,9 +25,15 @@
         <template #default="scope">
           <div class="column-expand">
             <div class="top">
-              <span>提交时间: {{ timeToString(scope.row.created_at) || "空" }}</span>
+              <span
+                >提交时间:
+                {{ timeToString(scope.row.created_at) || "空" }}</span
+              >
               <span>工单地址: {{ scope.row.address || "空" }}</span>
-              <span>修改时间: {{ timeToString(scope.row.updated_at) || "空" }}</span>
+              <span
+                >修改时间:
+                {{ timeToString(scope.row.updated_at) || "空" }}</span
+              >
             </div>
             <div>
               <p>详细描述: {{ scope.row.description || "空" }}</p>
@@ -40,7 +57,10 @@
       <el-table-column prop="priority" label="优先级" width="70">
         <template #default="scope">
           <div style="display: flex; align-items: center">
-            <el-tag :type="tagSituationsType(scope.row.priority)" effect="plain">
+            <el-tag
+              :type="tagSituationsType(scope.row.priority)"
+              effect="plain"
+            >
               {{ scope.row.priority }}
             </el-tag>
           </div>
@@ -50,8 +70,12 @@
       <el-table-column prop="isOnLine" label="线上/下" width="75">
         <template #default="scope">
           <div style="display: flex; align-items: center">
-            <el-tag type="success" v-if="scope.row.isOnLine == 1" effect="plain">线上</el-tag>
-            <el-tag v-else-if="scope.row.isOnLine == 0" effect="plain">线下</el-tag>
+            <el-tag type="success" v-if="scope.row.isOnLine == 1" effect="plain"
+              >线上</el-tag
+            >
+            <el-tag v-else-if="scope.row.isOnLine == 0" effect="plain"
+              >线下</el-tag
+            >
           </div>
         </template>
       </el-table-column>
@@ -90,19 +114,36 @@
         <el-input v-model="order.title" />
       </el-form-item>
       <el-form-item label="期限时间">
-        <el-input v-model="order.time_limit" class="text-box-width-200" type="number" />
+        <el-input
+          v-model="order.time_limit"
+          class="text-box-width-200"
+          type="number"
+        />
         <el-text class="mx-1">天</el-text>
       </el-form-item>
       <el-form-item>
         <el-switch v-model="isOnline" active-text="线上" inactive-text="线下" />
       </el-form-item>
       <el-form-item label="工单类型">
-        <el-select v-model="order.order_type" class="m-2" placeholder="请选择工单类型">
-          <el-option v-for="item in orderType" :key="item.id" :label="item.type_name" :value="item.id" />
+        <el-select
+          v-model="order.order_type"
+          class="m-2"
+          placeholder="请选择工单类型"
+        >
+          <el-option
+            v-for="item in orderType"
+            :key="item.id"
+            :label="item.type_name"
+            :value="item.id"
+          />
         </el-select>
       </el-form-item>
       <el-form-item label="预约时间">
-        <el-date-picker v-model="order.appointment" type="datetime" placeholder="请选择希望完成时间" />
+        <el-date-picker
+          v-model="order.appointment"
+          type="datetime"
+          placeholder="请选择希望完成时间"
+        />
       </el-form-item>
       <el-form-item label="工单地址">
         <el-input v-model="order.address" />
@@ -142,7 +183,9 @@ let tableData: any = ref([]);
 // 获取工单数据
 const getOrders = async () => {
   loading.value = true;
-  const res: any = await apiClient.get<any>(`/order/orderPage?pageSize=${pageSize.value}&page=${currentPage.value}`);
+  const res: any = await apiClient.get<any>(
+    `/order/orderPage?pageSize=${pageSize.value}&page=${currentPage.value}`
+  );
   tableData.value = res.data.data;
   // 页面数据长度
   pageTotal.value = res!.data.total;
@@ -240,20 +283,36 @@ const searchOptions = [
 const searchValue = ref("");
 
 // 过滤显示
-const filterTableData = computed(() => tableData.value.filter((data: any) => searchOption(data)));
+const filterTableData = computed(() =>
+  tableData.value.filter((data: any) => searchOption(data))
+);
 // 判断搜索条件
 const searchOption = (data: any) => {
   switch (searchOptionChoosed.value) {
     case "id":
-      return !searchValue.value || data.id.includes(searchValue.value.toLowerCase());
+      return (
+        !searchValue.value || data.id.includes(searchValue.value.toLowerCase())
+      );
     case "status":
-      return !searchValue.value || data.status.toLowerCase().includes(searchValue.value.toLowerCase());
+      return (
+        !searchValue.value ||
+        data.status.toLowerCase().includes(searchValue.value.toLowerCase())
+      );
     case "username":
-      return !searchValue.value || data.username.toLowerCase().includes(searchValue.value.toLowerCase());
+      return (
+        !searchValue.value ||
+        data.username.toLowerCase().includes(searchValue.value.toLowerCase())
+      );
     case "priority":
-      return !searchValue.value || data.priority.toLowerCase().includes(searchValue.value.toLowerCase());
+      return (
+        !searchValue.value ||
+        data.priority.toLowerCase().includes(searchValue.value.toLowerCase())
+      );
     case "isOnLine":
-      return !searchValue.value || data.isOnLine.includes(searchValue.value.toLowerCase());
+      return (
+        !searchValue.value ||
+        data.isOnLine.includes(searchValue.value.toLowerCase())
+      );
   }
 };
 
@@ -261,7 +320,15 @@ const searchOption = (data: any) => {
 const timeToString = (date: any): string => {
   let d = new Date(date);
   // TODO:把转换做得更细节一点
-  let time = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate() + " " + d.getHours() + "点";
+  let time =
+    d.getFullYear() +
+    "-" +
+    d.getMonth() +
+    "-" +
+    d.getDate() +
+    " " +
+    d.getHours() +
+    "点";
   return time;
 };
 // 接收接收状态标签内容

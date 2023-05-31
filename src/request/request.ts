@@ -8,7 +8,6 @@ import axios, {
 import { useRouter } from "vue-router";
 // 定义一些公共的请求参数，避免重复写在每个请求中 PS.用那一个就可以注释另外一个
 // 远程测试的后端接口
-// const BASE_URL = "http://bs_project.svvs.top/api/v1";
 // 本地测试的后端接口
 const BASE_URL = "http://www.bstestserver.com/api/v1";
 // 请求头
@@ -178,12 +177,4 @@ export default class ApiClient {
       return [];
     }
   }
-  // TODO:别删
-  // 并发请求的使用方法
-  //  const apiClient = ApiClient.getInstance();
-  // const usersRequest = apiClient.get("/users");
-  // const productsRequest = apiClient.get("/products");
-
-  // const [users, products] = await apiClient.all([usersRequest, productsRequest]);
-  // console.log(users, products);
 }

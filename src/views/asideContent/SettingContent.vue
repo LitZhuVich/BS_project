@@ -225,6 +225,7 @@ const submitAvatar = async (): Promise<void> => {
     });
   }
 };
+
 // 修改名称
 const updateUsername = (): void => {
   ElMessageBox.prompt("输入名称：", "输入框", {
@@ -239,8 +240,9 @@ const updateUsername = (): void => {
             username: value,
           }
         );
+        console.log(res);
         if (typeof res!.data.username == "string") {
-          userInfo.value.username = res!.data.username;
+          userInfo.value.username = JSON.parse(res!.data.username).username;
           ElMessage({
             type: "success",
             message: `你的用户名:${value}`,
@@ -275,7 +277,7 @@ const updatePassword = (): void => {
           }
         );
         if (typeof res!.data.password == "string") {
-          userInfo.value.password = res!.data.password;
+          userInfo.value.password = JSON.parse(res!.data.password).password;
           ElMessage({
             type: "success",
             message: `密码修改成功`,
@@ -307,7 +309,7 @@ const updatePhone = (): void => {
           }
         );
         if (typeof res!.data.phone == "string") {
-          userInfo.value.phone = res!.data.phone;
+          userInfo.value.phone = JSON.parse(res!.data.phone).phone;
           ElMessage({
             type: "success",
             message: `你的手机号:${value}`,
@@ -327,7 +329,7 @@ const updatePhone = (): void => {
       });
     });
 };
-// TODO:邮箱验证待写
+// TODO:邮箱验证待写（接口已写好
 // 修改邮箱
 const updateEmail = (): void => {
   ElMessageBox.prompt("输入邮箱：", "输入框", {
@@ -339,9 +341,6 @@ const updateEmail = (): void => {
   })
     .then(async ({ value }) => {
       if (value != "" && value != null) {
-        // const aa = await apiClient.post("/sendEmailToken", {
-        //   user_id: userInfo.value.id,
-        // });
         const res = await apiClient.patch<apiResponseUser>(
           `/CustomerRepresentative/${userInfo.value.id}/email`,
           {
@@ -355,7 +354,6 @@ const updateEmail = (): void => {
             type: "success",
             message: `你的邮箱:${value}`,
           });
-          console.log(userInfo.value);
         } else {
           ElMessage({
             type: "error",
