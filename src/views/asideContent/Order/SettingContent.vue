@@ -66,7 +66,7 @@
       <el-table-column prop="createTime" label="操作" width="160">
         <template #default="scope: any">
           <el-button @click="editOrder(scope)" type="primary">编辑</el-button>
-          <el-button type="danger">删除</el-button>
+          <el-button @click="deleteOrder(scope)" type="danger">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -202,7 +202,23 @@ const submit = async () => {
   getOrders();
 };
 // 删除工单
-const deleteOrder = async (row: any) => {};
+const deleteOrder = async (row: any) => {
+  const res: any = await apiClient.get<any>("/order/delete/" + row.row.id);
+  if (!res) {
+    ElNotification({
+      title: "工单删除",
+      message: "删除失败！",
+      type: "error",
+    });
+    return;
+  }
+  ElNotification({
+    title: "工单删除",
+    message: "删除成功！",
+    type: "success",
+  });
+  getOrders();
+};
 // 选择的搜索方式
 const searchOptionChoosed = ref("status");
 // 搜索方式
@@ -292,6 +308,7 @@ const handleCurrentChange = (val: number) => {
 
 <style scoped lang="scss">
 .whole {
+  height: calc(100vh - 130px);
   background-color: white;
   margin: 10px;
   padding: 10px;
