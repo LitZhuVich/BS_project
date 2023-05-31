@@ -134,27 +134,6 @@ const apiClient = ApiClient.getInstance();
 const userStore = useUserStore();
 const { userInfo } = storeToRefs(userStore);
 const dialogFormVisible = ref(false);
-
-/* const { circleUrl, squareUrl, sizeList } = toRefs(state);
-const value = ref("");
-const options = [
-  {
-    value: "简体中文",
-    label: "简体中文",
-  },
-  {
-    value: "繁體",
-    label: "繁體",
-  },
-  {
-    value: "Enlish",
-    label: "Enlish",
-  },
-  {
-    value: "日語",
-    label: "日語",
-  },
-]; */
 // 修改头像名称
 const patchAvatarApi = `http://www.bstestserver.com/api/v1/CustomerRepresentative/${userInfo.value.id}/avatar`;
 
