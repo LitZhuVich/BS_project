@@ -9,37 +9,28 @@
     class="demo-ruleForm"
     label-suffix="："
   >
-    <el-form-item label="公司名称" prop="companyname">
-      <el-input
-        v-model="dialogInfo.data.companyname"
-        autocomplete="off"
-        type="text"
-        placeholder="公司名称"
-      />
-    </el-form-item>
-
-    <el-form-item label="最后更新人" prop="username">
+    <el-form-item label="工程师姓名" prop="username">
       <el-input
         v-model="dialogInfo.data.username"
         autocomplete="off"
         type="text"
-        placeholder="最后更新人"
+        placeholder="工程师姓名"
       />
     </el-form-item>
-    <el-form-item label="公司地址">
+    <el-form-item label="工程师地址">
       <el-input
         v-model="dialogInfo.data.address"
         autocomplete="off"
-        placeholder="公司地址"
+        placeholder="工程师地址"
         type="text"
       />
     </el-form-item>
-    <el-form-item label="手机号" prop="phone">
+    <el-form-item label="联系电话" prop="phone">
       <el-input
         v-model="dialogInfo.data.phone"
         autocomplete="off"
         type="text"
-        placeholder="手机号"
+        placeholder="联系电话"
         maxlength="11"
         show-word-limit
       />
@@ -48,17 +39,17 @@
       <el-input
         v-model="dialogInfo.data.remark"
         type="textarea"
-        placeholder="该客户备注"
+        placeholder="该工程师备注"
         autocomplete="off"
         autosize
         maxlength="200"
         show-word-limit
       />
     </el-form-item>
-    <el-form-item label="分组" v-if="dialogInfo.id != 0">
+    <el-form-item label="部门" v-if="dialogInfo.id != 0">
       <el-select
         v-model="dialogInfo.data.group_name"
-        placeholder="选择组"
+        placeholder="选择部门"
         multiple
         autocomplete="off"
       >
@@ -94,23 +85,13 @@ const apiClient = ApiClient.getInstance();
 const dialogStore = useDialogStore();
 const { dialogInfo }: any = storeToRefs(dialogStore);
 const ruleFormRef = ref<FormInstance>();
-const props = defineProps({
-  updateData: Function,
-});
+
 // 下拉框接口
 interface options {
   value: string;
   label: string;
 }
-// 公司名验证
-const validateCompanyname = (rule: any, value: any, callback: any) => {
-  // if (value === "") {
-  //   callback(new Error("请输入公司名"));
-  // } else {
-  //   callback();
-  // }
-  callback();
-};
+
 // 用户名验证
 const validateUsername = (rule: any, value: any, callback: any) => {
   if (value === "") {
@@ -141,7 +122,6 @@ const validatePhone = (rule: any, value: any, callback: any) => {
 };
 // 验证规则
 const rules = reactive<FormRules>({
-  companyname: [{ validator: validateCompanyname, trigger: "change" }],
   username: [{ validator: validateUsername, trigger: "change" }],
   phone: [{ validator: validatePhone, trigger: "blur" }],
 });
@@ -182,10 +162,13 @@ const submit = async (formEl: FormInstance | undefined): Promise<void> => {
         return;
       }
 
-      if (dialogInfo.value.title == "新增客户信息") {
-        const res = await apiClient.post<
-          apiResponseCustomerRepresentative & apiResponseMessage
-        >("/CustomerRepresentative", dialogInfo.value.data);
+      if (dialogInfo.value.title == "新增工程师信息") {
+        const res = await apiClient.post<any>(
+          "/CustomerRepresentative",
+          dialogInfo.value.data,
+          { params: { role_id: 2 } }
+        );
+        console.log(res);
         if (res!.code == 200) {
           ElNotification({
             title: "成功",
@@ -207,8 +190,8 @@ const submit = async (formEl: FormInstance | undefined): Promise<void> => {
             type: "error",
           });
         }
-      } else if (dialogInfo.value.title == "修改客户信息") {
-        const res = await apiClient.put<apiResponseCustomerRepresentative>(
+      } else if (dialogInfo.value.title == "修改工程师信息") {
+        const res = await apiClient.put<any>(
           "/CustomerRepresentative/" + dialogInfo.value.id,
           dialogInfo.value.data
         );
@@ -229,10 +212,11 @@ const submit = async (formEl: FormInstance | undefined): Promise<void> => {
         }
       }
       loading.value = false;
-      (props as any).updateData();
     } else {
+      loading.value = false;
       return false;
     }
+    loading.value = false;
   });
 };
 

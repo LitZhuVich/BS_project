@@ -8,7 +8,6 @@ export interface order {
   description: string;
   time_limit: number;
   appointment: string;
-  attachment: string;
   created_at: string;
   updated_at: string;
 }

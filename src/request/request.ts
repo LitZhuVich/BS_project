@@ -6,20 +6,17 @@ import axios, {
 } from "axios";
 
 import { useRouter } from "vue-router";
-import type { apiResponseTokenType } from "../model/interface";
-
 // 定义一些公共的请求参数，避免重复写在每个请求中 PS.用那一个就可以注释另外一个
 // 远程测试的后端接口
-// const BASE_URL = "http://bs_project.svvs.top/api/v1";
 // 本地测试的后端接口
 const BASE_URL = "http://www.bstestserver.com/api/v1";
 // 请求头
 const HEADERS = {
   "Content-Type": "application/json",
 };
-
+// 是否正在刷新的标记
+let isRefreshing = false;
 const router = useRouter();
-
 export default class ApiClient {
   private static instance: ApiClient;
   private axiosInstance: AxiosInstance;
@@ -45,61 +42,52 @@ export default class ApiClient {
     );
     // 接收拦截
     this.axiosInstance.interceptors.response.use(
-      (response: AxiosResponse): AxiosResponse => {
+      (response: AxiosResponse): any => {
+        const { code } = response.data;
+        if (code === 401) {
+          const config = response.config;
+          if (!isRefreshing) {
+            isRefreshing = true;
+            return this.get("/refresh")
+              .then((res: any) => {
+                if (res.data == "无法刷新令牌") {
+                  window.location.href = "/login";
+                  this.clearStorage();
+                } else {
+                  localStorage.setItem("token", res.data.access_token);
+                  // localStorage.setItem("token", res.data.access_token);
+                  config.headers.Authorization = `Bearer ${
+                    res!.data.access_token
+                  }`;
+                }
+                // 发送原始请求
+                return this.axiosInstance(config);
+              })
+              .catch((err: any) => {
+                window.location.href = "/login";
+                this.clearStorage();
+                console.log(err);
+                return Promise.reject(err);
+              })
+              .finally(() => {
+                isRefreshing = false;
+              });
+          }
+        }
         return response;
       },
       async (error: AxiosError): Promise<AxiosResponse> => {
-        // TODO:token的安全性有待提升，目前的问题是用户可以直接在 localStorage里面获取到自己的token很危险
-        // TODO:这一步刷新token一直实现不了不知道为什么，待解决，
-        // 现在采用登录过期之后直接让用户重新登录( 在store.js文件中实现 ) , 而不是刷新token
-        // PS . 现在将token过期时间延长至 7天
-        try {
-          // 如果返回状态码为 401，则说明 Token 已经过期，需要重新获取 Token
-          console.log(error.response);
-          console.log(error.response?.status);
-          if (error.response && error.response.status === 401) {
-            // 处理未授权错误
-            console.log(error.response);
-            const refreshedResponse = await this.refreshToken(error);
-            return Promise.resolve(refreshedResponse); // 返回一个解决的 Promise 对象
-          }
-          throw error;
-        } catch (error) {
-          return Promise.reject(error);
-        }
+        return Promise.reject(error);
       }
     );
   }
-  // 刷新token
-  public async refreshToken(error: AxiosError) {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        router.push({ name: "login" });
-        return Promise.reject("未登录或登录信息已过期");
-      }
-      // 发送刷新 Token 的请求
-      const response: apiResponseTokenType = await this.axiosInstance.get(
-        "/refresh"
-      );
-      // 将新的 Token 存储到本地存储中
-      localStorage.setItem("token", response!.data.access_token);
-      localStorage.setItem("refreshToken", response!.data.access_token);
-      // 获取原始请求的配置信息
-      const originalRequest: any = error.config;
-      // 设置新的 Token 到头部信息中
-      originalRequest.headers.Authorization = `Bearer ${
-        response!.data.access_token
-      }`;
-      // 重新发送原始请求
-      return this.axiosInstance(originalRequest);
-    } catch (error) {
-      // 如果刷新 Token 失败，则跳转到登录页
-      router.push({
-        name: "login",
-      });
-      return Promise.reject(error);
-    }
+
+  // 清除缓存;
+  public clearStorage() {
+    localStorage.removeItem("Rtoken");
+    localStorage.removeItem("token");
+    localStorage.removeItem("expires_in");
+    sessionStorage.removeItem("role");
   }
 
   // 引入该文件之后调用此方法
@@ -174,7 +162,7 @@ export default class ApiClient {
       const response = await this.axiosInstance.delete(url, config);
       return response.data;
     } catch (error) {
-      console.error(error);
+      console.log(error);
       return undefined;
     }
   }
@@ -189,12 +177,4 @@ export default class ApiClient {
       return [];
     }
   }
-  // TODO:别删
-  // 并发请求的使用方法
-  //  const apiClient = ApiClient.getInstance();
-  // const usersRequest = apiClient.get("/users");
-  // const productsRequest = apiClient.get("/products");
-
-  // const [users, products] = await apiClient.all([usersRequest, productsRequest]);
-  // console.log(users, products);
 }

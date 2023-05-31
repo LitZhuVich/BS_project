@@ -2,24 +2,24 @@
   <el-page-header @back="onBack" class="header">
     <template #breadcrumb>
       <el-breadcrumb :separator-icon="ArrowRight" class="breadcrumb">
-        <el-breadcrumb-item
-          :to="{ name: 'index' }"
-          @click="BreadcrumbListReset"
-        >
+        <el-breadcrumb-item :to="{ name: 'index' }" @click="BreadcrumbListReset">
           微工单管理系统
         </el-breadcrumb-item>
-        <el-breadcrumb-item
-          v-for="(item, index) of list"
-          :to="(item as any).url"
-          :key="index"
-        >
+        <el-breadcrumb-item v-for="(item, index) of list" :to="(item as any).url" :key="index">
           {{ (item as any).title }}
         </el-breadcrumb-item>
       </el-breadcrumb>
     </template>
     <template #content>
       <div class="flex items-center">
-        <el-avatar class="mr-3" :size="32" :src="userInfo.avator" />
+        <el-avatar
+          class="mr-3"
+          :size="32"
+          :src="
+            userInfo.avator ||
+            'https://cdn.staticaly.com/gh/LitZhuVich/blogcdn@master/img/user_tou.jpg'
+          "
+        />
         <span class="text-large font-600 mr-3"> {{ userInfo.username }} </span>
         <el-tag type="info" plain class="permissions">
           {{ roleNamae }}
@@ -48,12 +48,14 @@ const route = useRoute();
 const router = useRouter();
 // 接收父元素的数据
 const props = defineProps(["userInfo"]);
+
 // 实例化
 const breadcrumbStore = useBreadcrumbStore();
 const UserStore = useUserStore();
 // 执行方法
 breadcrumbStore.getBreadcrumbList(route);
 breadcrumbStore.updateBreadcrumb();
+
 // 响应式 数据
 const { list }: any = storeToRefs(breadcrumbStore);
 // 返回上一级路由
@@ -61,6 +63,7 @@ const onBack = () => {
   // notify("点击了Back");
   router.go(-1);
 };
+
 // 计算客户角色转换为中文
 let roleNamae = computed(() => {
   switch (props.userInfo.role_name) {
@@ -74,11 +77,13 @@ let roleNamae = computed(() => {
       return "你是？";
   }
 });
+
 // 重置 breadcrumbStore
 const BreadcrumbListReset = () => {
   breadcrumbStore.ResertBreadcrumb();
   // breadcrumbStore.$reset();
 };
+
 // 登出
 const logout = async (): Promise<void> => {
   try {

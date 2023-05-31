@@ -25,24 +25,16 @@ export const useUserStore = defineStore("user", {
         const userInfo = await apiClient.get<apiResponseUser>("/user");
         this.userInfo = userInfo!.data;
         sessionStorage.setItem("role", this.userInfo.role_name);
+        sessionStorage.setItem("name", this.userInfo.username);
+        sessionStorage.setItem("UID", this.userInfo.id);
         console.log(this.userInfo);
-        // TODO:现在采用登录过期之后直接让用户重新登录
-        if (this.userInfo.message == "Unauthenticated.") {
-          this.clearUserInfo();
-          router.push({
-            name: "login",
-          });
-        }
       } catch (error) {
         console.log(error);
-        // TODO:现在采用登录过期之后直接让用户重新登录
-        router.push({
-          name: "login",
-        });
       }
     },
     // 清空用户信息
     clearUserInfo() {
+      localStorage.removeItem("Rtoken");
       localStorage.removeItem("token");
       localStorage.removeItem("expires_in");
       sessionStorage.removeItem("role");
@@ -111,15 +103,11 @@ export const useDialogStore = defineStore("dialog", {
           address: "",
           phone: "",
           remark: "",
-          group_name: "",
+          group_name: [],
         },
         // 弹窗ID,
         id: 0,
       },
-      // 确认删除是否显示弹窗
-      confirmDelete: false,
-      // 确定删除地址
-      delUrl: "",
     };
   },
   actions: {
@@ -134,7 +122,7 @@ export const useDialogStore = defineStore("dialog", {
           address: "",
           phone: "",
           remark: "",
-          group_name: "",
+          group_name: [],
         },
         id: 0,
       };

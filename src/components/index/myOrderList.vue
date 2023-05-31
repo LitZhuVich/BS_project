@@ -3,7 +3,6 @@
     v-model="search"
     placeholder="输入情况说明内容查找对应的工单"
     :prefix-icon="Search"
-    autosize
     maxlength="50"
     show-word-limit
   />
@@ -11,6 +10,7 @@
     :data="filterTableData"
     style="width: 100%"
     stripe
+    v-loading="loading"
     :height="TableHeight"
   >
     <el-table-column prop="status" label="工单状态" width="140" fixed>
@@ -32,114 +32,67 @@
   </el-table>
 </template>
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { Search } from "@element-plus/icons-vue";
+import ApiClient from "../../request/request";
+import type { apiResponseUser } from "../../model/interface";
 import { useIndexStore } from "../../store/store";
 import { storeToRefs } from "pinia";
 const breadcrumb = useIndexStore();
 const { TableHeight } = storeToRefs(breadcrumb);
-const tableData = [
-  {
+interface tableType {
+  state: {
+    status: string;
+    situations: string;
+  };
+  content: string;
+}
+const loading = ref<boolean>(true);
+// 存储表单数据变量
+const tableData = ref<tableType[]>([]);
+const apiClient = ApiClient.getInstance();
+// 获取表单数据
+const getTableData = async () => {
+  const resUserInfo = await apiClient.get<apiResponseUser>("/user");
+  const res = await apiClient.get<any>("/order/user/" + resUserInfo!.data.id);
+  tableData.value = res.data.map((item: any) => ({
     state: {
-      status: "待处理",
-      situations: "一般",
+      status: item.status,
+      situations: item.priority,
     },
-    content: "No. 189, Grove St, Los Angeles",
-  },
-  {
-    state: {
-      status: "待确认",
-      situations: "一般",
-    },
-    content: "No. 189, Gro22s",
-  },
-  {
-    state: {
-      status: "处理中",
-      situations: "紧急",
-    },
-    content: "No. 189, Grove St, Los Angeles",
-  },
-  {
-    state: {
-      status: "处理中",
-      situations: "一般",
-    },
-    content: "No. 189, Grove St, Los Angeles",
-  },
-  {
-    state: {
-      status: "已接收",
-      situations: "紧急",
-    },
-    content: "No. 189, Grove St, Los Angeles",
-  },
-  {
-    state: {
-      status: "已接收",
-      situations: "紧急",
-    },
-    content: "No. 189, Grove St, Los Angeles",
-  },
-  {
-    state: {
-      status: "已接收",
-      situations: "紧急",
-    },
-    content: "No. 189, Grove St, Los Angeles",
-  },
-  {
-    state: {
-      status: "已接收",
-      situations: "紧急",
-    },
-    content: "No. 189, Grove St, Los Angeles",
-  },
-  {
-    state: {
-      status: "已接收",
-      situations: "紧急",
-    },
-    content: "No. 189, Grove St, Los Angeles",
-  },
-  {
-    state: {
-      status: "已接收",
-      situations: "紧急",
-    },
-    content: "No. 189, Grove St, Los Angeles",
-  },
-  {
-    state: {
-      status: "已接收",
-      situations: "紧急",
-    },
-    content: "No. 189, Grove St, Los Angeles",
-  },
-];
+    content: item.description,
+  }));
+  loading.value = false;
+};
+
 // 接收输入框的值
 const search = ref("");
 // 过滤显示
 const filterTableData = computed(() =>
-  tableData.filter(
+  tableData.value.filter(
     (data) =>
       !search.value ||
       data.content.toLowerCase().includes(search.value.toLowerCase())
   )
 );
+
 // 接收接收状态标签内容
 const tagStatusType = (value: string): string => {
   switch (value) {
     case "待处理":
-      return "success";
+      return "warning";
     case "待确认":
       return "danger";
     case "处理中":
       return ""; // 默认是 primary
     case "已接收":
       return "warning";
+    case "已完成":
+      return "success";
+    case "已超时":
+      return "danger";
     default:
-      return "状态不对";
+      return "danger";
   }
 };
 // 接收紧急情况标签内容
@@ -150,9 +103,12 @@ const tagSituationsType = (value: string): string => {
     case "紧急":
       return "danger";
     default:
-      return "情况不对";
+      return "danger";
   }
 };
+onMounted(() => {
+  getTableData();
+});
 </script>
 <style lang="scss" scoped>
 .el-tag {
