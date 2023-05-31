@@ -6,7 +6,7 @@
         <el-select v-model="searchOptionChoosed">
           <el-option v-for="item in searchOptions" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
-        <el-input v-model="searchValue" class="search-box" placeholder="请输入编号" :suffix-icon="Search" />
+        <el-input v-model="searchValue" class="search-box" placeholder="请输入搜索内容" :suffix-icon="Search" />
       </div>
     </div>
     <el-table v-loading="loading" :data="filterTableData" stripe border>
@@ -14,12 +14,14 @@
         <template #default="scope">
           <div class="column-expand">
             <div class="top">
-              <span>提交时间: {{ timeToString(scope.row.created_at) || '空' }}</span>
-              <span>工单地址: {{ scope.row.address || '空' }}</span>
-              <span>修改时间: {{ timeToString(scope.row.updated_at) || '空' }}</span>
+              <span>提交时间:
+                {{ timeToString(scope.row.created_at) || "空" }}</span>
+              <span>工单地址: {{ scope.row.address || "空" }}</span>
+              <span>修改时间:
+                {{ timeToString(scope.row.updated_at) || "空" }}</span>
             </div>
             <div>
-              <p>详细描述: {{ scope.row.description || '空' }}</p>
+              <p>详细描述: {{ scope.row.description || "空" }}</p>
             </div>
           </div>
         </template>
@@ -35,7 +37,8 @@
         </template>
       </el-table-column>
       <el-table-column prop="title" label="标题" />
-      <el-table-column prop="username" label="用户" />
+      <el-table-column prop="username" label="客户" />
+      <el-table-column prop="engineer" label="工程师" />
       <el-table-column prop="priority" label="优先级" width="70">
         <template #default="scope">
           <div style="display: flex; align-items: center">
@@ -96,26 +99,18 @@ const pageTotal = ref<number>(0);
 const searchOptionChoosed = ref("status");
 // 搜索方式
 const searchOptions = [
-  // {
-  //   value: "id",
-  //   label: "编号",
-  // },
   {
     value: "status",
     label: "工单状态",
   },
   {
     value: "username",
-    label: "用户",
+    label: "客户",
   },
   {
     value: "priority",
     label: "优先级",
-  },
-  // {
-  //   value: "isOnLine",
-  //   label: "线上/下",
-  // }
+  }
 ];
 // 搜索框
 const searchValue = ref("");
@@ -125,7 +120,7 @@ let tableData: any = ref([]);
 const getOrders = async () => {
   loading.value = true;
   const res: any = await apiClient.get<any>(
-    `/getToBeDoneOrder?pageSize=${pageSize.value}&page=${currentPage.value}`
+    `/order/getToBeDoneOrder?pageSize=${pageSize.value}&page=${currentPage.value}`
   )
   tableData.value = res.data.data
   // 页面数据长度
@@ -140,11 +135,6 @@ const filterTableData = computed(() =>
 // 判断搜索条件
 const searchOption = (data: any) => {
   switch (searchOptionChoosed.value) {
-    case "id":
-      return (
-        !searchValue.value ||
-        data.id.includes(searchValue.value.toLowerCase())
-      );
     case "status":
       return (
         !searchValue.value ||
@@ -159,11 +149,6 @@ const searchOption = (data: any) => {
       return (
         !searchValue.value ||
         data.priority.toLowerCase().includes(searchValue.value.toLowerCase())
-      );
-    case "isOnLine":
-      return (
-        !searchValue.value ||
-        data.isOnLine.includes(searchValue.value.toLowerCase())
       );
   }
 };

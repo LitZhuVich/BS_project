@@ -1,61 +1,43 @@
 <template>
   <div class="AddContentbox">
     <div class="AddContentbox_center">
-      <el-form
-        ref="ruleFormRef"
-        :model="ruleForm"
-        :rules="rules"
-        label-width="120px"
-        class="demo-ruleForm"
-        :size="formSize"
-        status-icon
-      >
-        <el-form-item label="资产模板" class="scp_btn" prop="name">
-          <el-input v-model="ruleForm.name" placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="资产名称" class="scp_btn" prop="nametwo">
-          <el-input v-model="ruleForm.nametwo" placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="资产型号" class="scp_btn" prop="namethree">
-          <el-input v-model="ruleForm.namethree" placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="序列号" prop="regiontwo">
-          <el-select v-model="ruleForm.regiontwo" placeholder="01111">
-            <el-option label="Zone one" value="shanghai" />
-            <el-option label="Zone two" value="beijing" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="生产日期">
-          <el-date-picker
-            v-model="value1"
-            type="datetime"
-            placeholder="2023-04-02 00:00:00"
-          />
-        </el-form-item>
-        <el-form-item label="保修时效" class="scp_btn">
-          <el-input v-model="input" disabled placeholder="3" />
-        </el-form-item>
-        <el-form-item label="保修日期">
-          <el-date-picker
-            v-model="value2"
-            type="datetime"
-            placeholder="2026-04-02 00:00:00"
-          />
-        </el-form-item>
-        <el-form-item label="资产类别" prop="region">
-          <el-select v-model="ruleForm.region" placeholder="机器">
-            <el-option label="Zone one" value="shanghai" />
-            <el-option label="Zone two" value="beijing" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="来源" class="scp_btn">
-          <el-input v-model="ruleForm.laiyuan" placeholder="白云" />
-        </el-form-item>
-        <el-form-item label="资产地址" class="scp_btn">
-          <el-input v-model="ruleForm.laiyuan" placeholder="珠江公寓" />
-        </el-form-item>
+      <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="120px" class="demo-ruleForm"
+        :size="formSize" status-icon>
+        <p>
+          <el-form-item label="资产模板" class="scp_btn">
+            <el-select v-model="ruleForm.module_id" class="m-2" placeholder="请选择模板">
+              <el-option v-for="item in asset_module" :key="item.value" :label="item.label" :value="item.value" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="资产名称" class="scp_btn" prop="asset_name">
+            <el-input v-model="ruleForm.asset_name" placeholder="请输入" />
+          </el-form-item>
+          <el-form-item label="设备型号">
+            <el-input v-model="ruleForm.model_id" placeholder="请输入资产型号" />
+          </el-form-item>
+        </p>
+        <p>
+          <el-form-item label="来源" class="scp_btn">
+            <el-select v-model="ruleForm.source_id" class="m-2" placeholder="请选择来源">
+              <el-option v-for="item in asset_source" :key="item.value" :label="item.label" :value="item.value" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="保修时间" prop="asset_warranty">
+            <el-input v-model="ruleForm.asset_warranty" type="number" min="0" />
+          </el-form-item>
+        </p>
+        <p>
+          <el-form-item label="资产地址" prop="asset_address">
+            <el-input v-model="ruleForm.asset_address" placeholder="请输入资产地址" />
+          </el-form-item>
+          <el-form-item label="资产类别" prop="asset_categorie_id">
+            <el-select v-model="ruleForm.asset_categorie_id" class="m-2" placeholder="请选择分类">
+              <el-option v-for="item in asset_categorie" :key="item.value" :label="item.label" :value="item.value" />
+            </el-select>
+          </el-form-item>
+        </p>
         <el-form-item label="资产详情" prop="desc">
-          <el-input v-model="ruleForm.desc" type="textarea" />
+          <el-input v-model="ruleForm.description" type="textarea" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm(ruleFormRef)">
@@ -69,87 +51,103 @@
 </template>
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
-import type { FormInstance, FormRules } from "element-plus";
+import { FormInstance, FormRules, ElNotification } from "element-plus";
+import ApiClient from "../../../request/request";
+
+const apiClient = ApiClient.getInstance();
 
 const formSize = ref("default");
 const ruleFormRef = ref<FormInstance>();
 const ruleForm = reactive({
-  name: "",
-  nametwo: "",
-  namethree: "",
-  region: "",
-  laiyuan: "",
-  regiontwo: "",
-  count: "",
-  date1: "",
-  date2: "",
-  delivery: false,
-  type: [],
-  resource: "",
-  desc: "",
+  module_id: "", // 资产模板
+  asset_name: "", // 资产名称
+  user_id: "",  // 客户 TODO: 自动获取当前用户
+  model_id: "",  // 型号
+  source_id: "", // 来源
+  asset_warranty: 0, // 保修时间
+  asset_address: "",  // 资产地址
+  asset_categorie_id: '',  // 资产类别
+  description: "" // 详情
 });
-const value1 = ref("");
-const value2 = ref("");
-const input = ref("");
+
+// 资产模板
+const asset_module = [
+  {
+    value: 1,
+    label: '桌面电脑'
+  },
+  {
+    value: 2,
+    label: '其他'
+  }
+]
+// 来源
+const asset_source = [
+  {
+    value: 1,
+    label: '白云'
+  }, {
+    value: 2,
+    label: '其他'
+  }
+]
+// 资产类别
+const asset_categorie = [
+  {
+    value: 1,
+    label: '电脑周边',
+  },
+  {
+
+    value: 2,
+    label: '普通家电',
+  },
+  {
+    value: 3,
+    label: '其他'
+  }
+]
+// 表单规则
 const rules = reactive<FormRules>({
-  name: [
-    {
-      required: true,
-      message: "请输入资产模板",
-      trigger: "target",
-    },
-    { min: 3, max: 5, message: "Length should be 3 to 5", trigger: "target" },
-  ],
-  nametwo: [
+  asset_name: [
     {
       required: true,
       message: "请输入资产名称",
       trigger: "target",
     },
-    { min: 3, max: 5, message: "Length should be 3 to 5", trigger: "target" },
   ],
-  namethree: [
+  asset_warranty: [
     {
       required: true,
-      message: "请输入资产型号",
+      message: "请输入保修时间",
       trigger: "target",
     },
-    { min: 3, max: 5, message: "Length should be 3 to 5", trigger: "target" },
   ],
-  region: [
+  asset_categorie_id: [
     {
       required: true,
-      message: "请输入资产类别",
-      trigger: "change",
-    },
-  ],
-  regiontwo: [
-    {
-      required: true,
-      message: "请输入序列号",
-      trigger: "change",
-    },
-  ],
-  desc: [
-    {
-      required: true,
-      message: "请输入资产详情",
+      message: "请输入资产分类",
       trigger: "target",
     },
   ],
 });
 
+// 提交表单
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
-  await formEl.validate((valid, fields) => {
+  await formEl.validate(async (valid, fields) => {
     if (valid) {
-      console.log("submit!");
-    } else {
-      console.log("error submit!", fields);
+      const res = await apiClient.post<any>("/asset/add", ruleForm);
+      console.log('res', res)
+      ElNotification({
+        title: '提交状态',
+        message: res.data
+      })
+      formEl.resetFields();
     }
   });
 };
-
+// 重置表单
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.resetFields();
@@ -162,13 +160,26 @@ const resetForm = (formEl: FormInstance | undefined) => {
   height: calc(100% - 120px);
   background-color: white;
   margin: 10px;
-  .scp_btn {
-    width: 340px;
-  }
+
   .AddContentbox_center {
     padding: 20px;
     background-color: white;
     height: 600px;
+
+    .el-form {
+      p {
+        display: flex;
+        margin: 50px 0;
+
+        .el-form-item {
+
+          .scp_btn {
+            width: 340px;
+          }
+        }
+      }
+
+    }
   }
 }
 </style>
