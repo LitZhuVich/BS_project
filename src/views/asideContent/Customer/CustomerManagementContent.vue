@@ -242,7 +242,6 @@ const filterTableData = async (
   }
 };
 
-const refreshDat = () => {};
 // 创建一个防抖函数 在输入框输入最后一个字 500毫秒之后执行 filterTableData函数
 const debouncedFunc = debounce(filterTableData, 500);
 // 定义当分页大小变化时
@@ -254,6 +253,7 @@ const handleSizeChange = (val: number) => {
     filterTableData(searchValue.value, searchOptionChoosed.value);
   }
 };
+
 // 定义当页码变化时
 const handleCurrentChange = (val: number) => {
   // 如果有查询数据则修改查询数据的表单数据
@@ -263,6 +263,7 @@ const handleCurrentChange = (val: number) => {
     filterTableData(searchValue.value, searchOptionChoosed.value);
   }
 };
+
 const btnLoading = ref<boolean>(false);
 // 定义编辑操作
 const handleEdit = async (index: number, row: CustomerRepresentativeInfo) => {
@@ -344,7 +345,6 @@ const deleteMany = async () => {
           "/CustomerRepresentative/" + id
         )
       );
-      const res = apiClient.all(promises);
       if (searchValue.value == "") {
         getTableData();
       } else {
@@ -352,13 +352,13 @@ const deleteMany = async () => {
       }
     })
     .catch((action: Action) => {
-      console.log(action);
       ElMessage({
         type: "info",
         message: action === "cancel" ? "取消删除" : "删除失败",
       });
     });
 };
+
 // 获取已点击的按钮数据
 const handleSelectionChange = (val: any) => {
   multipleSelection.value = val;

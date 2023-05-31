@@ -219,7 +219,7 @@ const updateAvatar = (): void => {
   // 显示修改头像
   dialogFormVisible.value = true;
 };
-
+// 提交文件
 const submitAvatar = async (): Promise<void> => {
   const res = await apiClient.post<apiResponseUserAvatar>(
     `/CustomerRepresentative/${userInfo.value.id}/avatar`,
@@ -258,7 +258,6 @@ const updateUsername = (): void => {
             username: value,
           }
         );
-
         if (typeof res!.data.username == "string") {
           userInfo.value.username = res!.data.username;
           ElMessage({
@@ -294,7 +293,6 @@ const updatePassword = (): void => {
             password: value,
           }
         );
-        console.log(res);
         if (typeof res!.data.password == "string") {
           userInfo.value.password = res!.data.password;
           ElMessage({
@@ -360,13 +358,16 @@ const updateEmail = (): void => {
   })
     .then(async ({ value }) => {
       if (value != "" && value != null) {
+        const aa = await apiClient.post("/sendEmailToken", {
+          user_id: userInfo.value.id,
+        });
+
         const res = await apiClient.patch<apiResponseUser>(
           `/CustomerRepresentative/${userInfo.value.id}/email`,
           {
             email: value,
           }
         );
-        console.log(res!.data.email);
         if (typeof res!.data.email == "string") {
           userInfo.value.email = res!.data.email;
           ElMessage({

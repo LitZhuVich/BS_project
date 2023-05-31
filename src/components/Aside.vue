@@ -104,7 +104,7 @@
       <el-icon>
         <setting />
       </el-icon>
-      <span> 系统设置 </span>
+      <span> 个人信息 </span>
     </el-menu-item>
   </el-menu>
 </template>
