@@ -4,29 +4,57 @@
       <div class="top-operation">
         <div style="display: flex">
           <el-select v-model="searchOptionChoosed">
-            <el-option v-for="(option, index) in searchOptions" :key="index" :label="option.label"
-              :value="option.value"></el-option>
+            <el-option
+              v-for="(option, index) in searchOptions"
+              :key="index"
+              :label="option.label"
+              :value="option.value"
+            ></el-option>
           </el-select>
-          <el-input v-model="searchValue" class="search-box" size="small" placeholder="输入关键字搜索" :suffix-icon="Search" />
+          <el-input
+            v-model="searchValue"
+            class="search-box"
+            size="small"
+            placeholder="输入关键字搜索"
+            :suffix-icon="Search"
+          />
         </div>
         <div>
           <!-- 按钮组 -->
           <div class="function_button">
-            <el-button type="info" plain :icon="Refresh" @click="getTableData()">
+            <el-button
+              type="info"
+              plain
+              :icon="Refresh"
+              @click="getTableData()"
+            >
               刷新
             </el-button>
             <el-button type="success" plain :icon="Plus" @click="add()">
               新增客户
             </el-button>
-            <el-button type="danger" plain :icon="CloseBold" @click="deleteMany()">
+            <el-button
+              type="danger"
+              plain
+              :icon="CloseBold"
+              @click="deleteMany()"
+            >
               批量删除
             </el-button>
           </div>
         </div>
       </div>
       <div class="table">
-        <el-table ref="multipleTableRef" :data="filterData" stripe style="width: 100%" border height="545px"
-          v-loading="loading" @selection-change="handleSelectionChange">
+        <el-table
+          ref="multipleTableRef"
+          :data="filterData"
+          stripe
+          style="width: 100%"
+          border
+          height="545px"
+          v-loading="loading"
+          @selection-change="handleSelectionChange"
+        >
           <el-table-column type="selection" width="55" align="center" />
           <el-table-column prop="companyname" label="公司名称" />
           <el-table-column prop="lastUpdater" label="最后更新人" />
@@ -38,10 +66,18 @@
           <el-table-column prop="lastUpdateTime" label="最后更新时间" />
           <el-table-column prop="operation" label="操作" width="200">
             <template #default="scope">
-              <el-button type="primary" @click="handleEdit(scope.$index, scope.row)" :icon="EditPen"
-                :loading="btnLoading">修改
+              <el-button
+                type="primary"
+                @click="handleEdit(scope.$index, scope.row)"
+                :icon="EditPen"
+                :loading="btnLoading"
+                >修改
               </el-button>
-              <el-button type="danger" @click="handleDelete(scope.$index, scope.row)" :icon="CloseBold">删除
+              <el-button
+                type="danger"
+                @click="handleDelete(scope.$index, scope.row)"
+                :icon="CloseBold"
+                >删除
               </el-button>
             </template>
           </el-table-column>
@@ -49,9 +85,15 @@
       </div>
       <div class="demo-pagination-block">
         <el-config-provider :locale="zhCn">
-          <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize" :page-sizes="[5, 10, 20, 50]"
-            layout="sizes, prev, pager, next, jumper" :total="pageTotal" @size-change="handleSizeChange"
-            @current-change="handleCurrentChange" />
+          <el-pagination
+            v-model:current-page="currentPage"
+            v-model:page-size="pageSize"
+            :page-sizes="[5, 10, 20, 50]"
+            layout="sizes, prev, pager, next, jumper"
+            :total="pageTotal"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+          />
         </el-config-provider>
       </div>
     </div>
@@ -199,7 +241,7 @@ const filterTableData = async (
   }
 };
 
-const refreshDat = () => { };
+const refreshDat = () => {};
 // 创建一个防抖函数 在输入框输入最后一个字 500毫秒之后执行 filterTableData函数
 const debouncedFunc = debounce(filterTableData, 500);
 // 定义当分页大小变化时
@@ -211,6 +253,7 @@ const handleSizeChange = (val: number) => {
     filterTableData(searchValue.value, searchOptionChoosed.value);
   }
 };
+
 // 定义当页码变化时
 const handleCurrentChange = (val: number) => {
   // 如果有查询数据则修改查询数据的表单数据
@@ -220,6 +263,7 @@ const handleCurrentChange = (val: number) => {
     filterTableData(searchValue.value, searchOptionChoosed.value);
   }
 };
+
 const btnLoading = ref<boolean>(false);
 // 定义编辑操作
 const handleEdit = async (index: number, row: CustomerRepresentativeInfo) => {
@@ -308,13 +352,13 @@ const deleteMany = async () => {
       }
     })
     .catch((action: Action) => {
-      console.log(action);
       ElMessage({
         type: "info",
         message: action === "cancel" ? "取消删除" : "删除失败",
       });
     });
 };
+
 // 获取已点击的按钮数据
 const handleSelectionChange = (val: any) => {
   multipleSelection.value = val;

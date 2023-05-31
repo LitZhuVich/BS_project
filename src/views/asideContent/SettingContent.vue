@@ -164,7 +164,7 @@ const updateAvatar = (): void => {
   // 显示修改头像
   dialogFormVisible.value = true;
 };
-
+// 提交文件
 const submitAvatar = async (): Promise<void> => {
   const res = await apiClient.post<apiResponseUserAvatar>(
     `/CustomerRepresentative/${userInfo.value.id}/avatar`,
@@ -303,6 +303,10 @@ const updateEmail = (): void => {
   })
     .then(async ({ value }) => {
       if (value != "" && value != null) {
+        const aa = await apiClient.post("/sendEmailToken", {
+          user_id: userInfo.value.id,
+        });
+
         const res = await apiClient.patch<apiResponseUser>(
           `/CustomerRepresentative/${userInfo.value.id}/email`,
           {
