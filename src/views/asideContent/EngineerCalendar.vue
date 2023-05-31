@@ -21,24 +21,45 @@
       <!--日历表内容 -->
       <div class="cal_m_days">
         <!-- 第几行 -->
-        <div v-for="(ds, index) in monthData" :key="index" class="cal_m_day_line">
+        <div
+          v-for="(ds, index) in monthData"
+          :key="index"
+          class="cal_m_day_line"
+        >
           <!-- 每行内容 -->
-          <div v-for="d in ds" :key="d.day" class="cal_m_day_cell" :style="{ color: getCellColor(d) }"
-            @mouseenter="mouseenter(d, $event)" @mouseleave="mouseleave(d, $event)">
+          <div
+            v-for="d in ds"
+            :key="d.day"
+            class="cal_m_day_cell"
+            :style="{ color: getCellColor(d) }"
+            @mouseenter="mouseenter(d, $event)"
+            @mouseleave="mouseleave(d, $event)"
+          >
             <div class="itemDay">{{ d.day }}</div>
             <!-- 卡片 -->
             <template v-for="user in users">
-              <div v-if="d.type == 0 && setDataList(d.date).user_id == user.id" :style="{
-                background: cardColor[setDataList(d.date).user_id - 1].backgroundColor,
-                color: cardColor[setDataList(d.date).user_id - 1].color
-              }
-                " class="Card">
-                <div class="CardTitle">{{ setDataList(d.date).username }} : 期限{{
-                  setDataList(d.date).time_limit }}天
+              <div
+                v-if="d.type == 0 && setDataList(d.date).user_id == user.id"
+                :style="{
+                  background:
+                    cardColor[setDataList(d.date).user_id - 1].backgroundColor,
+                  color: cardColor[setDataList(d.date).user_id - 1].color,
+                }"
+                class="Card"
+              >
+                <div class="CardTitle">
+                  {{ setDataList(d.date).username }} : 期限{{
+                    setDataList(d.date).time_limit
+                  }}天
                 </div>
                 <div class="CardDot">
-                  <div v-for="i in 3" :style="{ background: cardColor[setDataList(d.date).user_id - 1].color }">
-                  </div>
+                  <div
+                    v-for="i in 3"
+                    :style="{
+                      background:
+                        cardColor[setDataList(d.date).user_id - 1].color,
+                    }"
+                  ></div>
                 </div>
               </div>
             </template>
@@ -54,56 +75,61 @@ import { ref, reactive, onMounted, defineEmits } from "vue";
 import ApiClient from "../../request/request";
 const apiClient = ApiClient.getInstance();
 
-const $emit = defineEmits(["enter", "leave", "changeMonth"])
-let orderList = reactive({ datas: [] })
+const $emit = defineEmits(["enter", "leave", "changeMonth"]);
+let orderList = reactive({ datas: [] });
 
-let now = ref(new Date()) //当前时间：Fri Jul 29 2022 09:57:33 GMT+0800 (中国标准时间)
-let year = ref(0)
-let month = ref(0)
-const weeks = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"]
-let monthData = ref<any>([]) //月数据容器
-let currentYear = ref(new Date().getFullYear()) //当前年：2022
-let currentMonth = ref(new Date().getMonth() + 1) //当前月：7
-let currentDay = ref(new Date().getDate()) //当前天：29
-let users = ref<any>([])
-const cardColor = [{
-  backgroundColor: 'rgba(16, 154, 249, 0.2)',
-  color: 'rgba(16, 154, 249, 1)'
-}, {
-  backgroundColor: 'rgba(255, 199, 0, 0.2)',
-  color: 'rgba(255, 199, 0, 1)'
-}, {
-  backgroundColor: 'rgba(36, 0, 255, 0.2)',
-  color: 'rgba(36, 0, 255, 1)'
-}, {
-  backgroundColor: 'rgba(240, 92, 39, 0.2)',
-  color: 'rgba(240, 92, 39, 1)'
-}, {
-  backgroundColor: 'rgba(29, 209, 155, 0.2)',
-  color: 'rgba(29, 209, 155, 1)'
-}, {
-  backgroundColor: 'rgba(255, 167, 40, 0.2)',
-  color: '#ffa728'
-}]
+let now = ref(new Date()); //当前时间：Fri Jul 29 2022 09:57:33 GMT+0800 (中国标准时间)
+let year = ref(0);
+let month = ref(0);
+const weeks = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
+let monthData = ref<any>([]); //月数据容器
+let currentYear = ref(new Date().getFullYear()); //当前年：2022
+let currentMonth = ref(new Date().getMonth() + 1); //当前月：7
+let currentDay = ref(new Date().getDate()); //当前天：29
+let users = ref<any>([]);
+const cardColor = [
+  {
+    backgroundColor: "rgba(16, 154, 249, 0.2)",
+    color: "rgba(16, 154, 249, 1)",
+  },
+  {
+    backgroundColor: "rgba(255, 199, 0, 0.2)",
+    color: "rgba(255, 199, 0, 1)",
+  },
+  {
+    backgroundColor: "rgba(36, 0, 255, 0.2)",
+    color: "rgba(36, 0, 255, 1)",
+  },
+  {
+    backgroundColor: "rgba(240, 92, 39, 0.2)",
+    color: "rgba(240, 92, 39, 1)",
+  },
+  {
+    backgroundColor: "rgba(29, 209, 155, 0.2)",
+    color: "rgba(29, 209, 155, 1)",
+  },
+  {
+    backgroundColor: "rgba(255, 167, 40, 0.2)",
+    color: "#ffa728",
+  },
+];
 onMounted(() => {
   getOrders();
   setYearMonth(now.value);
   generateMonth(now.value);
   getAllUsers();
-})
+});
 // 获取所有用户
 async function getAllUsers() {
   const res: any = await apiClient.get<any>(
-    '/CustomerRepresentative/getAllUsers'
-  )
-  users.value = res.data
+    "/CustomerRepresentative/getAllUsers"
+  );
+  users.value = res.data;
 }
 
 async function getOrders() {
-  const res: any = await apiClient.get<any>(
-    '/order'
-  )
-  orderList.datas = res.data
+  const res: any = await apiClient.get<any>("/order");
+  orderList.datas = res.data;
 }
 
 // 通过输入日期，匹配当天的所有数据
@@ -113,7 +139,7 @@ function setDataList(value: any) {
   let date = dateFormat("YYYY-mm-dd", value);
   orderList.datas.forEach((element: any) => {
     // 将工单里的预约时间（string类型）转为Date类型
-    let appointment = dateFormat("YYYY-mm-dd", new Date(element.appointment))
+    let appointment = dateFormat("YYYY-mm-dd", new Date(element.appointment));
     if (appointment == date) {
       object = element;
     }
@@ -125,6 +151,7 @@ function setYearMonth(now: any) {
   year.value = now.getFullYear();
   month.value = now.getMonth() + 1;
 }
+
 // 上一年
 function preYear() {
   let n = now.value;
@@ -187,7 +214,6 @@ function nextMonth() {
 }
 
 function setYearMonthInfos(date: any) {
-
   setYearMonth(date);
   generateMonth(date);
   now.value = date;
@@ -269,7 +295,7 @@ function generateMonth(date: any) {
     }
     monthData.value.push(lastLine);
   }
-  console.log("//", JSON.parse(JSON.stringify(monthData.value)))
+  console.log("//", JSON.parse(JSON.stringify(monthData.value)));
 }
 
 function getCellColor(d: any) {
@@ -306,26 +332,25 @@ function dateChange() {
 function dateFormat(fmt: any, date: any) {
   let ret: any;
   const opt: any = {
-    "Y+": date.getFullYear().toString(),        // 年
-    "m+": (date.getMonth() + 1).toString(),     // 月
-    "d+": date.getDate().toString(),            // 日
-    "H+": date.getHours().toString(),           // 时
-    "M+": date.getMinutes().toString(),         // 分
-    "S+": date.getSeconds().toString()          // 秒
+    "Y+": date.getFullYear().toString(), // 年
+    "m+": (date.getMonth() + 1).toString(), // 月
+    "d+": date.getDate().toString(), // 日
+    "H+": date.getHours().toString(), // 时
+    "M+": date.getMinutes().toString(), // 分
+    "S+": date.getSeconds().toString(), // 秒
     // 有其他格式化字符需求可以继续添加，必须转化成字符串
   };
   for (let k in opt) {
     ret = new RegExp("(" + k + ")").exec(fmt);
     if (ret) {
-      fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+      fmt = fmt.replace(
+        ret[1],
+        ret[1].length == 1 ? opt[k] : opt[k].padStart(ret[1].length, "0")
+      );
     }
-    ;
   }
-  ;
   return fmt;
 }
-
-
 </script>
 
 <style scoped lang="scss">
@@ -372,7 +397,6 @@ function dateFormat(fmt: any, date: any) {
   }
 
   .cal_month {
-
     // 日历表头 周日 周一 周二 周三 周四 周五 周六
     .cal_m_weeks {
       display: flex;
@@ -393,7 +417,6 @@ function dateFormat(fmt: any, date: any) {
 
     // 日历表内容
     .cal_m_days {
-
       // 第几行
       .cal_m_day_line {
         display: flex;
